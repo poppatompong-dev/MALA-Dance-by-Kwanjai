@@ -18,7 +18,7 @@
         @can('sale_create')
         <li class="nav-item dropdown">
             <a class="nav-link btn bg-gradient-primary text-white" href="{{route('backend.admin.cart.index')}}">
-                <i class="fas fa-cart-plus"> POS</i>
+                <i class="fas fa-cart-plus"> ขายหน้าร้าน</i>
             </a>
         </li>
         @endcan
@@ -62,12 +62,12 @@
             <div class="dropdown-menu ">
                 <a href="{{ route('backend.admin.profile') }}" class="dropdown-item dropdown-footer">
                     <i class="fas fa-address-card"></i>
-                    Profile
+                    โปรไฟล์
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="{{ route('logout') }}" class="dropdown-item dropdown-footer">
                     <i class="fas fa-sign-out-alt"></i>
-                    Logout
+                    ออกจากระบบ
                 </a>
             </div>
         </li>

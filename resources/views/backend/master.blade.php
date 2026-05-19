@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-        @yield('title', 'Dashboard') | {{ readConfig('site_name') }}
+        @yield('title', 'แดชบอร์ด') | {{ readConfig('site_name') }}
     </title>
 
     <!-- FAVICON ICON -->
@@ -126,7 +126,7 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-4 sidebar-light-lightblue">
+        <aside class="main-sidebar elevation-4 sidebar-dark-primary">
             <!-- Brand Logo -->
             <a href="{{ route('frontend.home') }}" class="brand-link">
                 <img src="{{ assetImage(readconfig('site_logo')) }}" alt="Logo"
