@@ -1,3 +1,4 @@
+import '../css/app.css';
 // import './bootstrap';
 import React from 'react'
 import Pos from "./components/Pos";
@@ -22,4 +23,3 @@ if (document.getElementById("purchase")) {
     );
     purchaseRoot.render(<Purchase />);
 }
-
