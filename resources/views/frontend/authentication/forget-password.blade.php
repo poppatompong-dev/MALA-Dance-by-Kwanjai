@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Forget Password | {{ readConfig('site_name') }}
+        ลืมรหัสผ่าน | {{ readConfig('site_name') }}
     </title>
     <!-- FAVICON ICON -->
     <link rel="shortcut icon" href="{{ assetImage(readconfig('site_logo')) }}" type="image/svg+xml">
@@ -36,32 +36,32 @@
                     <a href="{{ route('frontend.home') }}" class="logo">
                         <img src="{{ assetImage(readconfig('site_logo')) }}" width="200px" alt="brand-logo">
                     </a>
-                    <h3 class="form-title">Forgot Password?</h3>
-                    <p class="form-des">Please enter the email you use to sign in.</p>
+                    <h3 class="form-title">ลืมรหัสผ่าน?</h3>
+                    <p class="form-des">กรุณากรอกอีเมลที่ใช้เข้าสู่ระบบ</p>
                 </div>
                 <div class="authentication-form-content">
                     <div class="row g-4">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter email"
+                                <label for="email" class="form-label">อีเมล</label>
+                                <input type="email" class="form-control" id="email" placeholder="กรอกอีเมล"
                                     autocomplete="off" name="email" required>
                                 <div class="invalid-feedback">
-                                    Enter a valid email address
+                                    กรุณากรอกอีเมลให้ถูกต้อง
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-12">
                             <div class="form-group">
-                                <button type="submit" class="create-account-btn w-100">Request password reset</button>
+                                <button type="submit" class="create-account-btn w-100">ขอรีเซ็ตรหัสผ่าน</button>
                             </div>
                         </div>
 
                     </div>
                 </div>
                 <div class="authentication-form-footer">
-                    <p>Back to <a href="{{ route('login') }}">Log in </a></p>
+                    <p>กลับไป <a href="{{ route('login') }}">เข้าสู่ระบบ</a></p>
                 </div>
             </form>
         </div>

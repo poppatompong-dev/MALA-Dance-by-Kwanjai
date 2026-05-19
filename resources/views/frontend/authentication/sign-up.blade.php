@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Sign Up | {{ readConfig('site_name') }}
+        สมัครใช้งาน | {{ readConfig('site_name') }}
     </title>
     <!-- FAVICON ICON -->
     <link rel="shortcut icon" href="{{ assetImage(readconfig('site_logo')) }}" type="image/svg+xml">
@@ -36,38 +36,38 @@
                     <a href="{{ route('frontend.home') }}" class="logo">
                         <img src="{{ assetImage(readconfig('site_logo')) }}" width="200px" alt="brand-logo">
                     </a>
-                    <h3 class="form-title">Create Account</h3>
-                    <p class="form-des">Sign up now and explore.</p>
+                    <h3 class="form-title">สร้างบัญชี</h3>
+                    <p class="form-des">สมัครใช้งานเพื่อเริ่มจัดการร้านของคุณ</p>
                 </div>
                 <div class="authentication-form-content">
                     <div class="row g-4">
                         <!-- name -->
                         <div class="col-sm-6 col-lg-12 col-xl-6">
                             <div class="form-group">
-                                <label for="fullName" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="fullName" placeholder="Enter full name"
+                                <label for="fullName" class="form-label">ชื่อ</label>
+                                <input type="text" class="form-control" id="fullName" placeholder="กรอกชื่อ-นามสกุล"
                                     autocomplete="off" name="name" value="{{ old('name') }}" required>
                                 <div class="invalid-feedback">
-                                    Please enter your name.
+                                    กรุณากรอกชื่อของคุณ
                                 </div>
                             </div>
                         </div>
                         <!-- email -->
                         <div class="col-sm-6 col-lg-12 col-xl-6">
                             <div class="form-group">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter email"
+                                <label for="email" class="form-label">อีเมล</label>
+                                <input type="email" class="form-control" id="email" placeholder="กรอกอีเมล"
                                     autocomplete="off" name="email" value="{{ old('email') }}" required>
                                 <div class="invalid-feedback">
-                                    Please enter a valid email address.
+                                    กรุณากรอกอีเมลให้ถูกต้อง
                                 </div>
                             </div>
                         </div>
                         <!-- password -->
                         <div class="col-sm-6 col-lg-12 col-xl-6">
                             <div class="form-group">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Enter password"
+                                <label for="password" class="form-label">รหัสผ่าน</label>
+                                <input type="password" class="form-control" id="password" placeholder="กรอกรหัสผ่าน"
                                     autocomplete="off" name="password" required>
                                 <div class="show-hide toggle-password" id="toggleIcon">
 
@@ -106,16 +106,16 @@
                                     </span>
                                 </div>
                                 <div class="invalid-feedback">
-                                    Please enter a password.
+                                    กรุณากรอกรหัสผ่าน
                                 </div>
                             </div>
                         </div>
                         <!-- confirm password -->
                         <div class="col-sm-6 col-lg-12 col-xl-6">
                             <div class="form-group">
-                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <label for="confirmPassword" class="form-label">ยืนยันรหัสผ่าน</label>
                                 <input type="password" class="form-control" id="confirmPassword"
-                                    placeholder="Confirm password" autocomplete="off" name="password_confirmation"
+                                    placeholder="ยืนยันรหัสผ่าน" autocomplete="off" name="password_confirmation"
                                     required>
                                 <div class="show-hide toggle-password" id="toggleIcon">
 
@@ -154,7 +154,7 @@
                                     </span>
                                 </div>
                                 <div class="invalid-feedback">
-                                    Please confirm your password.
+                                    กรุณายืนยันรหัสผ่าน
                                 </div>
                             </div>
                         </div>
@@ -174,11 +174,11 @@
                                     <div class="customcheck ">
                                         <input type="checkbox" id="agree" class="customcheck-box"
                                             name="remember" hidden required>
-                                        <label for="agree" class="customcheck-label">I agree to all the <a
-                                                href="#">Terms </a> and <a href="">Privacy Policy</a>
+                                        <label for="agree" class="customcheck-label">ฉันยอมรับ <a
+                                                href="#">ข้อกำหนด </a> และ <a href="">นโยบายความเป็นส่วนตัว</a>
                                             .</label>
                                         <div class="invalid-feedback">
-                                            Please agree to our terms.
+                                            กรุณายอมรับข้อกำหนดการใช้งาน
                                         </div>
                                     </div>
                                 </div>
@@ -187,7 +187,7 @@
                         <!-- create account  -->
                         <div class="col-sm-6 col-lg-12 col-xl-6">
                             <div class="form-group">
-                                <button type="submit" class="create-account-btn w-100">Create Account</button>
+                                <button type="submit" class="create-account-btn w-100">สร้างบัญชี</button>
                             </div>
                         </div>
 
@@ -232,7 +232,7 @@
                     </div>
                 </div>
                 <div class="authentication-form-footer">
-                    <p>Already have an account ? <a href="{{ route('login') }}">Log in </a></p>
+                    <p>มีบัญชีอยู่แล้ว? <a href="{{ route('login') }}">เข้าสู่ระบบ</a></p>
                 </div>
             </form>
 

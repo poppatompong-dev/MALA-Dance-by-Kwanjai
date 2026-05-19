@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Otp Verify | {{ readConfig('site_name') }}
+        ยืนยัน OTP | {{ readConfig('site_name') }}
     </title>
     <!-- FAVICON ICON -->
     <link rel="shortcut icon" href="{{ assetImage(readconfig('site_logo')) }}" type="image/svg+xml">
@@ -35,8 +35,8 @@
                     <a href="{{ route('frontend.home') }}" class="logo">
                         <img src="{{ assetImage(readconfig('site_logo')) }}" width="200px" alt="brand-logo">
                     </a>
-                    <h3 class="form-title">Otp Verify</h3>
-                    <p class="form-des">Please enter the code we emailed you.</p>
+                    <h3 class="form-title">ยืนยัน OTP</h3>
+                    <p class="form-des">กรุณากรอกรหัสที่เราส่งไปทางอีเมล</p>
                 </div>
                 <div class="authentication-form-content">
                     <div class="row g-4">
@@ -52,14 +52,14 @@
 
                         <div class="col-12">
                             <div class="form-group">
-                                <button type="submit" class="create-account-btn w-100">Continue</button>
+                                <button type="submit" class="create-account-btn w-100">ดำเนินการต่อ</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="authentication-form-footer">
-                    <p>Didn’t receive the email? Click to <a href="{{ route('resend.login.otp') }}">resend </a></p>
-                    <p>Back to <a href="{{ route('login') }}">Log in </a></p>
+                    <p>ไม่ได้รับอีเมล? คลิกเพื่อ <a href="{{ route('resend.login.otp') }}">ส่งอีกครั้ง</a></p>
+                    <p>กลับไป <a href="{{ route('login') }}">เข้าสู่ระบบ</a></p>
                 </div>
             </form>
         </div>

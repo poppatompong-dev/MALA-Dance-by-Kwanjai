@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Login | {{ readConfig('site_name') }}
+        เข้าสู่ระบบ | {{ readConfig('site_name') }}
     </title>
     <!-- FAVICON ICON -->
     <link rel="shortcut icon" href="{{ assetImage(readconfig('site_logo')) }}" type="image/svg+xml">
@@ -36,30 +36,30 @@
                     <a href="{{ route('frontend.home') }}" class="logo">
                         <img src="{{ assetImage(readconfig('site_logo')) }}" width="200px" alt="brand-logo">
                     </a>
-                    <h3 class="form-title">Sign in</h3>
-                    <p class="form-des">Welcome back! Sign in to access your account.</p>
+                    <h3 class="form-title">เข้าสู่ระบบ</h3>
+                    <p class="form-des">ยินดีต้อนรับกลับ กรุณาเข้าสู่ระบบเพื่อใช้งานบัญชีของคุณ</p>
                 </div>
                 <div class="authentication-form-content">
                     <div class="row g-4">
 
                         <div class="col-sm-6 col-lg-12 col-xl-6">
                             <div class="form-group">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter email"
+                                <label for="email" class="form-label">อีเมล</label>
+                                <input type="email" class="form-control" id="email" placeholder="กรอกอีเมล"
                                     autocomplete="off" name="email" required>
                                 <div class="invalid-feedback">
-                                    Please enter a valid email address.
+                                    กรุณากรอกอีเมลให้ถูกต้อง
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-12 col-xl-6">
                             <div class="form-group">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Enter password"
+                                <label for="password" class="form-label">รหัสผ่าน</label>
+                                <input type="password" class="form-control" id="password" placeholder="กรอกรหัสผ่าน"
                                     autocomplete="off" name="password" required>
                                 <div class="invalid-feedback">
-                                    Please enter a password.
+                                    กรุณากรอกรหัสผ่าน
                                 </div>
                                 <div class="show-hide toggle-password" id="toggleIcon">
                                     <span class="eye-icon">
@@ -104,9 +104,9 @@
                                     <div class="customcheck ">
                                         <input type="checkbox" id="rememberMe" class="customcheck-box"
                                             name="remember_me" hidden>
-                                        <label for="rememberMe" class="customcheck-label">Remember me</label>
+                                        <label for="rememberMe" class="customcheck-label">จดจำฉันไว้</label>
                                     </div>
-                                    <a href="{{ route('forget.password') }}" class="forget">Forgot password</a>
+                                    <a href="{{ route('forget.password') }}" class="forget">ลืมรหัสผ่าน</a>
                                 </div>
                             </div>
                             {{-- <div class="single-row">
@@ -124,11 +124,11 @@
 
                         <div class="col-sm-6 col-lg-12 col-xl-6">
                             <div class="form-group">
-                                <button type="submit" class="create-account-btn w-100">Sign In</button>
+                                <button type="submit" class="create-account-btn w-100">เข้าสู่ระบบ</button>
                             </div>
                             <div class="form-group"> <br>
-                            <p><b>User:</b> demo@qtecsolution.net</p>
-                            <p><b>Password:</b> 87654321</p>
+                            <p><b>ผู้ใช้ตัวอย่าง:</b> demo@qtecsolution.net</p>
+                            <p><b>รหัสผ่านตัวอย่าง:</b> 87654321</p>
                             </div>
                         </div>
 
@@ -170,7 +170,7 @@
                     </div>
                 </div>
                 <div class="authentication-form-footer">
-                    <p>Don’t have an account? <a href="{{ route('signup') }}">Sign up </a></p>
+                    <p>ยังไม่มีบัญชี? <a href="{{ route('signup') }}">สมัครใช้งาน</a></p>
                 </div>
             </form>
         </div>
