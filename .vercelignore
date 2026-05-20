@@ -1,4 +1,6 @@
 .agents
+.composer-cache
+.composer-home
 .env
 .git
 .idea
