@@ -25,18 +25,18 @@ class SupplierController extends Controller
                 ->addColumn('created_at', fn($data) => $data->created_at->format('d M, Y')) // Using Carbon for formatting
                 ->addColumn('action', function ($data) {
                     return '<div class="btn-group">
-                    <button type="button" class="btn bg-gradient-primary btn-flat">Action</button>
+                    <button type="button" class="btn bg-gradient-primary btn-flat">จัดการ</button>
                     <button type="button" class="btn bg-gradient-primary btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                      <span class="sr-only">Toggle Dropdown</span>
+                      <span class="sr-only">เปิดเมนู</span>
                     </button>
                     <div class="dropdown-menu" role="menu">
                       <a class="dropdown-item" href="' . route('backend.admin.suppliers.edit', $data->id) . '" ' . ($data->id == 1 ? 'onclick="event.preventDefault();"' : '') . ' >
-                    <i class="fas fa-edit"></i> Edit
+                    <i class="fas fa-edit"></i> แก้ไข
                 </a> <div class="dropdown-divider"></div>
 <form action="' . route('backend.admin.suppliers.destroy', $data->id) . '"method="POST" style="display:inline;">
                    ' . csrf_field() . '
                     ' . method_field("DELETE") . '
-<button type="submit" ' . ($data->id == 1 ? 'disabled' : '') . ' class="dropdown-item" onclick="return confirm(\'Are you sure ?\')"><i class="fas fa-trash"></i> Delete</button>
+<button type="submit" ' . ($data->id == 1 ? 'disabled' : '') . ' class="dropdown-item" onclick="return confirm(\'ยืนยันการลบรายการนี้?\')"><i class="fas fa-trash"></i> ลบ</button>
                   </form>
                     </div>
                   </div>';
@@ -87,7 +87,7 @@ class SupplierController extends Controller
 
         $supplier = Supplier::create($request->only(['name', 'phone', 'address']));
 
-        session()->flash('success', 'Supplier created successfully.');
+        session()->flash('success', 'เพิ่มซัพพลายเออร์เรียบร้อยแล้ว');
         return to_route('backend.admin.suppliers.index');
     }
 
@@ -125,7 +125,7 @@ class SupplierController extends Controller
 
         $supplier->update($request->only(['name', 'phone', 'address']));
 
-        session()->flash('success', 'Supplier updated successfully.');
+        session()->flash('success', 'อัปเดตซัพพลายเออร์เรียบร้อยแล้ว');
         return to_route('backend.admin.suppliers.index');
     }
 
@@ -138,7 +138,7 @@ class SupplierController extends Controller
         abort_if(!auth()->user()->can('supplier_delete'), 403);
         $supplier = Supplier::findOrFail($id);
         $supplier->delete();
-        session()->flash('success', 'Supplier deleted successfully.');
+        session()->flash('success', 'ลบซัพพลายเออร์เรียบร้อยแล้ว');
         return to_route('backend.admin.suppliers.index');
     }
     public function getCustomers(Request $request)

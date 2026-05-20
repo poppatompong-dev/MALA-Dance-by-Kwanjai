@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Inventory Report')
+@section('title', 'รายงานสต็อก')
 
 @section('content')
 <div class="card">
@@ -99,7 +99,7 @@
         },
         {
           extend: 'print',
-          text: 'Print',
+          text: 'พิมพ์',
           className: 'btn'
         }
       ],

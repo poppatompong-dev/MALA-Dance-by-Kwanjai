@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Sale Report')
+@section('title', 'รายงานขาย')
 
 @section('content')
 <div class="card">
@@ -8,7 +8,7 @@
     <div class="form-group">
       <div class="input-group">
         <button type="button" class="btn btn-default float-right" id="daterange-btn">
-          <i class="far fa-calendar-alt"></i> Filter by date
+          <i class="far fa-calendar-alt"></i> กรองตามวันที่
           <i class="fas fa-caret-down"></i>
         </button>
       </div>
@@ -26,7 +26,7 @@
               <!-- /.col -->
               <div class="col-sm-4">
                 <address>
-                  <strong>Sale Report ({{$start_date}} - {{$end_date}})</strong><br>
+                  <strong>รายงานขาย ({{$start_date}} - {{$end_date}})</strong><br>
                 </address>
               </div>
               <!-- /.col -->
@@ -43,16 +43,16 @@
                   <thead>
                     <tr>
                       <th data-orderable="false">#</th>
-                      <th>SaleId</th>
-                      <th>Customer</th>
-                      <th>Date</th>
-                      <th>Item</th>
-                      <th>Sub Total {{currency()->symbol??''}}</th>
-                      <th>Discount {{currency()->symbol??''}}</th>
-                      <th>Total {{currency()->symbol??''}}</th>
-                      <th>Paid {{currency()->symbol??''}}</th>
-                      <th>Due {{currency()->symbol??''}}</th>
-                      <th>Status</th>
+                      <th>เลขที่ขาย</th>
+                      <th>ลูกค้า</th>
+                      <th>วันที่</th>
+                      <th>จำนวนรายการ</th>
+                      <th>ยอดก่อนส่วนลด {{currency()->symbol??''}}</th>
+                      <th>ส่วนลด {{currency()->symbol??''}}</th>
+                      <th>ยอดสุทธิ {{currency()->symbol??''}}</th>
+                      <th>รับเงิน {{currency()->symbol??''}}</th>
+                      <th>ค้างชำระ {{currency()->symbol??''}}</th>
+                      <th>สถานะ</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -70,15 +70,15 @@
                       <td>{{number_format($order->due,2,'.',',')}}</td>
                       <td>
                         @if ($order->status)
-                        Paid
+                        ชำระแล้ว
                         @else
-                        Due
+                        ค้างชำระ
                         @endif
                       </td>
                     </tr>
                     @empty
                     <tr>
-                      <td colspan="7" class="text-center">No sells found.</td>
+                      <td colspan="11" class="text-center">ไม่พบรายการขาย</td>
                     </tr>
                     @endforelse
                   </tbody>
@@ -89,7 +89,7 @@
             <!-- /.row -->
             <div class="row no-print">
               <div class="col-12">
-                <button type="button" onclick="window.print()" class="btn btn-success float-right"><i class="fas fa-print"></i> Print</a>
+                <button type="button" onclick="window.print()" class="btn btn-success float-right"><i class="fas fa-print"></i> พิมพ์</a>
                 </button>
               </div>
             </div>

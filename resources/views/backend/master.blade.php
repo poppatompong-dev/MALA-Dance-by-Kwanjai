@@ -117,7 +117,7 @@
 
         <!-- Preloader -->
         <!-- <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="{{ assetImage(readconfig('site_logo')) }}" alt="Logo" height="60"
+            <img class="animation__shake" src="{{ assetImage(readconfig('site_logo')) }}" alt="โลโก้ร้าน" height="60"
                 width="60">
         </div> -->
 
@@ -129,7 +129,7 @@
         <aside class="main-sidebar elevation-4 sidebar-dark-primary">
             <!-- Brand Logo -->
             <a href="{{ route('frontend.home') }}" class="brand-link">
-                <img src="{{ assetImage(readconfig('site_logo')) }}" alt="Logo"
+                <img src="{{ assetImage(readconfig('site_logo')) }}" alt="โลโก้ร้าน"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">{{ readConfig('site_name') }}</span>
             </a>

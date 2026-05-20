@@ -44,7 +44,7 @@ export default function Pos() {
                 }
                 setTotalPages(productsData.meta.last_page); // Get total pages
             } catch (error) {
-                console.error("Error fetching products:", error);
+                console.error("ไม่สามารถโหลดสินค้าได้:", error);
             } finally {
                 setLoading(false); // Set loading to false
             }
@@ -58,7 +58,7 @@ export default function Pos() {
             setProducts(productsData.data);
             setTotalPages(productsData.meta.last_page); // Get total pages
         } catch (error) {
-            console.error("Error fetching products:", error);
+            console.error("ไม่สามารถโหลดสินค้าได้:", error);
         }
     }, []);
     useEffect(() => {
@@ -73,7 +73,7 @@ export default function Pos() {
             setUpdateTotal(data?.total - orderDiscount);
             setCarts(data?.carts);
         } catch (error) {
-            console.error("Error fetching carts:", error);
+            console.error("ไม่สามารถโหลดตะกร้าได้:", error);
         }
     };
 
@@ -152,10 +152,10 @@ export default function Pos() {
             return;
         }
         Swal.fire({
-            title: "Are you sure you want to delete Cart?",
+            title: "ต้องการล้างตะกร้าทั้งหมดใช่ไหม?",
             showDenyButton: true,
-            confirmButtonText: "Yes",
-            denyButtonText: "No",
+            confirmButtonText: "ใช่",
+            denyButtonText: "ไม่",
             customClass: {
                 actions: "my-actions",
                 cancelButton: "order-1 right-gap",
@@ -185,14 +185,14 @@ export default function Pos() {
             return;
         }
         if (!customerId) {
-            toast.error("Please select customer");
+            toast.error("กรุณาเลือกลูกค้า");
             return;
         }
         Swal.fire({
-            title: `Are you sure you want to complete this order? <br>Due: ${due}`,
+            title: `ยืนยันการปิดบิลนี้ใช่ไหม? <br>ยอดค้างชำระ: ${due}`,
             showDenyButton: true,
-            confirmButtonText: "Yes",
-            denyButtonText: "No",
+            confirmButtonText: "ยืนยัน",
+            denyButtonText: "ยกเลิก",
             customClass: {
                 actions: "my-actions",
                 cancelButton: "order-1 right-gap",
@@ -230,13 +230,13 @@ export default function Pos() {
                         href="/admin"
                         className="btn bg-gradient-primary mr-2"
                     >
-                        Dashboard
+                        แดชบอร์ด
                     </a>
                     <a
                         href="/admin/ordersma"
                         className="btn bg-gradient-primary"
                     >
-                        Orders
+                        รายการขาย
                     </a>
                 </div> */}
 
@@ -254,7 +254,7 @@ export default function Pos() {
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Enter barcode"
+                                        placeholder="ค้นหาหรือสแกนบาร์โค้ด…"
                                         value={searchQuery}
                                         onChange={(e) =>
                                             setSearchQuery(e.target.value)
@@ -271,18 +271,18 @@ export default function Pos() {
                             <div className="card">
                                 <div className="card-body">
                                     <div className="row text-bold mb-1">
-                                        <div className="col">Sub Total:</div>
+                                        <div className="col">ยอดก่อนส่วนลด:</div>
                                         <div className="col text-right mr-2">
                                             {total}
                                         </div>
                                     </div>
                                     <div className="row text-bold mb-1">
-                                        <div className="col">Discount:</div>
+                                        <div className="col">ส่วนลด:</div>
                                         <div className="col text-right mr-2">
                                             <input
                                                 type="number"
                                                 className="form-control form-control-sm"
-                                                placeholder="Enter discount"
+                                                placeholder="กรอกส่วนลด"
                                                 min={0}
                                                 disabled={total <= 0}
                                                 value={orderDiscount}
@@ -303,7 +303,7 @@ export default function Pos() {
                                     </div>
                                     <div className="row text-bold mb-1">
                                         <div className="col">
-                                            Apply Fractional Discount:
+                                            ปัดเศษเป็นส่วนลด:
                                         </div>
                                         <div className="col text-right mr-2">
                                             <input
@@ -327,18 +327,18 @@ export default function Pos() {
                                         </div>
                                     </div>
                                     <div className="row text-bold mb-1">
-                                        <div className="col">Total:</div>
+                                        <div className="col">ยอดสุทธิ:</div>
                                         <div className="col text-right mr-2">
                                             {updateTotal}
                                         </div>
                                     </div>
                                     <div className="row text-bold mb-1">
-                                        <div className="col">Paid:</div>
+                                        <div className="col">รับเงิน:</div>
                                         <div className="col text-right mr-2">
                                             <input
                                                 type="number"
                                                 className="form-control form-control-sm"
-                                                placeholder="Enter paid"
+                                                placeholder="กรอกยอดรับเงิน"
                                                 min={0}
                                                 disabled={total <= 0}
                                                 value={paid}
@@ -358,7 +358,7 @@ export default function Pos() {
                                         </div>
                                     </div>
                                     <div className="row text-bold">
-                                        <div className="col">Due:</div>
+                                        <div className="col">ค้างชำระ:</div>
                                         <div className="col text-right mr-2">
                                             {due}
                                         </div>
@@ -372,7 +372,7 @@ export default function Pos() {
                                         type="button"
                                         className="btn bg-gradient-danger btn-block text-white text-bold"
                                     >
-                                        Clear Cart
+                                        ล้างตะกร้า
                                     </button>
                                 </div>
                                 <div className="col">
@@ -383,7 +383,7 @@ export default function Pos() {
                                         type="button"
                                         className="btn bg-gradient-primary btn-block text-white text-bold"
                                     >
-                                        Checkout
+                                        ชำระเงิน
                                     </button>
                                 </div>
                             </div>
@@ -399,7 +399,7 @@ export default function Pos() {
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Enter Product Barcode"
+                                        placeholder="สแกนหรือกรอกรหัสสินค้า"
                                         value={searchBarcode}
                                         autoFocus
                                         onChange={(e) =>
@@ -411,7 +411,7 @@ export default function Pos() {
                                     <input
                                         type="text"
                                         className="form-control"
-                                        placeholder="Enter Product Name"
+                                        placeholder="ค้นหาชื่อสินค้า"
                                         value={searchQuery}
                                         onChange={(e) =>
                                             setSearchQuery(e.target.value)
@@ -432,12 +432,12 @@ export default function Pos() {
                                         >
                                             <div className="text-center">
                                                 <img
-                                                    src={`${fullDomainWithPort}/storage/${product.image}`}
+                                                    src={product.image_url || `${fullDomainWithPort}/storage/${product.image}`}
                                                     alt={product.name}
                                                     className="mr-2 img-thumb"
                                                     onError={(e) => {
                                                         e.target.onerror = null;
-                                                        e.target.src = `${fullDomainWithPort}/assets/images/no-image.png`;
+                                                        e.target.src = `${fullDomainWithPort}/assets/images/demo/no-image.svg`;
                                                     }}
                                                     width={120}
                                                     height={100}
@@ -448,7 +448,7 @@ export default function Pos() {
                                                         {product.quantity})
                                                     </p>
                                                     <p>
-                                                        Price:{" "}
+                                                        ราคา:{" "}
                                                         {
                                                             product?.discounted_price
                                                         }
@@ -460,7 +460,7 @@ export default function Pos() {
                             </div>
                             {loading && (
                                 <div className="loading-more">
-                                    Loading more...
+                                    กำลังโหลดสินค้า…
                                 </div>
                             )}
                         </div>

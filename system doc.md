@@ -1,65 +1,64 @@
-# System Documentation: MALA Dance by Kwanjai
+# System Documentation: หม่าล่าแดนซ์ by ขวัญใจ
 
 ## ภาพรวมระบบ
 
-MALA Dance by Kwanjai เป็นระบบ POS สำหรับร้านหม่าล่าและเครื่องดื่ม พัฒนาบน Laravel 10 พร้อม React เฉพาะส่วนหน้าจอที่ต้องโต้ตอบแบบรวดเร็ว เช่น POS cart และ purchase form ระบบรองรับการขายหน้าร้าน การจัดการสินค้า สต็อก ลูกค้า ซัพพลายเออร์ คำสั่งซื้อ การรับสินค้า รายงาน และสิทธิ์ผู้ใช้งาน
+หม่าล่าแดนซ์ by ขวัญใจ เป็นระบบ POS สำหรับร้านหม่าล่าและเครื่องดื่ม พัฒนาด้วย Laravel, Blade, React และ Vite รองรับงานขายหน้าร้าน การจัดการสินค้า สต็อก ลูกค้า ซัพพลายเออร์ การซื้อเข้า รายงาน ใบเสร็จ และสิทธิ์ผู้ใช้งาน
 
-ระบบเดโมถูกปรับให้เหมาะกับร้านหม่าล่าไทย โดย seed ข้อมูลสินค้าเป็นหมวดหม่าล่าเสียบไม้ ชุดหม่าล่า เครื่องดื่มเย็น เครื่องดื่มปั่น ท็อปปิ้ง ซอส/น้ำจิ้ม และของทานเล่น พร้อมหน่วยนับภาษาไทยและสกุลเงิน Thai Baht
+ระบบถูกปรับเป็น Thai Full Version โดยใช้ข้อมูลเดโมร้านหม่าล่า เครื่องดื่มเย็น และชุดหม่าล่า พร้อมภาพ placeholder ภายใน repo
 
 ## เทคโนโลยีหลัก
 
-- Backend: PHP 8.1+, Laravel 10
+- Backend: Laravel 10, PHP 8.1+
 - Frontend: Blade, React 18, Vite
-- Database: MySQL/MariaDB สำหรับ production และ SQLite สำหรับ local testing
-- Auth/RBAC: Laravel auth flow และ Spatie Laravel Permission
-- Data table/report: Yajra DataTables
-- Export/import: Maatwebsite Excel
+- Database: SQLite สำหรับ local testing และ MySQL/MariaDB สำหรับ production
+- Auth/RBAC: Laravel auth และ Spatie Laravel Permission
+- DataTables: Yajra DataTables
+- Import/export: Maatwebsite Excel
 - PDF: barryvdh/laravel-dompdf
-- Docker: Dockerfile, Dockerfile.node, docker-compose.yml และ Makefile
 
 ## โครงสร้างสำคัญ
 
-- `app/Http/Controllers`: controller หลักของระบบ backend, POS, product, purchase, report, role/permission
-- `app/Models`: model สำหรับ Product, Category, Brand, Unit, Customer, Supplier, Order, Purchase, Currency และ user-related models
-- `database/migrations`: schema ฐานข้อมูล
-- `database/seeders`: seed ข้อมูลเริ่มต้น รวมถึง demo data ร้านหม่าล่า/เครื่องดื่ม
-- `resources/views`: Blade templates สำหรับหน้า admin, auth, invoice และ settings
-- `resources/js/components`: React components สำหรับ POS cart และ purchase workflow
-- `routes/web.php`: web routes หลักทั้งหมด
-- `docs/th`: คู่มือภาษาไทยสำหรับผู้ใช้และผู้ดูแล
+- `app/Http/Controllers`: controller หลังร้าน POS สินค้า ซื้อเข้า รายงาน และสิทธิ์
+- `app/Models`: Product, Category, Brand, Unit, Customer, Supplier, Order, Purchase, Currency, User
+- `database/seeders`: seed ข้อมูลร้านเดโม
+- `public/assets/images/demo`: logo, favicon, auth/error, product/category/brand placeholders
+- `resources/views/backend`: หน้าหลังร้านและเมนู
+- `resources/js/components`: POS และ purchase React components
+- `docs/th`: คู่มือภาษาไทย
 
-## โมดูลระบบ
+## Demo Data
 
-### Authentication
+ข้อมูลเดโมประกอบด้วย:
 
-เส้นทาง public อยู่ที่ `/login`, `/sign-up`, `/forget-password`, `/new-password`, `/password-reset` และ Google OAuth callback ระบบหลังบ้านถูกครอบด้วย middleware `admin`
+- หมวดสินค้า 7 หมวด
+- แบรนด์/แหล่งสินค้า 4 รายการ
+- สินค้า 12 รายการ
+- หน่วยนับไทย: ไม้, แก้ว, ขวด, ชุด, ถุง, กรัม
+- ลูกค้าเดโม 3 รายการ
+- ซัพพลายเออร์เดโม 3 รายการ
+- สกุลเงิน THB สัญลักษณ์ `฿`
 
-บัญชีเดโมจาก seeder:
+บัญชีเดโม:
 
 - Email: `demo@qtecsolution.net`
 - Password: `87654321`
 - Name: `ผู้ดูแลร้าน`
 
+## โมดูลหลัก
+
+### Authentication
+
+หน้า public อยู่ที่ `/login`, `/sign-up`, `/forget-password`, `/new-password`, `/password-reset`
+
 ### Dashboard
 
-หน้า `/admin` แสดงยอดรวมคำสั่งซื้อ ยอดขาย ส่วนลด ยอดชำระ ยอดค้างชำระ จำนวนลูกค้า จำนวนสินค้า และจำนวนคำสั่งซื้อ
-
-### Product Management
-
-จัดการสินค้า หมวดหมู่ แบรนด์ หน่วยนับ และการ import สินค้า เส้นทางหลัก:
-
-- `/admin/products`
-- `/admin/categories`
-- `/admin/brands`
-- `/admin/units`
-- `/admin/import/products`
-
-ข้อมูล demo seed ประกอบด้วยสินค้า deterministic 12 รายการ เช่น หมูสามชั้นหม่าล่า เนื้อวัวหม่าล่า ชุดหม่าล่า และเครื่องดื่มเย็น โดย slug ถูกกำหนดจาก SKU แบบ lowercase เพื่อเลี่ยงปัญหา Thai slug ว่าง
+หน้า `/admin` แสดงยอดรวมออเดอร์ ยอดขาย ส่วนลด ยอดชำระ ยอดค้าง จำนวนลูกค้า จำนวนสินค้า และจำนวนรายการขาย
 
 ### POS และ Order
 
-หน้าขายใช้ React component เรียก API ภายใต้ `/admin/get/products` และ cart endpoints:
+POS ใช้ React เรียก API:
 
+- `GET /admin/get/products`
 - `GET /admin/cart`
 - `POST /admin/cart`
 - `PUT /admin/cart/increment`
@@ -68,139 +67,96 @@ MALA Dance by Kwanjai เป็นระบบ POS สำหรับร้า�
 - `PUT /admin/cart/empty`
 - `PUT /admin/order/create`
 
-เมื่อสร้าง order ระบบบันทึกรายการสินค้า ลูกค้า ยอดรวม ส่วนลด การชำระเงิน และธุรกรรมที่เกี่ยวข้อง
+### Product Management
+
+จัดการสินค้า หมวด แบรนด์ หน่วยนับ และนำเข้าสินค้า:
+
+- `/admin/products`
+- `/admin/categories`
+- `/admin/brands`
+- `/admin/units`
+- `/admin/import/products`
 
 ### Customer และ Supplier
-
-จัดการข้อมูลลูกค้าและซัพพลายเออร์:
 
 - `/admin/customers`
 - `/admin/suppliers`
 - `/admin/get/customers`
 - `/admin/create/customers`
 
-ข้อมูลเริ่มต้นมีลูกค้าหน้าร้าน ลูกค้าประจำ ออเดอร์เดลิเวอรี และซัพพลายเออร์สำหรับวัตถุดิบสด เครื่องดื่ม/บรรจุภัณฑ์ ซอส/เครื่องปรุง
-
 ### Purchase
-
-หน้ารับสินค้าใช้ React component สำหรับเลือกซัพพลายเออร์และสินค้า แล้วบันทึก purchase และ purchase items:
 
 - `/admin/purchase`
 - `/admin/purchase/products/{id}`
 
-ระบบเพิ่มจำนวนสต็อกสินค้าเมื่อบันทึกการซื้อเข้า
+เมื่อบันทึกซื้อเข้า ระบบเพิ่มสต็อกสินค้า
 
 ### Reports
-
-รายงานหลัก:
 
 - `/admin/sale/summery`
 - `/admin/sale/report`
 - `/admin/inventory/report`
 
-ใช้สำหรับดูยอดขายตามช่วงเวลา รายการขาย และสถานะคลังสินค้า
+### Settings
 
-### Currency
+ตั้งค่าร้าน โลโก้ favicon ข้อมูลติดต่อ สถานะระบบ ใบเสร็จ สกุลเงิน ผู้ใช้ บทบาท และสิทธิ์
 
-จัดการสกุลเงินผ่าน `/admin/currencies` และกำหนด default ผ่าน `/admin/currencies/default/{id}` ข้อมูล seed กำหนด Thai Baht เป็น:
-
-- Code: `THB`
-- Symbol: `฿`
-- Active: `true`
-
-### Roles และ Permissions
-
-ระบบสิทธิ์อยู่ภายใต้:
-
-- `/admin/settings/website/roles`
-- `/admin/settings/website/permissions`
-
-Seeder สร้าง role `Admin` และ sync ให้กับผู้ใช้เดโม พร้อม permission สำหรับเมนูหลังบ้าน
-
-## Database หลัก
-
-ตารางสำคัญ:
-
-- `users`
-- `roles`, `permissions`, `model_has_roles`, `role_has_permissions`
-- `categories`, `brands`, `units`, `products`
-- `pos_carts`
-- `customers`, `suppliers`
-- `orders`, `order_products`, `order_transactions`
-- `purchases`, `purchase_items`
-- `currencies`
-
-ความสัมพันธ์หลัก:
-
-- Product belongs to Category, Brand, Unit
-- Customer has many Orders
-- Order has many OrderProducts และ OrderTransactions
-- Supplier เกี่ยวข้องกับ Purchase
-- Purchase has many PurchaseItems
-
-## Demo Data ร้านหม่าล่า
-
-Seeders ที่เกี่ยวข้อง:
-
-- `StartUpSeeder`: admin, first customer, first supplier, units, currencies, permissions
-- `UnitSeeder`: ไม้, แก้ว, ขวด, ชุด, ถุง, กรัม
-- `ProductSeeder`: หมวดสินค้า แบรนด์ และสินค้า mala/drinks 12 รายการ
-- `CustomerSeeder`: ลูกค้าหน้าร้าน ลูกค้าประจำ ออเดอร์เดลิเวอรี
-- `SupplierSeeder`: ร้านวัตถุดิบสด ร้านเครื่องดื่มและบรรจุภัณฑ์ ร้านซอสและเครื่องปรุง
-- `CurrencySeeder`: สกุลเงิน พร้อม THB active
-
-คำสั่ง reset ฐานข้อมูล local:
-
-```bash
-php artisan migrate:fresh --seed --force
-```
-
-## การติดตั้งแบบ Local
-
-```bash
-composer install
-npm install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate --seed
-php artisan serve
-npm run dev
-```
-
-เปิดระบบที่:
-
-```text
-http://127.0.0.1:8000
-```
-
-## การติดตั้งด้วย Docker
-
-```bash
-make setup
-```
-
-ค่า config หลักอยู่ใน `.env.docker`, `docker-compose.yml`, `Dockerfile` และ `Dockerfile.node`
-
-## คำสั่งพัฒนาและตรวจสอบ
-
-```bash
-php artisan migrate:fresh --seed --force
-npm run dev
-npm run build
-vendor/bin/phpunit
-```
-
-บน Windows workspace นี้มี portable PHP อยู่ที่:
+## คำสั่ง Local
 
 ```powershell
 .\.tools\php\php.exe artisan migrate:fresh --seed --force
+npm.cmd run dev
+.\.tools\php\php.exe artisan serve --host=127.0.0.1 --port=8000
 ```
 
-## หมายเหตุการ deploy
+## คำสั่งตรวจ
 
-- ตั้งค่า `.env` ให้ตรงกับฐานข้อมูลจริง
-- รัน `php artisan key:generate` เฉพาะ environment ใหม่
+```powershell
+.\.tools\php\php.exe artisan migrate:fresh --seed --force
+npm.cmd run build
+.\.tools\php\php.exe artisan view:cache
+```
+
+## หมายเหตุ Deploy
+
+- ตั้งค่า `.env` ให้ตรงฐานข้อมูลจริง
+- รัน `php artisan key:generate` เมื่อสร้าง environment ใหม่
 - ตั้ง permission ให้ `storage` และ `bootstrap/cache`
-- รัน `php artisan storage:link` หากต้องใช้ไฟล์ upload
-- รัน `npm run build` เพื่อสร้าง frontend assets
+- รัน `php artisan storage:link` หากใช้ไฟล์ upload
+- รัน `npm run build` ก่อน production
 - ห้าม commit `.env`, `vendor`, `node_modules`, log และ local SQLite
+## คู่มือบนเว็บหลังร้าน
+
+ระบบมีหน้าอ่านคู่มือสำหรับผู้ดูแลหลังร้านที่:
+
+```text
+http://127.0.0.1:8000/admin/manuals
+```
+
+route นี้อยู่ภายใต้ middleware `admin` และอ่านได้เฉพาะไฟล์ที่อยู่ใน allowlist เท่านั้น เพื่อป้องกันการอ่านไฟล์อื่นนอกระบบคู่มือ แหล่งข้อมูล Markdown ที่ใช้แสดงผลคือ:
+
+- `docs/th/quick-start.md`
+- `docs/th/owner-manual.md`
+- `docs/th/admin-manual.md`
+- `docs/th/user-manual.md`
+- `system doc.md`
+
+## Product Import
+
+หน้าหลังร้าน `สินค้า > นำเข้าสินค้า` ใช้ route `backend.admin.products.import` สำหรับดาวน์โหลดเทมเพลตและอัปโหลดไฟล์สินค้า
+
+- ดาวน์โหลดเทมเพลต: `/admin/import/products?download-template=1`
+- ไฟล์ที่รองรับ: `.xlsx`, `.xls`, `.csv`, `.txt`
+- ขนาดไฟล์สูงสุด: 5 MB
+- importer: `App\Imports\ProductsImport`
+- template export: `App\Exports\DemoProductsExport`
+
+หัวคอลัมน์ที่รองรับคือ `name`, `sku`, `description`, `category`, `brand`, `unit`, `price`, `discount`, `discount_type`, `purchase_price`, `quantity`, `expire_date`, `status`, `image`
+
+กฎสำคัญ:
+
+- SKU เป็น key หลักของสินค้า
+- slug ถูกสร้างจาก SKU เป็น lowercase/hyphen เพื่อเลี่ยงปัญหา slug ภาษาไทยว่าง
+- หาก SKU มีอยู่แล้ว ระบบจะ update สินค้าเดิม
+- หาก category, brand หรือ unit ยังไม่มี ระบบจะสร้างให้อัตโนมัติ
+- ถ้าเป็นสินค้าใหม่และมี supplier/user ในระบบ จะบันทึก purchase เริ่มต้นสำหรับจำนวนที่นำเข้า

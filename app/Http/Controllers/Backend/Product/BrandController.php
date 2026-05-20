@@ -27,25 +27,25 @@ class BrandController extends Controller
             $brands = Brand::latest()->get();
             return DataTables::of($brands)
                 ->addIndexColumn()
-                ->addColumn('image', fn($data) => '<img src="' . asset('storage/' . $data->image) . '" loading="lazy" alt="' . $data->name . '" class="img-thumb img-fluid" onerror="this.onerror=null; this.src=\'' . asset('assets/images/no-image.png') . '\';" height="80" width="60" />')
+                ->addColumn('image', fn($data) => '<img src="' . mediaImage($data->image) . '" loading="lazy" alt="' . $data->name . '" class="img-thumb img-fluid" onerror="this.onerror=null; this.src=\'' . asset('assets/images/demo/no-image.svg') . '\';" height="80" width="60" />')
                 ->addColumn('name', fn($data) => $data->name)
                 ->addColumn('status', fn($data) => $data->status
-                    ? '<span class="badge bg-primary">Active</span>'
-                    : '<span class="badge bg-danger">Inactive</span>')
+                    ? '<span class="badge bg-primary">ใช้งาน</span>'
+                    : '<span class="badge bg-danger">ปิดใช้งาน</span>')
                 ->addColumn('action', function ($data) {
                     return '<div class="btn-group">
-                    <button type="button" class="btn bg-gradient-primary btn-flat">Action</button>
+                    <button type="button" class="btn bg-gradient-primary btn-flat">จัดการ</button>
                     <button type="button" class="btn bg-gradient-primary btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
                       <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <div class="dropdown-menu" role="menu">
                       <a class="dropdown-item" href="' . route('backend.admin.brands.edit', $data->id) . '" ' . ' >
-                    <i class="fas fa-edit"></i> Edit
+                    <i class="fas fa-edit"></i> แก้ไข
                 </a> <div class="dropdown-divider"></div>
 <form action="' . route('backend.admin.brands.destroy', $data->id) . '"method="POST" style="display:inline;">
                    ' . csrf_field() . '
                     ' . method_field("DELETE") . '
-<button type="submit" class="dropdown-item" onclick="return confirm(\'Are you sure ?\')"><i class="fas fa-trash"></i> Delete</button>
+<button type="submit" class="dropdown-item" onclick="return confirm(\'ต้องการลบแบรนด์นี้ใช่ไหม?\')"><i class="fas fa-trash"></i> ลบ</button>
                   </form>
                   </div>';
                 })
@@ -84,7 +84,7 @@ class BrandController extends Controller
             $brand->save();
         }
 
-        return redirect()->route('backend.admin.brands.index')->with('success', 'Brand created successfully!');
+        return redirect()->route('backend.admin.brands.index')->with('success', 'เพิ่มแบรนด์เรียบร้อยแล้ว');
     }
 
     /**
@@ -127,7 +127,7 @@ class BrandController extends Controller
             $this->fileHandler->secureUnlink($oldImage);
         }
 
-        return redirect()->route('backend.admin.brands.index')->with('success', 'Brand updated successfully!');
+        return redirect()->route('backend.admin.brands.index')->with('success', 'อัปเดตแบรนด์เรียบร้อยแล้ว');
     }
 
     /**
@@ -141,6 +141,6 @@ class BrandController extends Controller
             $this->fileHandler->secureUnlink($brand->image);
         }
         $brand->delete();
-        return redirect()->back()->with('success', 'Brand Deleted Successfully');
+        return redirect()->back()->with('success', 'ลบแบรนด์เรียบร้อยแล้ว');
     }
 }

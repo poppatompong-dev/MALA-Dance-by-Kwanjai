@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Create Supplier')
+@section('title', 'เพิ่มซัพพลายเออร์')
 
 @section('content')
 <div class="card">
@@ -12,31 +12,31 @@
         <div class="row">
           <div class="mb-3 col-md-6">
             <label for="title" class="form-label">
-              Name
+              ชื่อซัพพลายเออร์
               <span class="text-danger">*</span>
             </label>
-            <input type="text" class="form-control" placeholder="Enter title" name="name"
+            <input type="text" class="form-control" placeholder="เช่น ร้านวัตถุดิบสด" name="name"
               value="{{ old('name') }}" required>
           </div>
           <div class="mb-3 col-md-6">
             <label for="title" class="form-label">
-              Phone
+              เบอร์โทร
               <span class="text-danger">*</span>
             </label>
-            <input type="text" class="form-control" placeholder="Enter phone" name="phone"
+            <input type="text" class="form-control" placeholder="เช่น 0811111111" name="phone"
               value="{{ old('phone') }}" required>
           </div>
           <div class="mb-3 col-md-6">
             <label for="title" class="form-label">
-              Address
+              ที่อยู่/หมายเหตุ
             </label>
-            <input type="text" class="form-control" placeholder="Enter Address" name="address"
+            <input type="text" class="form-control" placeholder="เช่น ตลาดสด" name="address"
               value="{{ old('Address') }}">
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <button type="submit" class="btn btn-md bg-gradient-primary">Create</button>
+            <button type="submit" class="btn btn-md bg-gradient-primary">บันทึก</button>
           </div>
         </div>
       </div>

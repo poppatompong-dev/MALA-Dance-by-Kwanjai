@@ -1,46 +1,39 @@
 @extends('backend.master')
 
-@section('title', 'Create Customer')
+@section('title', 'แก้ไขข้อมูลซื้อเข้า')
 
 @section('content')
 <div class="card">
   <div class="card-body">
-    <form action="{{ route('backend.admin.customers.update',$customer->id) }}" method="post" class="accountForm"
+    <form action="{{ route('backend.admin.customers.update', $customer->id) }}" method="post" class="accountForm"
       enctype="multipart/form-data">
       @method('PUT')
       @csrf
       <div class="card-body row">
         <div class="mb-3 col-md-6">
-          <label for="title" class="form-label">
-            Name
+          <label for="name" class="form-label">
+            ชื่อ
             <span class="text-danger">*</span>
           </label>
-          <input type="text" class="form-control" placeholder="Enter title" name="name"
+          <input type="text" class="form-control" id="name" name="name" placeholder="กรอกชื่อ"
             value="{{ $customer->name }}" required>
         </div>
         <div class="mb-3 col-md-6">
-          <label for="title" class="form-label">
-            Phone
+          <label for="phone" class="form-label">
+            เบอร์โทร
             <span class="text-danger">*</span>
           </label>
-          <input type="text" class="form-control" placeholder="Enter phone" name="phone"
+          <input type="text" class="form-control" id="phone" name="phone" placeholder="กรอกเบอร์โทร"
             value="{{ $customer->phone }}" required>
         </div>
         <div class="mb-3 col-md-6">
-          <label for="title" class="form-label">
-            Address
-          </label>
-          <input type="text" class="form-control" placeholder="Enter Address" name="address"
+          <label for="address" class="form-label">ที่อยู่</label>
+          <input type="text" class="form-control" id="address" name="address" placeholder="กรอกที่อยู่"
             value="{{ $customer->address }}">
         </div>
       </div>
-      <!-- /.card-body -->
-      <button type="submit" class="btn btn-block bg-gradient-primary">Update</button>
+      <button type="submit" class="btn btn-block bg-gradient-primary">อัปเดต</button>
     </form>
   </div>
 </div>
 @endsection
-@push('script')
-<script>
-</script>
-@endpush

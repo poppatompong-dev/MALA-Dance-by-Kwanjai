@@ -13,43 +13,20 @@ class UnitSeeder extends Seeder
     public function run(): void
     {
         $units = [
-            [
-                'title' => 'ไม้',
-                'short_name' => 'ไม้',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'title' => 'แก้ว',
-                'short_name' => 'แก้ว',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'title' => 'ขวด',
-                'short_name' => 'ขวด',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'title' => 'ชุด',
-                'short_name' => 'ชุด',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'title' => 'ถุง',
-                'short_name' => 'ถุง',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'title' => 'กรัม',
-                'short_name' => 'กรัม',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            ['title' => 'ไม้', 'short_name' => 'ไม้'],
+            ['title' => 'แก้ว', 'short_name' => 'แก้ว'],
+            ['title' => 'ขวด', 'short_name' => 'ขวด'],
+            ['title' => 'ชุด', 'short_name' => 'ชุด'],
+            ['title' => 'ถุง', 'short_name' => 'ถุง'],
+            ['title' => 'กรัม', 'short_name' => 'กรัม'],
+            ['title' => 'จาน', 'short_name' => 'จาน'],
+            ['title' => 'ชาม', 'short_name' => 'ชาม'],
+            ['title' => 'กล่อง', 'short_name' => 'กล่อง'],
+            ['title' => 'เสิร์ฟ', 'short_name' => 'เสิร์ฟ'],
         ];
-        Unit::insert($units);
+
+        foreach ($units as $unit) {
+            Unit::updateOrCreate(['title' => $unit['title']], $unit);
+        }
     }
 }

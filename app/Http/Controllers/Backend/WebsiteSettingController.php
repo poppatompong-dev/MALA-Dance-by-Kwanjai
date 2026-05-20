@@ -34,7 +34,7 @@ class WebsiteSettingController extends Controller
         }
         Artisan::call('config:clear');
         return to_route('backend.admin.settings.website.general', ['active-tab' => 'website-info'])
-            ->with('success', 'Updated successfully');
+            ->with('success', 'บันทึกข้อมูลร้านเรียบร้อยแล้ว');
     }
 
     public function websiteContactsUpdate(Request $request)
@@ -44,7 +44,7 @@ class WebsiteSettingController extends Controller
         }
         Artisan::call('config:clear');
         return to_route('backend.admin.settings.website.general', ['active-tab' => 'contacts'])
-            ->with('success', 'Updated successfully');
+            ->with('success', 'บันทึกข้อมูลติดต่อเรียบร้อยแล้ว');
     }
 
     public function websiteSocialLinkUpdate(Request $request)
@@ -54,7 +54,7 @@ class WebsiteSettingController extends Controller
         }
         Artisan::call('config:clear');
         return to_route('backend.admin.settings.website.general', ['active-tab' => 'social-links'])
-            ->with('success', 'Updated successfully');
+            ->with('success', 'บันทึกโซเชียลเรียบร้อยแล้ว');
     }
 
     public function websiteStyleSettingsUpdate(Request $request)
@@ -84,7 +84,7 @@ class WebsiteSettingController extends Controller
         }
         Artisan::call('config:clear');
         return to_route('backend.admin.settings.website.general', ['active-tab' => 'style-settings'])
-            ->with('success', 'Updated successfully');
+            ->with('success', 'บันทึกโลโก้และภาพเรียบร้อยแล้ว');
     }
 
     public function websiteCustomCssUpdate(Request $request)
@@ -92,7 +92,7 @@ class WebsiteSettingController extends Controller
         writeConfig('custom_css', $request->custom_css);
         Artisan::call('config:clear');
         return to_route('backend.admin.settings.website.general', ['active-tab' => 'custom-css'])
-            ->with('success', 'Updated successfully');
+            ->with('success', 'บันทึก CSS เรียบร้อยแล้ว');
     }
 
     public function websiteNotificationSettingsUpdate(Request $request)
@@ -102,16 +102,17 @@ class WebsiteSettingController extends Controller
         }
         Artisan::call('config:clear');
         return to_route('backend.admin.settings.website.general', ['active-tab' => 'notification-settings'])
-            ->with('success', 'Updated successfully');
+            ->with('success', 'บันทึกการแจ้งเตือนเรียบร้อยแล้ว');
     }
     
 
     public function websiteStatusUpdate(Request $request)
     {
         writeConfig('is_live', $request->is_live);
+        writeConfig('close_msg', $request->close_msg);
         Artisan::call('config:clear');
         return to_route('backend.admin.settings.website.general', ['active-tab' => 'website-status'])
-            ->with('success', 'Updated successfully');
+            ->with('success', 'บันทึกสถานะระบบเรียบร้อยแล้ว');
     }
     public function websiteInvoiceUpdate(Request $request)
     {
@@ -120,6 +121,6 @@ class WebsiteSettingController extends Controller
         }
         Artisan::call('config:clear');
         return to_route('backend.admin.settings.website.general', ['active-tab' => 'invoice-settings'])
-            ->with('success', 'Updated successfully');
+            ->with('success', 'บันทึกตั้งค่าใบเสร็จเรียบร้อยแล้ว');
     }
 }

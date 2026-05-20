@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Permissions')
+@section('title', 'สิทธิ์')
 
 @section('content')
 <div class="card">
@@ -9,7 +9,7 @@
     <div class="mt-n5 mb-3 d-flex justify-content-end">
         <a href="{{ route('backend.admin.roles') }}" class="btn bg-gradient-primary">
             <i class="fas fa-ruler-vertical"></i>
-            Roles
+            บทบาท
         </a>
     </div>
     @endcan
@@ -53,7 +53,7 @@
                 <table class="table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>ชื่อสิทธิ์</th>
                             <th>Slug</th>
 
                             <!-- @if (env('APP_ENV') == 'local')

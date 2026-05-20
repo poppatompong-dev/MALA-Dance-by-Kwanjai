@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\Product\CategoryController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\ManualController;
 use App\Http\Controllers\Backend\RolePermission\PermissionController;
 use App\Http\Controllers\Backend\Pos\OrderController;
 use App\Http\Controllers\Backend\Product\BrandController;
@@ -61,6 +62,7 @@ Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallba
 
 Route::prefix('admin')->as('backend.admin.')->middleware(['admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('manuals', [ManualController::class, 'index'])->name('manuals.index');
     Route::resource('products', ProductController::class);
     Route::resource('brands', BrandController::class);
     Route::resource('orders', OrderController::class);

@@ -14,7 +14,9 @@ use App\Models\Product;
 use App\Models\Unit;
 use App\Trait\FileHandler;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
+use Throwable;
 use Yajra\DataTables\DataTables;
 
 class ProductController extends Controller
@@ -37,7 +39,7 @@ class ProductController extends Controller
             $products = Product::latest()->get();
             return DataTables::of($products)
                 ->addIndexColumn()
-                ->addColumn('image', fn($data) => '<img src="' . asset('storage/' . $data->image) . '" loading="lazy" alt="' . $data->name . '" class="img-thumb img-fluid" onerror="this.onerror=null; this.src=\'' . asset('assets/images/no-image.png') . '\';" height="80" width="60" />')
+                ->addColumn('image', fn($data) => '<img src="' . mediaImage($data->image) . '" loading="lazy" alt="' . $data->name . '" class="img-thumb img-fluid" onerror="this.onerror=null; this.src=\'' . asset('assets/images/demo/no-image.svg') . '\';" height="80" width="60" />')
                 ->addColumn('name', fn($data) => $data->name)
                 ->addColumn(
                     'price',
@@ -49,26 +51,26 @@ class ProductController extends Controller
                 ->addColumn('quantity', fn($data) => $data->quantity . ' ' . optional($data->unit)->short_name)
                 ->addColumn('created_at', fn($data) => $data->created_at->format('d M, Y'))
                 ->addColumn('status', fn($data) => $data->status
-                    ? '<span class="badge bg-primary">Active</span>'
-                    : '<span class="badge bg-danger">Inactive</span>')
+                    ? '<span class="badge bg-primary">ใช้งาน</span>'
+                    : '<span class="badge bg-danger">ปิดใช้งาน</span>')
                 ->addColumn('action', function ($data) {
                     return '<div class="btn-group">
-                    <button type="button" class="btn bg-gradient-primary btn-flat">Action</button>
+                    <button type="button" class="btn bg-gradient-primary btn-flat">จัดการ</button>
                     <button type="button" class="btn bg-gradient-primary btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
                       <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <div class="dropdown-menu" role="menu">
                       <a class="dropdown-item" href="'.route('backend.admin.products.edit', $data->id). '">
-                    <i class="fas fa-edit"></i> Edit
+                    <i class="fas fa-edit"></i> แก้ไข
                 </a> <div class="dropdown-divider"></div>
 <form action="' . route('backend.admin.products.destroy', $data->id) . '"method="POST" style="display:inline;">
                    ' . csrf_field() . '
                     ' . method_field("DELETE") . '
-<button type="submit" class="dropdown-item" onclick="return confirm(\'Are you sure ?\')"><i class="fas fa-trash"></i> Delete</button>
+<button type="submit" class="dropdown-item" onclick="return confirm(\'ต้องการลบสินค้านี้ใช่ไหม?\')"><i class="fas fa-trash"></i> ลบ</button>
                   </form>
 <div class="dropdown-divider"></div>
   <a class="dropdown-item" href="' . route('backend.admin.purchase.create', ['barcode' => $data->sku]) . '">
-                <i class="fas fa-cart-plus"></i> Purchase
+                <i class="fas fa-cart-plus"></i> ซื้อเข้า
             </a>
                     </div>
                   </div>';
@@ -124,7 +126,7 @@ class ProductController extends Controller
             $product->save();
         }
 
-        return redirect()->route('backend.admin.products.index')->with('success', 'Product created successfully!');
+        return redirect()->route('backend.admin.products.index')->with('success', 'เพิ่มสินค้าเรียบร้อยแล้ว');
     }
 
     /**
@@ -167,7 +169,7 @@ class ProductController extends Controller
             $this->fileHandler->secureUnlink($oldImage);
         }
 
-        return redirect()->route('backend.admin.products.index')->with('success', 'Product updated successfully!');
+        return redirect()->route('backend.admin.products.index')->with('success', 'อัปเดตสินค้าเรียบร้อยแล้ว');
     }
 
     /**
@@ -182,17 +184,37 @@ class ProductController extends Controller
             $this->fileHandler->secureUnlink($product->image);
         }
         $product->delete();
-        return redirect()->back()->with('success', 'Product Deleted Successfully');
+        return redirect()->back()->with('success', 'ลบสินค้าเรียบร้อยแล้ว');
     }
     public function import(Request $request)
     {
-        if ($request->query('download-demo')) {
-            return Excel::download(new DemoProductsExport, 'demo_products.xlsx');
+        abort_if(!auth()->user()->can('product_import'), 403);
+
+        if ($request->query('download-template') || $request->query('download-demo')) {
+            return Excel::download(new DemoProductsExport, 'mala-products-template.xlsx');
         }
+
         if ($request->isMethod('post') && $request->hasFile('file')) {
-            Excel::import(new ProductsImport, $request->file('file'));
-            return redirect()->back()->with('success', 'Products imported successfully.');
+            $request->validate([
+                'file' => ['required', 'file', 'mimes:xlsx,xls,csv,txt', 'max:5120'],
+            ]);
+
+            try {
+                Excel::import(new ProductsImport(auth()->id()), $request->file('file'));
+            } catch (ValidationException $exception) {
+                throw $exception;
+            } catch (Throwable $exception) {
+                report($exception);
+
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('error', 'นำเข้าสินค้าไม่สำเร็จ กรุณาตรวจรูปแบบไฟล์และลองใหม่อีกครั้ง');
+            }
+
+            return redirect()->route('backend.admin.products.index')->with('success', 'นำเข้าสินค้าเรียบร้อยแล้ว');
         }
+
         return view('backend.products.import');
     }
 }

@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Create Currency')
+@section('title', 'เพิ่มสกุลเงิน')
 
 @section('content')
 <div class="card">
@@ -12,32 +12,32 @@
         <div class="row">
           <div class="mb-3 col-md-6">
             <label for="name" class="form-label">
-              Name
+              ชื่อ
               <span class="text-danger">*</span>
             </label>
-            <input type="text" class="form-control" placeholder="Enter name" name="name"
+            <input type="text" class="form-control" placeholder="เช่น Thai Baht" name="name"
               value="{{ old('name') }}" required>
           </div>
           <div class="mb-3 col-md-6">
             <label for="code" class="form-label">
-              Code
+              รหัส
               <span class="text-danger">*</span>
             </label>
-            <input type="text" class="form-control" placeholder="Enter Short cod" name="code"
+            <input type="text" class="form-control" placeholder="เช่น THB" name="code"
               value="{{ old('code') }}" required>
           </div>
           <div class="mb-3 col-md-6">
             <label for="symbol" class="form-label">
-              Symbol
+              สัญลักษณ์
               <span class="text-danger">*</span>
             </label>
-            <input type="text" class="form-control" placeholder="Enter symbol" name="symbol"
+            <input type="text" class="form-control" placeholder="เช่น ฿" name="symbol"
               value="{{ old('symbol') }}" required>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <button type="submit" class="btn bg-gradient-primary">Create</button>
+            <button type="submit" class="btn bg-gradient-primary">บันทึก</button>
           </div>
         </div>
       </div>

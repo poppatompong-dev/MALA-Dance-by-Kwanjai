@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Update Category')
+@section('title', 'แก้ไขหมวดสินค้า')
 
 @section('content')
 <div class="card">
@@ -13,24 +13,24 @@
         <div class="row">
           <div class="mb-3 col-md-6">
             <label for="title" class="form-label">
-              Name
+              ชื่อหมวดสินค้า
               <span class="text-danger">*</span>
             </label>
-            <input type="text" class="form-control" placeholder="Enter title" name="name"
+            <input type="text" class="form-control" placeholder="เช่น หม่าล่าเสียบไม้" name="name"
               value="{{ old('name', $category->name) }}" required>
           </div>
           <div class="mb-3 col-md-6">
             <label for="thumbnailInput" class="form-label">
-              Image
+              รูปหมวดสินค้า
             </label>
             <div class="image-upload-container" id="imageUploadContainer">
               <input type="file" class="form-control" name="category_image" id="thumbnailInput" accept="image/*" style="display: none;">
               <div class="thumb-preview" id="thumbPreviewContainer">
-                <img src="{{ asset('storage/' . $category->image) }}" alt="Thumbnail Preview"
-                  class="img-thumbnail" id="thumbnailPreview" onerror="this.onerror=null; this.src='{{ asset('assets/images/no-image.png') }}'">
+                <img src="{{ mediaImage($category->image) }}" alt="ตัวอย่างรูปหมวดสินค้า"
+                  class="img-thumbnail" id="thumbnailPreview" onerror="this.onerror=null; this.src='{{ asset('assets/images/demo/no-image.svg') }}'">
                 <div class="upload-text d-none">
                   <i class="fas fa-plus-circle"></i>
-                  <span>Upload Image</span>
+                  <span>อัปโหลดรูป</span>
                 </div>
               </div>
             </div>
@@ -38,9 +38,9 @@
 
           <div class="mb-3 col-md-12">
             <label for="description" class="form-label">
-              Description
+              รายละเอียด
             </label>
-            <textarea class="form-control" placeholder="Enter description" name="description">{{ old('description',$category->description) }}</textarea>
+            <textarea class="form-control" placeholder="รายละเอียดหมวดสินค้า" name="description">{{ old('description',$category->description) }}</textarea>
           </div>
           <div class="mb-3 col-md-12">
             <div class="form-switch px-4">
@@ -48,14 +48,14 @@
               <input class="form-check-input" type="checkbox" name="status" id="active"
                 value="1" @if($category->status==1) checked @endif>
               <label class="form-check-label" for="active">
-                Active
+                ใช้งาน
               </label>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <button type="submit" class="btn bg-gradient-primary">Update</button>
+            <button type="submit" class="btn bg-gradient-primary">บันทึกการแก้ไข</button>
           </div>
         </div>
       </div>

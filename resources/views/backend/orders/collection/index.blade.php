@@ -14,8 +14,8 @@
                 <th data-orderable="false">#</th>
                 <th>TransactionId</th>
                 <th>Amount {{currency()->symbol??''}}</th>
-                <th>Paid By</th>
-                <th>Created</th>
+                <th>ชำระโดย</th>
+                <th>วันที่สร้าง</th>
                 <th></th>
               </tr>
             </thead>

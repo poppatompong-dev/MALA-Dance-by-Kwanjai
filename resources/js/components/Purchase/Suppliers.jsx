@@ -83,7 +83,7 @@ const Suppliers = ({ setSupplierId,oldSupplier }) => {
                 options={suppliers}
                 onChange={handleChange}
                 value={selectedSupplier}
-                placeholder="Select supplier"
+                placeholder="เลือกซัพพลายเออร์"
                 required
             />
             
@@ -92,7 +92,7 @@ const Suppliers = ({ setSupplierId,oldSupplier }) => {
                 className="btn btn-primary mt-3"
                 onClick={handleShow}
             >
-                Add New Supplier
+                เพิ่มซัพพลายเออร์
             </button>
             <div
                 className="modal fade"
@@ -108,7 +108,7 @@ const Suppliers = ({ setSupplierId,oldSupplier }) => {
                                 className="modal-title"
                                 id="createSupplierModalLabel"
                             >
-                                Create Supplier
+                                เพิ่มซัพพลายเออร์
                             </h5>
                             <span className="text-bold" onClick={handleClose}>X</span>
                         </div>
@@ -118,7 +118,7 @@ const Suppliers = ({ setSupplierId,oldSupplier }) => {
                                     htmlFor="supplierName"
                                     className="form-label"
                                 >
-                                    Supplier Name
+                                    ชื่อซัพพลายเออร์
                                 </label>
                                 <input
                                     type="text"
@@ -129,7 +129,7 @@ const Suppliers = ({ setSupplierId,oldSupplier }) => {
                                     name="name"
                                     value={newSupplier.name}
                                     onChange={handleInputChange}
-                                    placeholder="Enter supplier name"
+                                    placeholder="เช่น ร้านวัตถุดิบสด"
                                 />
                                 {errors.name && (
                                     <div className="invalid-feedback">
@@ -154,7 +154,7 @@ const Suppliers = ({ setSupplierId,oldSupplier }) => {
                                     name="phone"
                                     value={newSupplier.phone}
                                     onChange={handleInputChange}
-                                    placeholder="Enter phone number"
+                                    placeholder="เช่น 0811111111"
                                 />
                                 {errors.phone && (
                                     <div className="invalid-feedback">
@@ -177,7 +177,7 @@ const Suppliers = ({ setSupplierId,oldSupplier }) => {
                                     name="address"
                                     value={newSupplier.address}
                                     onChange={handleInputChange}
-                                    placeholder="Enter address (optional)"
+                                    placeholder="เช่น ตลาดสด"
                                 />
                             </div>
                         </div>
@@ -195,7 +195,7 @@ const Suppliers = ({ setSupplierId,oldSupplier }) => {
                                 className="btn btn-primary"
                                 onClick={handleCreateSupplier}
                             >
-                                Create Supplier
+                                บันทึกซัพพลายเออร์
                             </button>
                         </div>
                     </div>

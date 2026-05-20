@@ -11,7 +11,7 @@ export default function Purchase() {
     const [barcode, setBarcode] = useState("");
     const [selectedSupplier, setSelectedSupplier] = useState({
         value: 1,
-        label: "Own Supplier",
+        label: "ซัพพลายเออร์หน้าร้าน",
     });
     const [purchaseId, setPurchaseId] = useState(null);
     const [date, setDate] = useState(null);
@@ -212,17 +212,17 @@ export default function Purchase() {
             return;
         }
         if (!date) {
-            toast.error("Please select purchase date.");
+            toast.error("กรุณาเลือกวันที่ซื้อเข้า");
             return;
         }
         if (!supplierId) {
-            toast.error("Please select a supplier.");
+            toast.error("กรุณาเลือกซัพพลายเออร์");
             return;
         }
 
         // Show confirmation dialog
         Swal.fire({
-            title: `Are you sure you want to save this purchase?`,
+            title: `ยืนยันการบันทึกรายการซื้อเข้า?`,
             showDenyButton: true,
             confirmButtonText: "Yes",
             denyButtonText: "No",
@@ -325,14 +325,14 @@ export default function Purchase() {
                         <div className="row">
                             <div className="mb-3 col-md-6">
                                 <label htmlFor="date" className="form-label">
-                                    Purchase Date
+                                    วันที่ซื้อเข้า
                                     <span className="text-danger">*</span>
                                 </label>
                                 <div>
                                     <DatePicker
                                         name="date"
                                         className="form-control"
-                                        placeholderText="Enter purchase date"
+                                        placeholderText="เลือกวันที่ซื้อเข้า"
                                         selected={date}
                                         dateFormat="yyyy-MM-dd"
                                         onChange={(date) => {
@@ -351,7 +351,7 @@ export default function Purchase() {
                                     htmlFor="supplier"
                                     className="form-label"
                                 >
-                                    Supplier
+                                    ซัพพลายเออร์
                                     <span className="text-danger">*</span>
                                 </label>
                                 <Suppliers
@@ -378,13 +378,13 @@ export default function Purchase() {
                                     onChange={(e) =>
                                         setSearchTerm(e.target.value)
                                     }
-                                    placeholder="Enter product barcode/name"
+                                    placeholder="ค้นหาสินค้าหรือสแกนบาร์โค้ด…"
                                 />
                                 <button
                                     className="btn bg-gradient-primary ml-2"
                                     onClick={handleSearchAdd}
                                 >
-                                    Add Product
+                                    เพิ่มสินค้า
                                 </button>
                             </div>
                         </div>
@@ -422,12 +422,12 @@ export default function Purchase() {
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Product Name</th>
-                                            <th>Purchase Price</th>
-                                            <th>Current Stock</th>
+                                            <th>ชื่อสินค้า</th>
+                                            <th>ราคาซื้อ</th>
+                                            <th>สต็อกปัจจุบัน</th>
                                             <th>Qty</th>
                                             <th>Sub Total</th>
-                                            <th>Action</th>
+                                            <th>จัดการ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -480,7 +480,7 @@ export default function Purchase() {
                                                             )
                                                         }
                                                     >
-                                                        Delete
+                                                        ลบ
                                                     </button>
                                                 </td>
                                             </tr>
@@ -496,31 +496,31 @@ export default function Purchase() {
                                     <table className="table table-sm">
                                         <tbody>
                                             <tr>
-                                                <th>Subtotal:</th>
+                                                <th>ยอดก่อนปรับเพิ่ม:</th>
                                                 <td className="text-right">
                                                     {totals.subTotal.toFixed(2)}
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th>Tax:</th>
+                                                <th>ภาษี:</th>
                                                 <td className="text-right">
                                                     {totals.tax.toFixed(2)}
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th>Discount:</th>
+                                                <th>ส่วนลด:</th>
                                                 <td className="text-right">
                                                     {totals.discount.toFixed(2)}
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th>Shipping:</th>
+                                                <th>ค่าขนส่ง:</th>
                                                 <td className="text-right">
                                                     {totals.shipping.toFixed(2)}
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th>Grand Total:</th>
+                                                <th>ยอดสุทธิ:</th>
                                                 <td className="text-right">
                                                     {totals.grandTotal.toFixed(
                                                         2
@@ -539,7 +539,7 @@ export default function Purchase() {
                         <div className="row">
                             <div className="mb-3 col-md-4">
                                 <label htmlFor="tax" className="form-label">
-                                    Tax
+                                    ภาษี
                                 </label>
                                 <input
                                     type="number"
@@ -549,7 +549,7 @@ export default function Purchase() {
                                     onChange={(e) =>
                                         setTax(parseFloat(e.target.value) || 0)
                                     }
-                                    placeholder="Enter tax"
+                                    placeholder="กรอกภาษี"
                                     name="tax"
                                     required
                                 />
@@ -559,7 +559,7 @@ export default function Purchase() {
                                     htmlFor="discount"
                                     className="form-label"
                                 >
-                                    Discount
+                                    ส่วนลด
                                 </label>
                                 <input
                                     type="number"
@@ -571,7 +571,7 @@ export default function Purchase() {
                                             parseFloat(e.target.value) || 0
                                         )
                                     }
-                                    placeholder="Enter discount"
+                                    placeholder="กรอกส่วนลด"
                                     name="discount"
                                     required
                                 />
@@ -581,7 +581,7 @@ export default function Purchase() {
                                     htmlFor="shipping"
                                     className="form-label"
                                 >
-                                    Shipping Charge
+                                    ค่าขนส่ง
                                 </label>
                                 <input
                                     type="number"
@@ -593,7 +593,7 @@ export default function Purchase() {
                                             parseFloat(e.target.value) || 0
                                         )
                                     }
-                                    placeholder="Enter shipping"
+                                    placeholder="กรอกค่าขนส่ง"
                                     name="shipping"
                                     required
                                 />
@@ -606,7 +606,7 @@ export default function Purchase() {
                     className="btn btn-md bg-gradient-primary"
                     onClick={handleSubmit}
                 >
-                    Create
+                    บันทึกรายการซื้อเข้า
                 </button>
             </div>
 

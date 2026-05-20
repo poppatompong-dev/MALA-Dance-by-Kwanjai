@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Sale')
+@section('title', 'รายการขาย')
 
 @section('content')
 <div class="card">
@@ -12,16 +12,16 @@
             <thead>
               <tr>
                 <th data-orderable="false">#</th>
-                <th>SaleId</th>
-                <th>Customer</th>
-                <th>Item</th>
-                <th>Sub Total {{currency()->symbol??''}}</th>
-                <th>Discount {{currency()->symbol??''}}</th>
-                <th>Total {{currency()->symbol??''}}</th>
-                <th>Paid {{currency()->symbol??''}}</th>
-                <th>Due {{currency()->symbol??''}}</th>
-                <th>Status</th>
-                <th data-orderable="false">Action</th>
+                <th>เลขที่ขาย</th>
+                <th>ลูกค้า</th>
+                <th>จำนวนรายการ</th>
+                <th>ยอดก่อนส่วนลด {{currency()->symbol??''}}</th>
+                <th>ส่วนลด {{currency()->symbol??''}}</th>
+                <th>ยอดสุทธิ {{currency()->symbol??''}}</th>
+                <th>รับเงิน {{currency()->symbol??''}}</th>
+                <th>ค้างชำระ {{currency()->symbol??''}}</th>
+                <th>สถานะ</th>
+                <th data-orderable="false">จัดการ</th>
               </tr>
             </thead>
           </table>

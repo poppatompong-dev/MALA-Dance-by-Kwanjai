@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460" role="img" aria-labelledby="title">
+  <title id="title">ไม่พบหน้าที่ต้องการ</title>
+  <rect width="720" height="460" rx="34" fill="#fff7ed"/>
+  <text x="360" y="160" text-anchor="middle" font-family="Tahoma, Arial, sans-serif" font-size="96" font-weight="900" fill="#dc2626">404</text>
+  <text x="360" y="226" text-anchor="middle" font-family="Tahoma, Arial, sans-serif" font-size="34" font-weight="800" fill="#7f1d1d">ไม่พบหน้าที่ต้องการ</text>
+  <text x="360" y="275" text-anchor="middle" font-family="Tahoma, Arial, sans-serif" font-size="22" fill="#9a3412">กลับไปหน้าร้านหรือแดชบอร์ดเพื่อใช้งานต่อ</text>
+  <path d="M220 340c70-38 210-38 280 0" fill="none" stroke="#fb923c" stroke-width="18" stroke-linecap="round"/>
+</svg>

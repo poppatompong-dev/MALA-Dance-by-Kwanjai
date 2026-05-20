@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Units')
+@section('title', 'หน่วยสินค้า')
 
 @section('content')
 <div class="card">
@@ -8,7 +8,7 @@
   <div class="mt-n5 mb-3 d-flex justify-content-end">
     <a href="{{ route('backend.admin.units.create') }}" class="btn bg-gradient-primary">
       <i class="fas fa-plus-circle"></i>
-      Add New
+      เพิ่มหน่วย
     </a>
   </div>
   @endcan
@@ -20,9 +20,9 @@
             <thead>
               <tr>
                 <th data-orderable="false">#</th>
-                <th>Title</th>
-                <th>Short Name</th>
-                <th data-orderable="false">Action</th>
+                <th>ชื่อหน่วย</th>
+                <th>ชื่อย่อ</th>
+                <th data-orderable="false">จัดการ</th>
               </tr>
             </thead>
           </table>

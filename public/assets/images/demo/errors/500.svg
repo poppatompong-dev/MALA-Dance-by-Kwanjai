@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460" role="img" aria-labelledby="title">
+  <title id="title">ระบบขัดข้องชั่วคราว</title>
+  <rect width="720" height="460" rx="34" fill="#fef2f2"/>
+  <text x="360" y="160" text-anchor="middle" font-family="Tahoma, Arial, sans-serif" font-size="96" font-weight="900" fill="#7f1d1d">500</text>
+  <text x="360" y="226" text-anchor="middle" font-family="Tahoma, Arial, sans-serif" font-size="34" font-weight="800" fill="#dc2626">ระบบขัดข้องชั่วคราว</text>
+  <text x="360" y="275" text-anchor="middle" font-family="Tahoma, Arial, sans-serif" font-size="22" fill="#9a3412">กรุณาลองใหม่อีกครั้ง หรือติดต่อผู้ดูแลร้าน</text>
+  <circle cx="360" cy="340" r="34" fill="#fb923c"/>
+  <path d="M360 316v30M360 368h.1" stroke="#fff7ed" stroke-width="12" stroke-linecap="round"/>
+</svg>

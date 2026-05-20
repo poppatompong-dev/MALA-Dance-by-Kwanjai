@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Customers')
+@section('title', 'ลูกค้า')
 
 @section('content')
 <div class="card">
@@ -8,7 +8,7 @@
   <div class="mt-n5 mb-3 d-flex justify-content-end">
     <a href="{{ route('backend.admin.customers.create') }}" class="btn bg-gradient-primary">
       <i class="fas fa-plus-circle"></i>
-      Add New
+      เพิ่มลูกค้า
     </a>
   </div>
   @endcan
@@ -20,12 +20,12 @@
             <thead>
               <tr>
                 <th data-orderable="false">#</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Created</th>
+                <th>ชื่อลูกค้า</th>
+                <th>โทรศัพท์</th>
+                <th>ที่อยู่/ช่องทาง</th>
+                <th>วันที่สร้าง</th>
                 <th data-orderable="false">
-                  Action
+                  จัดการ
                 </th>
               </tr>
             </thead>

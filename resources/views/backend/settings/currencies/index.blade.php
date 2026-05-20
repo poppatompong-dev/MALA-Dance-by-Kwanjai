@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Currency')
+@section('title', 'สกุลเงิน')
 
 @section('content')
 <div class="card">
@@ -9,7 +9,7 @@
   <div class="mt-n5 mb-3 d-flex justify-content-end">
     <a href="{{ route('backend.admin.currencies.create') }}" class="btn bg-gradient-primary">
       <i class="fas fa-plus-circle"></i>
-      Add New
+      เพิ่มสกุลเงิน
     </a>
   </div>
   @endcan
@@ -21,10 +21,10 @@
             <thead>
               <tr>
                 <th data-orderable="false">#</th>
-                <th>Name</th>
-                <th>Code</th>
-                <th>Symbol</th>
-                <th data-orderable="false">Action</th>
+                <th>ชื่อ</th>
+                <th>รหัส</th>
+                <th>สัญลักษณ์</th>
+                <th data-orderable="false">จัดการ</th>
               </tr>
             </thead>
           </table>

@@ -24,24 +24,24 @@ class CurrencyController extends Controller
                 ->addColumn('name', fn($data) => $data->name)
                 ->addColumn('code', fn($data) => $data->code)
                 ->addColumn('symbol', fn($data) => $data->symbol
-                    . ($data->active ? ' (Default Currency)' : ''))
+                    . ($data->active ? ' (สกุลเงินหลัก)' : ''))
                 ->addColumn('action', function ($data) {
                     return '<div class="btn-group">
-                    <button type="button" class="btn bg-gradient-primary btn-flat">Action</button>
+                    <button type="button" class="btn bg-gradient-primary btn-flat">จัดการ</button>
                     <button type="button" class="btn bg-gradient-primary btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                      <span class="sr-only">Toggle Dropdown</span>
+                      <span class="sr-only">เปิดเมนู</span>
                     </button>
                     <div class="dropdown-menu" role="menu">
                       <a class="dropdown-item" href="' . route('backend.admin.currencies.edit', $data->id) . '" ' . ' >
-                    <i class="fas fa-edit"></i> Edit
+                    <i class="fas fa-edit"></i> แก้ไข
                 </a> <div class="dropdown-divider"></div>
 <form action="' . route('backend.admin.currencies.destroy', $data->id) . '"method="POST" style="display:inline;">
                    ' . csrf_field() . '
                     ' . method_field("DELETE") . '
-<button type="submit" class="dropdown-item" onclick="return confirm(\'Are you sure ?\')"><i class="fas fa-trash"></i> Delete</button>
+<button type="submit" class="dropdown-item" onclick="return confirm(\'ยืนยันการลบสกุลเงินนี้?\')"><i class="fas fa-trash"></i> ลบ</button>
                   </form><div class="dropdown-divider"></div>
-                   <a class="dropdown-item" onclick="return confirm(\'Are you sure to set Default ?\')" href="' . route('backend.admin.currencies.setDefault', $data->id) . '" ' . ' >
-                    <i class="fas fa-edit"></i> Set Default
+                   <a class="dropdown-item" onclick="return confirm(\'ตั้งเป็นสกุลเงินหลัก?\')" href="' . route('backend.admin.currencies.setDefault', $data->id) . '" ' . ' >
+                    <i class="fas fa-edit"></i> ตั้งเป็นสกุลเงินหลัก
                 </a>
                   </div>';
                 })
@@ -75,7 +75,7 @@ class CurrencyController extends Controller
         ]);
         $currency = Currency::create($request->only(['name', 'code', 'symbol']));
 
-        return redirect()->route('backend.admin.currencies.index')->with('success', 'Currency created successfully!');
+        return redirect()->route('backend.admin.currencies.index')->with('success', 'เพิ่มสกุลเงินเรียบร้อยแล้ว');
     }
 
     /**
@@ -112,7 +112,7 @@ class CurrencyController extends Controller
             'symbol' => 'required|string'
         ]);
         $currency->update($request->only(['name', 'code', 'symbol']));
-        return redirect()->route('backend.admin.currencies.index')->with('success', 'Currency updated successfully!');
+        return redirect()->route('backend.admin.currencies.index')->with('success', 'อัปเดตสกุลเงินเรียบร้อยแล้ว');
     }
 
 
@@ -125,7 +125,7 @@ class CurrencyController extends Controller
         abort_if(!auth()->user()->can('currency_delete'), 403);
         $currency = Currency::findOrFail($id);
         $currency->delete();
-        return redirect()->back()->with('success', 'Currency Deleted Successfully');
+        return redirect()->back()->with('success', 'ลบสกุลเงินเรียบร้อยแล้ว');
     }
     public function setDefault($id)
     {
@@ -134,6 +134,6 @@ class CurrencyController extends Controller
         $currency->active = true;
         $currency->save();
         Cache::put('default_currency', $currency, 60 * 24);
-        return redirect()->back()->with('success', 'Currency Set Default Successfully');
+        return redirect()->back()->with('success', 'ตั้งสกุลเงินหลักเรียบร้อยแล้ว');
     }
 }

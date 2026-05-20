@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Sale Report')
+@section('title', 'สรุปยอดขาย')
 
 @section('content')
 <div class="card">
@@ -8,7 +8,7 @@
     <div class="form-group">
       <div class="input-group">
         <button type="button" class="btn btn-default float-right" id="daterange-btn">
-          <i class="far fa-calendar-alt"></i> Filter by date
+          <i class="far fa-calendar-alt"></i> กรองตามวันที่
           <i class="fas fa-caret-down"></i>
         </button>
       </div>
@@ -54,11 +54,11 @@
                       <td class="text-right">{{currency()->symbol??''}} {{number_format($total,2)}}</td>
                     </tr>
                     <tr>
-                      <th>Customer Paid:</th>
+                      <th>ยอดรับเงิน:</th>
                       <td class="text-right">{{currency()->symbol??''}} {{number_format($paid,2)}}</td>
                     </tr>
                     <tr>
-                      <th>Customer Due:</th>
+                      <th>ยอดค้างชำระ:</th>
                       <td class="text-right">{{currency()->symbol??''}} {{number_format($due,2)}}</td>
                     </tr>
                   </table>
@@ -69,7 +69,7 @@
             <!-- /.row -->
             <div class="row no-print">
               <div class="col-12">
-                <button type="button" onclick="window.print()" class="btn btn-success float-right"><i class="fas fa-print"></i> Print</a>
+                <button type="button" onclick="window.print()" class="btn btn-success float-right"><i class="fas fa-print"></i> พิมพ์</a>
                 </button>
               </div>
             </div>

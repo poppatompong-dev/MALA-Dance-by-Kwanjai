@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Create Category')
+@section('title', 'เพิ่มหมวดสินค้า')
 
 @section('content')
 <div class="card">
@@ -12,24 +12,24 @@
         <div class="row">
           <div class="mb-3 col-md-6">
             <label for="title" class="form-label">
-              Name
+              ชื่อหมวดสินค้า
               <span class="text-danger">*</span>
             </label>
-            <input type="text" class="form-control" placeholder="Enter title" name="name"
+            <input type="text" class="form-control" placeholder="เช่น หม่าล่าเสียบไม้" name="name"
               value="{{ old('name') }}" required>
           </div>
           <div class="mb-3 col-md-6">
             <label for="thumbnailInput" class="form-label">
-              Image
+              รูปหมวดสินค้า
             </label>
             <div class="image-upload-container" id="imageUploadContainer">
               <input type="file" class="form-control" name="category_image" id="thumbnailInput" accept="image/*" style="display: none;">
               <div class="thumb-preview" id="thumbPreviewContainer">
-                <img src="{{ asset('backend/assets/images/blank.png') }}" alt="Thumbnail Preview"
+                <img src="{{ asset('assets/images/demo/no-image.svg') }}" alt="ตัวอย่างรูปหมวดสินค้า"
                   class="img-thumbnail d-none" id="thumbnailPreview">
                 <div class="upload-text">
                   <i class="fas fa-plus-circle"></i>
-                  <span>Upload Image</span>
+                  <span>อัปโหลดรูป</span>
                 </div>
               </div>
             </div>
@@ -37,9 +37,9 @@
 
           <div class="mb-3 col-md-12">
             <label for="description" class="form-label">
-              Description
+              รายละเอียด
             </label>
-            <textarea class="form-control" placeholder="Enter description" name="description">{{ old('description') }}</textarea>
+            <textarea class="form-control" placeholder="รายละเอียดหมวดสินค้า" name="description">{{ old('description') }}</textarea>
           </div>
           <div class="mb-3 col-md-12">
             <div class="form-switch px-4">
@@ -47,14 +47,14 @@
               <input class="form-check-input" type="checkbox" name="status" id="active"
                 value="1" checked>
               <label class="form-check-label" for="active">
-                Active
+                ใช้งาน
               </label>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <button type="submit" class="btn bg-gradient-primary">Create</button>
+            <button type="submit" class="btn bg-gradient-primary">บันทึกหมวดสินค้า</button>
           </div>
         </div>
       </div>

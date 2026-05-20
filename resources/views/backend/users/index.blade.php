@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'User Management')
+@section('title', 'จัดการผู้ใช้งาน')
 
 @section('content')
 <div class="card">
@@ -8,7 +8,7 @@
     <div class="mt-n5 mb-3 d-flex justify-content-end">
         <a href="{{ route('backend.admin.user.create') }}" class="btn bg-gradient-primary">
             <i class="fas fa-plus-circle"></i>
-            Add New
+            เพิ่มผู้ใช้งาน
         </a>
     </div>
     @endcan
@@ -20,13 +20,13 @@
                         <thead>
                             <tr>
                                 <th data-orderable="false">#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Created</th>
-                                <th>Status</th>
+                                <th>ชื่อ</th>
+                                <th>อีเมล</th>
+                                <th>บทบาท</th>
+                                <th>วันที่สร้าง</th>
+                                <th>สถานะ</th>
                                 <th data-orderable="false">
-                                    Action
+                                    จัดการ
                                 </th>
                             </tr>
                         </thead>

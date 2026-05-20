@@ -1,13 +1,13 @@
 @extends('backend.master')
 
-@section('title', 'Customers')
+@section('title', 'รายละเอียดซื้อเข้า')
 
 @section('content')
 <div class="card">
   <div class="card-body p-2 p-md-4 pt-0">
     <div class="row invoice-info">
       <div class="col-sm-4 invoice-col">
-        Supplier
+        ซัพพลายเออร์
         <address>
           <strong>Name: {{ $purchase->supplier->name }}</strong><br>
         </address>
@@ -21,7 +21,7 @@
               <tr>
                 <th data-orderable="false">#</th>
                 <th>Product</th>
-                <th>Purchase Price{{currency()->symbol??''}}</th>
+                <th>ราคาซื้อ {{currency()->symbol??''}}</th>
                 <th>
                   Quantity
                 </th>
@@ -87,7 +87,7 @@
     </div>
     <!-- <div class="row no-print">
       <div class="col-12">
-        <button type="button" onclick="window.print()" class="btn btn-success float-right"><i class="fas fa-print"></i> Print</a>
+        <button type="button" onclick="window.print()" class="btn btn-success float-right"><i class="fas fa-print"></i> พิมพ์</a>
         </button>
       </div>
     </div> -->

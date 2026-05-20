@@ -4,7 +4,7 @@ import axios from "axios";
 
 const CustomerSelect = ({ setCustomerId }) => {
     const [customers, setCustomers] = useState([]);
-    const [selectedCustomer, setSelectedCustomer] = useState({value:1,label:"Walking Customer"});
+    const [selectedCustomer, setSelectedCustomer] = useState({value:1,label:"ลูกค้าหน้าร้าน"});
 
     // Fetch existing customers from the backend
     useEffect(() => {
@@ -33,7 +33,7 @@ const CustomerSelect = ({ setCustomerId }) => {
                 setSelectedCustomer(newOption);
             })
             .catch((error) => {
-                console.error("Error creating customer:", error);
+                console.error("ไม่สามารถเพิ่มลูกค้าได้:", error);
             });
     };
 
@@ -48,7 +48,7 @@ const CustomerSelect = ({ setCustomerId }) => {
             onChange={handleChange}
             onCreateOption={handleCreateCustomer} // Handle creating a new customer
             value={selectedCustomer}
-            placeholder="Select or create customer"
+            placeholder="เลือกลูกค้า หรือเพิ่มลูกค้าใหม่"
         />
     );
 };

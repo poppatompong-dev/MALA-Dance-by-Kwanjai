@@ -1,22 +1,33 @@
-# บันทึกตรวจโค้ดก่อนปรับภาษาไทย
+# บันทึกตรวจโค้ด
 
-วันที่ตรวจ: 19 พฤษภาคม 2026
+## ไฟล์สำคัญที่เกี่ยวข้อง
 
-## สิ่งที่พบ
+- `app/Helper.php`: เพิ่ม `mediaImage()` เพื่อรองรับรูปจาก public asset และ storage
+- `app/Http/Resources/ProductResource.php`: ส่ง `image_url` ให้ POS ใช้โดยตรง
+- `database/seeders/ProductSeeder.php`: seed สินค้า หม่าล่า/เครื่องดื่ม พร้อมรูปและ slug จาก SKU
+- `config/system.php`: ค่าเริ่มต้นร้านภาษาไทยและ path โลโก้/favicon
+- `resources/views/backend/layouts/sidebar.blade.php`: เมนูหลังร้านภาษาไทย
+- `resources/views/backend/layouts/navbar.blade.php`: navbar ภาษาไทยและ aria-label
+- `resources/js/components/Pos.jsx`: UI POS ภาษาไทยและรูปสินค้า
 
-1. โปรเจกต์ใช้ Laravel Blade สำหรับหน้าแอดมินและหน้า login
-2. หน้า POS และ purchase บางส่วนเป็น React ใน `resources/js/components`
-3. สิทธิ์ผู้ใช้ใช้ Spatie Permission ใน `database/seeders/RolePermissionSeeder.php`
-4. ใบเสร็จหลักอยู่ที่ `resources/views/backend/orders/pos-invoice.blade.php` และ `print-invoice.blade.php`
-5. ข้อมูลตัวอย่างยังเป็น Faker ภาษาอังกฤษ ควรเปลี่ยนเป็นตัวอย่างร้านหม่าล่าและเครื่องดื่ม
-6. Local ใช้ SQLite เพื่อทดสอบง่าย ส่วน production/cloud ควรใช้ MySQL หรือ MariaDB
+## แนวทางโค้ด
 
-## ความเสี่ยง
+- ไม่ใช้ remote image URL ใน runtime
+- รูป demo อยู่ใต้ `public/assets/images/demo`
+- สินค้าไทยใน seeder ต้องมี slug จาก SKU เพื่อเลี่ยง slug ว่าง
+- ใช้ `mediaImage()` เมื่อแสดง image field ที่อาจเป็น public asset หรือ storage path
+- หลีกเลี่ยงการแก้ business logic หากเป็นงาน localization/visual
 
-| เรื่อง | ความเสี่ยง | วิธีลดความเสี่ยง |
-|---|---|---|
-| แปลข้อความกระจายหลายไฟล์ | แปลไม่ครบทุกหน้าจอ | ทำเป็นเฟสและ smoke test ทุก route |
-| ภาษาไทยยาวกว่าอังกฤษ | ปุ่ม/table แตก | ตรวจหน้าจอ desktop และ mobile |
-| Seed data เปลี่ยน | ฐานข้อมูลเดิมไม่เห็นข้อมูลใหม่ | ใช้ migrate:fresh --seed เฉพาะ local |
-| สิทธิ์ role เดิมกว้างเกิน | แคชเชียร์เห็นเมนูเกินจำเป็น | ปรับ role cashier ให้เน้น POS และขาย |
-| ใบเสร็จภาษาไทย | thermal printer บางรุ่นไม่รองรับ font | ใช้ HTML print ก่อน แล้วทดสอบเครื่องพิมพ์จริงภายหลัง |
+## คำสั่งตรวจ
+
+```powershell
+.\.tools\php\php.exe -l app/Helper.php
+git diff --check
+.\.tools\php\php.exe artisan migrate:fresh --seed --force
+npm.cmd run build
+.\.tools\php\php.exe artisan view:cache
+```
+
+## หมายเหตุ
+
+งานนี้มี build artifacts ใน `public/build` ซึ่งอาจเปลี่ยนหลัง `npm.cmd run build` ให้ตรวจสถานะ git ก่อน stage/commit ทุกครั้ง และอย่า revert งานของผู้อื่น

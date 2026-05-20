@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" role="img" aria-label="หม่าล่าแดนซ์ by ขวัญใจ">
+  <rect width="180" height="180" rx="40" fill="#fff7ed"/>
+  <circle cx="90" cy="82" r="50" fill="#dc2626"/>
+  <circle cx="90" cy="82" r="34" fill="#fb923c"/>
+  <path d="M90 30c13 20 32 28 32 54 0 24-16 39-32 39S58 108 58 84c0-26 19-34 32-54z" fill="#fef2f2"/>
+  <text x="90" y="154" text-anchor="middle" font-family="Tahoma, Arial, sans-serif" font-size="19" font-weight="800" fill="#7f1d1d">หม่าล่าแดนซ์</text>
+</svg>

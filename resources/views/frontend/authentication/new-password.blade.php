@@ -25,7 +25,7 @@
     <section class="authentications">
         <div class="left-content">
             <figure class="">
-                <img src="{{ asset('assets/images/authentication/register.svg') }}" alt="register image ">
+                <img src="{{ asset('assets/images/demo/auth/reset.svg') }}" alt="ภาพตั้งรหัสผ่านใหม่">
             </figure>
         </div>
         <div class="right-content">

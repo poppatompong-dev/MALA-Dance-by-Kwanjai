@@ -32,16 +32,16 @@ class PurchaseController extends Controller
                 ->addColumn('created_at', fn($data) => \Carbon\Carbon::parse($data->date)->format('d M, Y')) // Using Carbon for formatting
                 ->addColumn('action', function ($data) {
                     return '<div class="btn-group">
-                    <button type="button" class="btn bg-gradient-primary btn-flat">Action</button>
+                    <button type="button" class="btn bg-gradient-primary btn-flat">จัดการ</button>
                     <button type="button" class="btn bg-gradient-primary btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                      <span class="sr-only">Toggle Dropdown</span>
+                      <span class="sr-only">เปิดเมนู</span>
                     </button>
                     <div class="dropdown-menu" role="menu">
                       <a class="dropdown-item" href="' . route('backend.admin.purchase.create', ['purchase_id' => $data->id]) . '">
-                    <i class="fas fa-edit"></i> Edit
+                    <i class="fas fa-edit"></i> แก้ไข
                 </a> 
   <a class="dropdown-item" href="' . route('backend.admin.purchase.products', $data->id) . '">
-                <i class="fas fa-eye"></i> View
+                <i class="fas fa-eye"></i> ดูรายการ
             </a>
                     </div>
                   </div>';
@@ -168,7 +168,7 @@ class PurchaseController extends Controller
             }
             // Step 4: Return a response
             return response()->json([
-                'message' => 'Purchase saved successfully.',
+                'message' => 'บันทึกรายการซื้อเข้าเรียบร้อยแล้ว',
                 'purchase' => $purchase,
             ], 201);
         }

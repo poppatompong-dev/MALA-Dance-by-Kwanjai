@@ -1,5 +1,5 @@
 @extends('backend.master')
-@section('title', 'Receipt_'.$order->id)
+@section('title', 'ใบเสร็จ_'.$order->id)
 @section('content')
 
 <div class="card">
@@ -7,7 +7,7 @@
   <div class="receipt-container mt-0" id="printable-section" style="max-width: {{ $maxWidth}}; font-size: 12px; font-family: 'Courier New', Courier, monospace;">
     <div class="text-center">
       @if(readConfig('is_show_logo_invoice'))
-      <img src="{{ assetImage(readconfig('site_logo')) }}" height="30" width="70" alt="Logo">
+      <img src="{{ assetImage(readconfig('site_logo')) }}" height="30" width="70" alt="โลโก้ร้าน">
       @endif
       @if(readConfig('is_show_site_invoice'))
       <h3>{{ readConfig('site_name') }}</h3>
@@ -16,16 +16,16 @@
       @if(readConfig('is_show_phone_invoice')){{ readConfig('contact_phone') }}<br>@endif
       @if(readConfig('is_show_email_invoice')){{ readConfig('contact_email') }}<br>@endif
     </div>
-    {{ 'User: '.auth()->user()->name}}<br>
-    {{ 'Order: #'.$order->id}}<br>
+    {{ 'ผู้ขาย: '.auth()->user()->name}}<br>
+    {{ 'เลขที่ออเดอร์: #'.$order->id}}<br>
     <hr>
     <div class="row justify-content-between mx-auto">
       <div class="text-left">
         @if(readConfig('is_show_customer_invoice'))
         <address>
-          Name: {{ $order->customer->name ?? 'N/A' }}<br>
-          Address: {{ $order->customer->address ?? 'N/A' }}<br>
-          Phone: {{ $order->customer->phone ?? 'N/A' }}
+          ลูกค้า: {{ $order->customer->name ?? '-' }}<br>
+          ที่อยู่: {{ $order->customer->address ?? '-' }}<br>
+          เบอร์โทร: {{ $order->customer->phone ?? '-' }}
         </address>
         @endif
       </div>
@@ -40,11 +40,11 @@
     <table style="width: 100%;">
       <thead>
         <tr>
-          <th style="text-align: left;">Product</th>
+          <th style="text-align: left;">สินค้า</th>
           <th style="text-align: right;"></th>
           <!-- <th style="text-align: right;">Qty</th> -->
           <!-- <th style="text-align: right;">Price {{ currency()->symbol}}</th> -->
-          <th style="text-align: right;">Total {{ currency()->symbol}}</th>
+          <th style="text-align: right;">รวม {{ currency()->symbol}}</th>
         </tr>
       </thead>
       <tbody>
@@ -62,23 +62,23 @@
     <div class="summary">
       <table style="width: 100%;">
         <tr>
-          <td>Subtotal:</td>
+          <td>ยอดก่อนส่วนลด:</td>
           <td class="text-right">{{number_format($order->sub_total, 2) }}</td>
         </tr>
         <tr>
-          <td>Discount:</td>
+          <td>ส่วนลด:</td>
           <td class="text-right">{{number_format($order->discount, 2) }}</td>
         </tr>
         <tr>
-          <td><strong>Total:</strong></td>
+          <td><strong>ยอดสุทธิ:</strong></td>
           <td class="text-right"><strong>{{number_format($order->total, 2) }}</strong></td>
         </tr>
         <tr>
-          <td>Paid:</td>
+          <td>รับเงิน:</td>
           <td class="text-right">{{number_format($order->paid, 2) }}</td>
         </tr>
         <tr>
-          <td>Due:</td>
+          <td>ค้างชำระ:</td>
           <td class="text-right">{{number_format($order->due, 2) }}</td>
         </tr>
       </table>
@@ -91,7 +91,7 @@
 
   <!-- Print Button -->
   <div class="text-center mt-3 no-print pb-3">
-    <button type="button" onclick="window.print()" class="btn bg-gradient-primary text-white"><i class="fas fa-print"></i> Print</button>
+    <button type="button" onclick="window.print()" class="btn bg-gradient-primary text-white"><i class="fas fa-print"></i> พิมพ์</button>
   </div>
 </div>
 @endsection

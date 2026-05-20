@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Profile')
+@section('title', 'โปรไฟล์')
 
 @section('content')
 <div class="card">
@@ -11,7 +11,7 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="fullName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" placeholder="Enter full name"
+                        <input type="text" class="form-control" id="fullName" placeholder="กรอกชื่อ-นามสกุล"
                             name="name" value="{{ $user->name }}">
                     </div>
                 </div>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="thumbnail">Profile Image</label>
+                        <label for="thumbnail">รูปโปรไฟล์</label>
                         <!-- <input type="file" class="form-control" name="profile_image"
                             onchange="previewThumbnail(this)">
                         <img class="img-fluid thumbnail-preview" src="{{ nullImg() }}" alt="preview-image"> -->
@@ -47,7 +47,7 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="password" class="form-label">Current password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Enter your password"
+                        <input type="password" class="form-control" id="password" placeholder="กรอกรหัสผ่าน"
                             name="current_password" autocomplete="new-password">
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="form-group">
-                        <button type="submit" class="btn btn-block bg-gradient-primary">Update</button>
+                        <button type="submit" class="btn btn-block bg-gradient-primary">อัปเดต</button>
                     </div>
                 </div>
             </div>

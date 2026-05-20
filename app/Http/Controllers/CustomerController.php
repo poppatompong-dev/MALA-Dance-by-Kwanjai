@@ -24,16 +24,16 @@ class CustomerController extends Controller
                 ->addColumn('created_at', fn($data) => $data->created_at->format('d M, Y')) // Using Carbon for formatting
                 ->addColumn('action', function ($data) {
                     $actionHtml = '<div class="btn-group">
-        <button type="button" class="btn bg-gradient-primary btn-flat">Action</button>
+        <button type="button" class="btn bg-gradient-primary btn-flat">จัดการ</button>
         <button type="button" class="btn bg-gradient-primary btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-            <span class="sr-only">Toggle Dropdown</span>
+            <span class="sr-only">เปิดเมนู</span>
         </button>
         <div class="dropdown-menu" role="menu">';
 
                     // Check if the user has permission to update customers
                     if (auth()->user()->can('customer_update')) {
                         $actionHtml .= '<a class="dropdown-item" href="' . route('backend.admin.customers.edit', $data->id) . '" ' . ($data->id == 1 ? 'onclick="event.preventDefault();"' : '') . '>
-            <i class="fas fa-edit"></i> Edit
+            <i class="fas fa-edit"></i> แก้ไข
         </a>';
                         $actionHtml .= '<div class="dropdown-divider"></div>';
                     }
@@ -43,8 +43,8 @@ class CustomerController extends Controller
                         $actionHtml .= '<form action="' . route('backend.admin.customers.destroy', $data->id) . '" method="POST" style="display:inline;">
             ' . csrf_field() . '
             ' . method_field("DELETE") . '
-            <button type="submit" ' . ($data->id == 1 ? 'disabled' : '') . ' class="dropdown-item" onclick="return confirm(\'Are you sure?\')">
-                <i class="fas fa-trash"></i> Delete
+            <button type="submit" ' . ($data->id == 1 ? 'disabled' : '') . ' class="dropdown-item" onclick="return confirm(\'ยืนยันการลบรายการนี้?\')">
+                <i class="fas fa-trash"></i> ลบ
             </button>
         </form>';
                         $actionHtml .= '<div class="dropdown-divider"></div>';
@@ -52,7 +52,7 @@ class CustomerController extends Controller
 
                     if (auth()->user()->can('customer_sales')) {
                         $actionHtml .= '<a class="dropdown-item" href="' . route('backend.admin.customers.orders', $data->id) . '">
-        <i class="fas fa-cart-plus"></i> Sales
+        <i class="fas fa-cart-plus"></i> รายการขาย
     </a>';
                     }
 
@@ -105,7 +105,7 @@ class CustomerController extends Controller
 
         $customer = Customer::create($request->only(['name', 'phone', 'address']));
 
-        session()->flash('success', 'Customer created successfully.');
+        session()->flash('success', 'เพิ่มลูกค้าเรียบร้อยแล้ว');
         return to_route('backend.admin.customers.index');
     }
 
@@ -145,7 +145,7 @@ class CustomerController extends Controller
 
         $customer->update($request->only(['name', 'phone', 'address']));
 
-        session()->flash('success', 'Customer updated successfully.');
+        session()->flash('success', 'อัปเดตลูกค้าเรียบร้อยแล้ว');
         return to_route('backend.admin.customers.index');
     }
 
@@ -159,7 +159,7 @@ class CustomerController extends Controller
         abort_if(!auth()->user()->can('customer_delete'), 403);
         $customer = Customer::findOrFail($id);
         $customer->delete();
-        session()->flash('success', 'Customer deleted successfully.');
+        session()->flash('success', 'ลบลูกค้าเรียบร้อยแล้ว');
         return to_route('backend.admin.customers.index');
     }
     public function getCustomers(Request $request)

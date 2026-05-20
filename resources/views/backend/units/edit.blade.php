@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Update Unit')
+@section('title', 'แก้ไขหน่วยสินค้า')
 
 @section('content')
 <div class="card">
@@ -13,24 +13,24 @@
         <div class="row">
           <div class="mb-3 col-md-6">
             <label for="title" class="form-label">
-              Title
+              ชื่อหน่วย
               <span class="text-danger">*</span>
             </label>
-            <input type="text" class="form-control" placeholder="Enter title" name="title"
+            <input type="text" class="form-control" placeholder="เช่น ไม้" name="title"
               value="{{ old('title',$unit->title) }}" required>
           </div>
           <div class="mb-3 col-md-6">
             <label for="short_name" class="form-label">
-              Short Name
+              ชื่อย่อ
               <span class="text-danger">*</span>
             </label>
-            <input type="text" class="form-control" placeholder="Enter Short Name" name="short_name"
+            <input type="text" class="form-control" placeholder="เช่น ไม้" name="short_name"
               value="{{ old('short_name',$unit->short_name) }}" required>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <button type="submit" class="btn bg-gradient-primary">Update</button>
+            <button type="submit" class="btn bg-gradient-primary">อัปเดต</button>
           </div>
         </div>
       </div>

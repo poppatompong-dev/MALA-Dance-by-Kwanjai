@@ -29,7 +29,7 @@
           </div>
           <div class="mb-3 col-md-3">
             <label for="title" class="form-label">
-              Due
+              ค้างชำระ
             </label>
             <p>{{$order->due}}</p>
           </div>
@@ -37,7 +37,7 @@
             <label for="title" class="form-label">
               Collection Amount <span class="text-danger">*</span>
             </label>
-            <input type="number" class="form-control" placeholder="Enter amount" value="{{$order->due}}" name="amount" required min="1" max="{{$order->due}}">
+            <input type="number" class="form-control" placeholder="กรอกยอดรับชำระ" value="{{$order->due}}" name="amount" required min="1" max="{{$order->due}}">
           </div>
         </div>
         <div class="row">

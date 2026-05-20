@@ -89,6 +89,30 @@ if (!function_exists('assetImage')) {
     }
 }
 
+if (!function_exists('mediaImage')) {
+
+    function mediaImage($path, $fallback = 'assets/images/demo/no-image.svg')
+    {
+        if ($path && preg_match('/^https?:\/\//i', $path)) {
+            return $path;
+        }
+
+        if ($path && str_starts_with($path, '/assets/')) {
+            return assetImage($path);
+        }
+
+        if ($path && str_starts_with($path, 'assets/')) {
+            return assetImage('/' . $path);
+        }
+
+        if ($path && \Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+            return asset(\Illuminate\Support\Facades\Storage::url($path));
+        }
+
+        return asset($fallback);
+    }
+}
+
 if (!function_exists('slugify')) {
 
     function slugify($text)

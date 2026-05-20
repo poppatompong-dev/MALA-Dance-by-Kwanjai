@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Product Purchase')
+@section('title', 'ซื้อสินค้าเข้า')
 
 @section('content')
 </div>

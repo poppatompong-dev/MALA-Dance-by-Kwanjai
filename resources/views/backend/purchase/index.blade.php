@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Purchase')
+@section('title', 'รายการซื้อเข้า')
 
 @section('content')
 <div class="card">
@@ -9,7 +9,7 @@
   <div class="mt-n5 mb-3 d-flex justify-content-end">
     <a href="{{ route('backend.admin.purchase.create') }}" class="btn bg-gradient-primary">
       <i class="fas fa-plus-circle"></i>
-      Add New
+      เพิ่มรายการซื้อเข้า
     </a>
   </div>
   @endcan
@@ -21,12 +21,12 @@
             <thead>
               <tr>
                 <th data-orderable="false">#</th>
-                <th>Supplier</th>
+                <th>ซัพพลายเออร์</th>
                 <th>ID</th>
-                <th>Total {{currency()->symbol??''}}</th>
-                <th>Date</th>
+                <th>ยอดรวม {{currency()->symbol??''}}</th>
+                <th>วันที่</th>
                 <th data-orderable="false">
-                  Action
+                  จัดการ
                 </th>
               </tr>
             </thead>

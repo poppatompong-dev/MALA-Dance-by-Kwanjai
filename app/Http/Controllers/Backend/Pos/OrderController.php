@@ -31,18 +31,18 @@ class OrderController extends Controller
                 ->addColumn('paid', fn($data) => number_format($data->paid, 2, '.', ','))
                 ->addColumn('due', fn($data) => number_format($data->due, 2, '.', ','))
                 ->addColumn('status', fn($data) => $data->status
-                    ? '<span class="badge bg-primary">Paid</span>'
-                    : '<span class="badge bg-danger">Due</span>')
+                    ? '<span class="badge bg-primary">ชำระแล้ว</span>'
+                    : '<span class="badge bg-danger">ค้างชำระ</span>')
                 ->addColumn('action', function ($data) {
                     $buttons = '';
 
-                    $buttons .= '<a class="btn btn-success btn-sm" href="' . route('backend.admin.orders.invoice', $data->id) . '"><i class="fas fa-file-invoice"></i> Invoice</a>';
+                    $buttons .= '<a class="btn btn-success btn-sm" href="' . route('backend.admin.orders.invoice', $data->id) . '"><i class="fas fa-file-invoice"></i> ใบแจ้งหนี้</a>';
 
-                    $buttons .= '<a class="btn btn-secondary btn-sm" href="' . route('backend.admin.orders.pos-invoice', $data->id) . '"><i class="fas fa-file-invoice"></i> Pos Invoice</a>';
+                    $buttons .= '<a class="btn btn-secondary btn-sm" href="' . route('backend.admin.orders.pos-invoice', $data->id) . '"><i class="fas fa-file-invoice"></i> ใบเสร็จ POS</a>';
                     if (!$data->status) {
-                        $buttons .= '<a class="btn btn-warning btn-sm" href="' . route('backend.admin.due.collection', $data->id) . '"><i class="fas fa-receipt"></i> Due Collection</a>';
+                        $buttons .= '<a class="btn btn-warning btn-sm" href="' . route('backend.admin.due.collection', $data->id) . '"><i class="fas fa-receipt"></i> รับชำระค้าง</a>';
                     }
-                    $buttons .= '<a class="btn btn-primary btn-sm" href="' . route('backend.admin.orders.transactions', $data->id) . '"><i class="fas fa-exchange-alt"></i> Transactions</a>';
+                    $buttons .= '<a class="btn btn-primary btn-sm" href="' . route('backend.admin.orders.transactions', $data->id) . '"><i class="fas fa-exchange-alt"></i> ธุรกรรม</a>';
                     return $buttons;
                 })
                 ->rawColumns(['saleId', 'customer', 'item', 'sub_total', 'discount', 'total', 'paid', 'due', 'status', 'action'])
@@ -81,10 +81,10 @@ class OrderController extends Controller
                 'min:0',
             ],
         ], [
-            'customer_id.required' => 'Please select a customer.',
-            'customer_id.exists' => 'The selected customer does not exist.',
-            'order_discount.numeric' => 'The order discount must be a number.',
-            'paid.numeric' => 'The amount paid must be a number.',
+            'customer_id.required' => 'กรุณาเลือกลูกค้า',
+            'customer_id.exists' => 'ไม่พบลูกค้าที่เลือก',
+            'order_discount.numeric' => 'ส่วนลดต้องเป็นตัวเลข',
+            'paid.numeric' => 'ยอดรับเงินต้องเป็นตัวเลข',
         ]);
         $carts = PosCart::with('product')->where('user_id', auth()->id())->get();
         $order = Order::create([
@@ -130,7 +130,7 @@ class OrderController extends Controller
         }
 
         $carts = PosCart::where('user_id', auth()->id())->delete();
-        return response()->json(['message' => 'Order completed successfully', 'order' => $order], 200);
+        return response()->json(['message' => 'บันทึกการขายเรียบร้อยแล้ว', 'order' => $order], 200);
     }
 
     /**
