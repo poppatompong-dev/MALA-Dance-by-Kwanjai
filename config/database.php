@@ -76,6 +76,9 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => 'prefer',
+            'options' => extension_loaded('pdo_pgsql') ? array_filter([
+                PDO::ATTR_EMULATE_PREPARES => env('DB_EMULATE_PREPARES', false),
+            ], fn ($value) => ! is_null($value)) : [],
         ],
 
         'sqlsrv' => [

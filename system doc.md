@@ -160,3 +160,29 @@ route นี้อยู่ภายใต้ middleware `admin` และอ่
 - หาก SKU มีอยู่แล้ว ระบบจะ update สินค้าเดิม
 - หาก category, brand หรือ unit ยังไม่มี ระบบจะสร้างให้อัตโนมัติ
 - ถ้าเป็นสินค้าใหม่และมี supplier/user ในระบบ จะบันทึก purchase เริ่มต้นสำหรับจำนวนที่นำเข้า
+
+## Supabase Production Database
+
+Production บน Vercel ใช้ Supabase Postgres เป็นฐานข้อมูลถาวร แนะนำให้ใช้ Transaction pooler สำหรับ serverless runtime
+
+Project:
+
+- Supabase URL: `https://rnvgjbhfnnzxmbmlyxke.supabase.co`
+- Project ref: `rnvgjbhfnnzxmbmlyxke`
+- Database host: `db.rnvgjbhfnnzxmbmlyxke.supabase.co`
+
+Vercel environment variables ที่ต้องมี:
+
+- `APP_ENV=production`
+- `APP_DEBUG=false`
+- `APP_URL=https://mala-dance-by-kwanjai.vercel.app`
+- `APP_KEY=<Laravel app key>`
+- `DB_CONNECTION=pgsql`
+- `DB_EMULATE_PREPARES=true`
+- `DATABASE_URL=<Supabase Transaction pooler connection string>`
+- `SESSION_DRIVER=cookie`
+- `CACHE_DRIVER=array`
+- `LOG_CHANNEL=stderr`
+- `QUEUE_CONNECTION=sync`
+
+อย่า commit `DATABASE_URL`, database password, service role key หรือ secret ใด ๆ ลง repo ให้ตั้งผ่าน Vercel Environment Variables เท่านั้น

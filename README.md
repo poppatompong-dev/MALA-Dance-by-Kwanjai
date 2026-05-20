@@ -89,3 +89,12 @@ http://127.0.0.1:8000/admin/manuals
 - รองรับไฟล์ `.xlsx`, `.xls`, `.csv`, `.txt`
 - ใช้ SKU เป็นรหัสหลัก หาก SKU เดิมมีอยู่ ระบบจะอัปเดตสินค้าเดิมแทนสร้างซ้ำ
 - ถ้าหมวดสินค้า แบรนด์ หรือหน่วยนับยังไม่มี ระบบจะสร้างให้อัตโนมัติ
+
+## Production Database
+
+เว็บ production บน Vercel ใช้ Supabase Postgres ผ่าน environment variables ของ Vercel
+
+- ใช้ `DB_CONNECTION=pgsql`
+- ใช้ Supabase Transaction pooler สำหรับ serverless
+- ตั้ง `DB_EMULATE_PREPARES=true` เพื่อหลีกเลี่ยงปัญหา prepared statements กับ transaction pooler
+- ตั้ง `DATABASE_URL` ผ่าน Vercel เท่านั้น ห้าม commit password หรือ connection string จริงลง repo
