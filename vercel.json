@@ -6,7 +6,8 @@
     "api/index.php": {
       "runtime": "vercel-php@0.9.0",
       "memory": 1024,
-      "maxDuration": 60
+      "maxDuration": 60,
+      "excludeFiles": "{docs/**,node_modules/**,public/assets/**,public/build/**,public/css/**,public/dist/**,public/js/**,public/plugins/**,storage/**,tests/**}"
     }
   },
   "routes": [
