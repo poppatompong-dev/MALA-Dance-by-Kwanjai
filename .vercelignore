@@ -1,0 +1,14 @@
+.agents
+.env
+.git
+.idea
+.phpunit.cache
+.tools
+.vscode
+database/database.sqlite
+node_modules
+npm-debug.log
+skills-lock.json
+storage/logs
+vendor
+yarn-error.log
