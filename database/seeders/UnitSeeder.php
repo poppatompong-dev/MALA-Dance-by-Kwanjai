@@ -21,6 +21,7 @@ class UnitSeeder extends Seeder
             ['title' => 'กรัม', 'short_name' => 'กรัม'],
             ['title' => 'จาน', 'short_name' => 'จาน'],
             ['title' => 'ชาม', 'short_name' => 'ชาม'],
+            ['title' => 'ถ้วย', 'short_name' => 'ถ้วย'],
             ['title' => 'กล่อง', 'short_name' => 'กล่อง'],
             ['title' => 'เสิร์ฟ', 'short_name' => 'เสิร์ฟ'],
         ];
