@@ -25,10 +25,10 @@ class AppServiceProvider extends ServiceProvider
             config(['permission.cache.store' => 'default']);
         }
 
-        // Vercel Serverless: force array session & cache drivers
-        // to avoid Database/file connection errors on cold starts
+        // Vercel Serverless: force cookie session & array cache drivers
+        // Cookie session stores encrypted session in browser — works across serverless invocations
         if ($this->isVercel()) {
-            config(['session.driver' => 'array']);
+            config(['session.driver' => 'cookie']);
             config(['cache.default' => 'array']);
         }
     }
