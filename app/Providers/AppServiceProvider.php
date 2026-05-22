@@ -14,7 +14,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Vercel Cache Workaround
+        if (!config()->has('cache.stores.array')) {
+            config(['cache.stores.array' => [
+                'driver' => 'array',
+                'serialize' => false,
+            ]]);
+        }
+        if (!config()->has('permission.cache.store')) {
+            config(['permission.cache.store' => 'default']);
+        }
     }
 
     /**
