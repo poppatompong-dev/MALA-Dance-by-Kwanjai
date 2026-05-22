@@ -7,6 +7,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\PosCart;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CartController extends Controller
 {
@@ -34,18 +35,26 @@ class CartController extends Controller
     }
     public function getProducts(Request $request)
     {
+        // Cache product list for 10 minutes — bust when search/barcode filters are used
+        $search  = $request->search;
+        $barcode = $request->barcode;
 
-        $products = Product::query()->active()->stocked();
-        // Search by name if provided
-        $products->when($request->search, function ($query, $search) {
-            $query->where('name', 'LIKE', "%{$search}%");
-        });
+        if ($search || $barcode) {
+            // Never cache filtered results
+            $products = Product::query()->active()->stocked()
+                ->when($search, fn($q, $s) => $q->where('name', 'LIKE', "%{$s}%"))
+                ->when($barcode, fn($q, $b) => $q->where('sku', $b))
+                ->latest()
+                ->paginate(96);
+        } else {
+            // Cache the default (unfiltered) product list for POS — 10 minutes
+            $page     = $request->input('page', 1);
+            $cacheKey = "pos_products_page_{$page}";
+            $products = Cache::remember($cacheKey, 600, fn() =>
+                Product::query()->active()->stocked()->latest()->paginate(96)
+            );
+        }
 
-        // Search by barcode if provided
-        $products->when($request->barcode, function ($query, $barcode) {
-            $query->where('sku', $barcode);
-        });
-        $products = $products->latest()->paginate(96);
         if (request()->wantsJson()) {
             return ProductResource::collection($products);
         }

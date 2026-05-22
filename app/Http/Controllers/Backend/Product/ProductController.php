@@ -14,6 +14,7 @@ use App\Models\Product;
 use App\Models\Unit;
 use App\Trait\FileHandler;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
@@ -36,7 +37,7 @@ class ProductController extends Controller
 
         abort_if(!auth()->user()->can('product_view'), 403);
         if ($request->ajax()) {
-            $products = Product::latest()->get();
+            $products = Product::with('unit')->latest();
             return DataTables::of($products)
                 ->addIndexColumn()
                 ->addColumn('image', fn($data) => '<img src="' . mediaImage($data->image) . '" loading="lazy" alt="' . $data->name . '" class="img-thumb img-fluid" onerror="this.onerror=null; this.src=\'' . asset('assets/images/demo/no-image.svg') . '\';" height="80" width="60" />')
@@ -126,6 +127,11 @@ class ProductController extends Controller
             $product->save();
         }
 
+        // Bust POS product cache and dashboard counts
+        Cache::forget('dashboard_product_count');
+        Cache::forget('dashboard_low_stock');
+        $this->bustPosProductCache();
+
         return redirect()->route('backend.admin.products.index')->with('success', 'เพิ่มสินค้าเรียบร้อยแล้ว');
     }
 
@@ -169,6 +175,11 @@ class ProductController extends Controller
             $this->fileHandler->secureUnlink($oldImage);
         }
 
+        // Bust POS product cache and dashboard
+        Cache::forget('dashboard_product_count');
+        Cache::forget('dashboard_low_stock');
+        $this->bustPosProductCache();
+
         return redirect()->route('backend.admin.products.index')->with('success', 'อัปเดตสินค้าเรียบร้อยแล้ว');
     }
 
@@ -184,7 +195,23 @@ class ProductController extends Controller
             $this->fileHandler->secureUnlink($product->image);
         }
         $product->delete();
+
+        // Bust POS product cache and dashboard
+        Cache::forget('dashboard_product_count');
+        Cache::forget('dashboard_low_stock');
+        $this->bustPosProductCache();
+
         return redirect()->back()->with('success', 'ลบสินค้าเรียบร้อยแล้ว');
+    }
+
+    /**
+     * Forget all paginated POS product cache keys (up to 20 pages).
+     */
+    protected function bustPosProductCache(): void
+    {
+        for ($page = 1; $page <= 20; $page++) {
+            Cache::forget("pos_products_page_{$page}");
+        }
     }
     public function import(Request $request)
     {

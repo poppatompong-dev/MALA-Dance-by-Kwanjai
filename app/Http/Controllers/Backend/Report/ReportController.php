@@ -27,19 +27,26 @@ class ReportController extends Controller
         // Parse and set end date
         $end_date = Carbon::createFromFormat('Y-m-d', $end_date_input) ?: Carbon::today()->endOfDay();
         $end_date = $end_date->endOfDay();
-        // Retrieve orders within the date range (Paginated for performance)
-        $orders = Order::whereBetween('created_at', [$start_date, $end_date])->with('customer')->paginate(100);
+        // Paginated orders for display
+        $orders = Order::whereBetween('created_at', [$start_date, $end_date])
+            ->with('customer')
+            ->paginate(100);
+
+        // Totals via SQL aggregate (single query, no PHP collection looping)
+        $totals = Order::whereBetween('created_at', [$start_date, $end_date])
+            ->selectRaw('SUM(sub_total) as sub_total, SUM(discount) as discount, SUM(paid) as paid, SUM(due) as due, SUM(total) as total')
+            ->first();
 
         // Calculate totals
         $data = [
-            'orders' => $orders,
-            'sub_total' => $orders->sum('sub_total'),
-            'discount' => $orders->sum('discount'),
-            'paid' => $orders->sum('paid'),
-            'due' => $orders->sum('due'),
-            'total' => $orders->sum('total'),
+            'orders'     => $orders,
+            'sub_total'  => $totals->sub_total ?? 0,
+            'discount'   => $totals->discount ?? 0,
+            'paid'       => $totals->paid ?? 0,
+            'due'        => $totals->due ?? 0,
+            'total'      => $totals->total ?? 0,
             'start_date' => $start_date->format('M d, Y'),
-            'end_date' => $end_date->format('M d, Y'),
+            'end_date'   => $end_date->format('M d, Y'),
         ];
 
         return view('backend.reports.sale-report', $data);
