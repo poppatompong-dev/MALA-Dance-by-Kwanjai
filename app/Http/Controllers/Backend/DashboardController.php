@@ -66,9 +66,14 @@ class DashboardController extends Controller
         $currentYear = now()->year;
         $data['currentYear'] = $currentYear;
 
-        $monthExpression = DB::connection()->getDriverName() === 'sqlite'
-            ? 'strftime("%Y-%m", created_at)'
-            : 'DATE_FORMAT(created_at, "%Y-%m")';
+        $driver = DB::connection()->getDriverName();
+        if ($driver === 'sqlite') {
+            $monthExpression = 'strftime("%Y-%m", created_at)';
+        } elseif ($driver === 'pgsql') {
+            $monthExpression = "TO_CHAR(created_at, 'YYYY-MM')";
+        } else {
+            $monthExpression = 'DATE_FORMAT(created_at, "%Y-%m")';
+        }
 
         $salesData = OrderTransaction::selectRaw($monthExpression . ' as month, SUM(amount) as total_amount')
         ->whereYear('created_at', $currentYear)
