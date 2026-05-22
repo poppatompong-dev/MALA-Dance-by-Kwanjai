@@ -141,6 +141,40 @@
         </div>
         <!-- /.row -->
 
+        <!-- Low Stock Warning Widget -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-warning">
+                    <div class="card-header border-0">
+                        <h3 class="card-title text-dark font-weight-bold"><i class="fas fa-exclamation-triangle"></i> แจ้งเตือนสินค้าคงเหลือน้อย (10 หรือต่ำกว่า)</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>สินค้า</th>
+                                    <th>หมวดหมู่</th>
+                                    <th>SKU</th>
+                                    <th>คงเหลือ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($lowStockProducts as $product)
+                                <tr>
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ $product->category->name ?? '-' }}</td>
+                                    <td>{{ $product->sku }}</td>
+                                    <td><span class="badge badge-danger">{{ $product->quantity }} {{ $product->unit->short_name ?? 'ชิ้น' }}</span></td>
+                                </tr>
+                                @empty
+                                <tr><td colspan="4" class="text-center text-muted">สต็อกสินค้าอยู่ในเกณฑ์ปกติ</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-6">

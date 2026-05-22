@@ -1,100 +1,72 @@
-# หม่าล่าแดนซ์ by ขวัญใจ
+# MALA Dance by Kwanjai - POS & Management System
 
-ระบบ POS ภาษาไทยสำหรับร้านหม่าล่าและเครื่องดื่ม พัฒนาด้วย Laravel, Blade, React และ Vite เหมาะสำหรับงานขายหน้าร้าน จัดการสินค้า สต็อก ลูกค้า ซัพพลายเออร์ ใบเสร็จ รายงาน และสิทธิ์ผู้ใช้งาน
+A modern, fast, and secure Point-of-Sale (POS) and Restaurant Management System custom-built for **MALA Dance by Kwanjai**. 
 
-## เอกสารสำคัญ
+This system has been upgraded from a generic template into a production-ready application tailored for Thai retail/restaurant environments.
 
-- [คู่มือเริ่มใช้งานเร็ว](docs/th/quick-start.md)
-- [คู่มือเจ้าของร้าน](docs/th/owner-manual.md)
-- [คู่มือผู้ดูแลระบบ](docs/th/admin-manual.md)
-- [คู่มือพนักงานหน้าร้าน](docs/th/user-manual.md)
-- [เอกสารระบบ](system%20doc.md)
-- [ระบบดีไซน์ภาษาไทย](docs/th/design-system.md)
-- [บันทึกตรวจฟีเจอร์](docs/th/feature-audit.md)
-- [บันทึกตรวจโค้ด](docs/th/code-audit.md)
+## Core Features
 
-## ข้อมูลเข้าสู่ระบบเดโม
+- **Blazing Fast POS**: Optimized checkout flow designed for high-volume, rapid-fire orders typical of a skewer/mala shop.
+- **Smart Inventory**: Real-time stock deductions tied into a comprehensive ledger (`stock_movements` table) to prevent stock mismatches.
+- **Security & Auditing**: Role-based access control (Owner, Admin, Cashier) and permanent `audit_logs` for tracking sensitive actions like voiding orders.
+- **Performance Optimized**: Memory-optimized, lightning-fast dashboard aggregation for sales and reporting. Heavy SQL queries replace sluggish PHP collection loops.
+- **Void/Refund Handling**: "Soft deletes" for orders ensure that voided receipts are safely hidden from sales totals but permanently retained for auditing purposes.
 
-- อีเมล: `demo@qtecsolution.net`
-- รหัสผ่าน: `87654321`
-- ชื่อผู้ใช้: `ผู้ดูแลร้าน`
+## Requirements
+- PHP 8.1+
+- Composer
+- Node.js & NPM
+- MySQL or SQLite (Default configuration uses SQLite)
 
-## ฟีเจอร์หลัก
+## Local Development Setup
 
-- ขายหน้าร้านผ่าน POS พร้อมค้นหาสินค้าด้วยชื่อหรือ SKU
-- จัดการสินค้า หมวดสินค้า แบรนด์/แหล่งสินค้า และหน่วยนับภาษาไทย
-- Seed ข้อมูลเดโมร้านหม่าล่าและเครื่องดื่ม 12 รายการ พร้อมรูป placeholder ใน repo
-- จัดการลูกค้า ซัพพลายเออร์ การซื้อเข้า และสต็อก
-- พิมพ์ใบเสร็จและใบแจ้งหนี้พร้อมโลโก้และข้อความท้ายใบเสร็จภาษาไทย
-- รายงานยอดขาย รายงานรายการขาย และรายงานสต็อก
-- จัดการผู้ใช้งาน บทบาท สิทธิ์ และสกุลเงิน
-- ตั้งค่าร้าน โลโก้ favicon ข้อมูลติดต่อ และสถานะระบบ
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/poppatompong-dev/MALA-Dance-by-Kwanjai.git
+   cd MALA-Dance-by-Kwanjai
+   ```
 
-## คำสั่งรันบน Windows Workspace นี้
+2. **Install Dependencies**
+   ```bash
+   composer install
+   npm install
+   ```
 
-```powershell
-.\.tools\php\php.exe artisan migrate:fresh --seed --force
-npm.cmd run dev
-.\.tools\php\php.exe artisan serve --host=127.0.0.1 --port=8000
+3. **Environment Setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **Database Setup**
+   Ensure your `.env` specifies `DB_CONNECTION=sqlite`.
+   ```bash
+   touch database/database.sqlite
+   php artisan migrate:fresh --seed
+   ```
+   *(Note: This automatically runs the `RolesAndPermissionsSeeder` to set up security roles, and the `ThaiShopSeeder` to populate the POS with default mala items and pricing).*
+
+5. **Start the Application**
+   ```bash
+   php artisan serve
+   ```
+   In a separate terminal, run the asset bundler:
+   ```bash
+   npm run dev
+   ```
+
+## Roles & Access
+The default seeder will configure:
+- **Owner**: Full system access.
+- **Admin**: Full access except User Management.
+- **Cashier**: Isolated access to the POS checkout system only.
+
+## Deployment (Production)
+For production environments, ensure you cache the framework configuration for maximum performance:
+```bash
+composer install --optimize-autoloader --no-dev
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+npm run build
 ```
-
-เปิดระบบที่:
-
-```text
-http://127.0.0.1:8000/login
-```
-
-## คำสั่งตรวจงาน
-
-```powershell
-.\.tools\php\php.exe artisan migrate:fresh --seed --force
-npm.cmd run build
-.\.tools\php\php.exe artisan view:cache
-```
-
-## โครงสร้างที่ควรรู้
-
-- `database/seeders`: ข้อมูลเริ่มต้นของร้าน เช่น สินค้า ลูกค้า ซัพพลายเออร์ หน่วยนับ และสกุลเงิน
-- `public/assets/images/demo`: โลโก้และภาพ placeholder ทั้งระบบ
-- `resources/views/backend`: หน้าหลังร้านและเมนูภาษาไทย
-- `resources/js/components`: POS และหน้าซื้อเข้าที่ใช้ React
-- `config/system.php`: ค่าเริ่มต้นของชื่อร้าน โลโก้ ข้อมูลติดต่อ และใบเสร็จ
-- `docs/th`: คู่มือภาษาไทยสำหรับเจ้าของร้าน ผู้ดูแลระบบ และพนักงาน
-
-## หมายเหตุการใช้งานจริง
-
-ก่อนเปิดร้านจริง ให้ตรวจชื่อร้าน เบอร์โทร ข้อความท้ายใบเสร็จ สินค้าขายดี ราคา สต็อกเริ่มต้น สิทธิ์ผู้ใช้งาน และการพิมพ์ใบเสร็จให้ครบทุกขั้นตอน
-## อ่านคู่มือบนเว็บ
-
-หลังเข้าสู่ระบบหลังร้านด้วยบัญชีผู้ดูแล สามารถอ่านคู่มือจากหน้าเว็บได้ที่:
-
-```text
-http://127.0.0.1:8000/admin/manuals
-```
-
-หน้า `คู่มือการใช้งาน` แสดงเอกสารจากไฟล์ต้นฉบับแบบ read-only ได้แก่:
-
-- `docs/th/quick-start.md`
-- `docs/th/owner-manual.md`
-- `docs/th/admin-manual.md`
-- `docs/th/user-manual.md`
-- `system doc.md`
-
-## นำเข้ารายการสินค้า
-
-หลังเข้าสู่ระบบหลังร้าน ไปที่ `สินค้า > นำเข้าสินค้า` เพื่อดาวน์โหลดเทมเพลตและอัปโหลดไฟล์สินค้า
-
-- URL: `http://127.0.0.1:8000/admin/import/products`
-- ดาวน์โหลดเทมเพลต: `http://127.0.0.1:8000/admin/import/products?download-template=1`
-- รองรับไฟล์ `.xlsx`, `.xls`, `.csv`, `.txt`
-- ใช้ SKU เป็นรหัสหลัก หาก SKU เดิมมีอยู่ ระบบจะอัปเดตสินค้าเดิมแทนสร้างซ้ำ
-- ถ้าหมวดสินค้า แบรนด์ หรือหน่วยนับยังไม่มี ระบบจะสร้างให้อัตโนมัติ
-
-## Production Database
-
-เว็บ production บน Vercel ใช้ Supabase Postgres ผ่าน environment variables ของ Vercel
-
-- ใช้ `DB_CONNECTION=pgsql`
-- ใช้ Supabase Transaction pooler สำหรับ serverless
-- ตั้ง `DB_EMULATE_PREPARES=true` เพื่อหลีกเลี่ยงปัญหา prepared statements กับ transaction pooler
-- ตั้ง `DATABASE_URL` ผ่าน Vercel เท่านั้น ห้าม commit password หรือ connection string จริงลง repo

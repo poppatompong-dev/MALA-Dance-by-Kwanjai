@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 use function PHPSTORM_META\map;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = [];
     protected $appends = ['total_item'];

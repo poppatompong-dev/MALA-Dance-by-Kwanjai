@@ -115,7 +115,15 @@ class PurchaseController extends Controller
                             'quantity' => $product['qty'],
                         ]);
 
-                        $existingProduct->increment('quantity', $product['qty']);
+                        app(\App\Services\InventoryService::class)->adjustStock(
+                            $existingProduct,
+                            $product['qty'],
+                            'purchase',
+                            Purchase::class,
+                            $purchase->id,
+                            'Purchase Stock In',
+                            auth()->id()
+                        );
                     }
                     DB::commit();
                 } catch (\Exception $e) {
@@ -156,9 +164,26 @@ class PurchaseController extends Controller
                             ]
                         );
 
-                        // Adjust product stock: first add back the old quantity, then subtract the new
-                        $existingProduct->decrement('quantity', $oldQuantity);
-                        $existingProduct->increment('quantity', $product['qty']);
+                        // Adjust product stock: reverse old quantity, then add the new
+                        app(\App\Services\InventoryService::class)->adjustStock(
+                            $existingProduct,
+                            -$oldQuantity,
+                            'adjustment',
+                            Purchase::class,
+                            $purchase->id,
+                            'Purchase Stock Reversal (Update)',
+                            auth()->id()
+                        );
+
+                        app(\App\Services\InventoryService::class)->adjustStock(
+                            $existingProduct,
+                            $product['qty'],
+                            'purchase',
+                            Purchase::class,
+                            $purchase->id,
+                            'Purchase Stock In (Update)',
+                            auth()->id()
+                        );
                     }
                     DB::commit();
                 } catch (\Exception $e) {

@@ -8,7 +8,7 @@
 .composer-cache/
 .composer-home/
 .tools/
-.qpos-*.log
+.mala-*.log
 database/database.sqlite
 .env
 .env.backup

@@ -88,7 +88,10 @@ export default function Cart({ carts, setCartUpdated, cartUpdated }) {
                                 <tbody>
                                     {carts.map((item) => (
                                         <tr key={item.id}>
-                                            <td>{item.product.name}</td>
+                                            <td>
+                                                {item.product.name}
+                                                {item.spice_level && <div className="text-muted small">เผ็ด: {item.spice_level}</div>}
+                                            </td>
                                             <td className="d-flex align-items-center">
                                                 <button
                                                     className="btn btn-warning btn-sm"

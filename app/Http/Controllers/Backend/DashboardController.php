@@ -18,18 +18,26 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $orders = Order::get();
-        // Calculate totals
+        $orderTotals = Order::selectRaw('
+            SUM(sub_total) as total_sub_total,
+            SUM(discount) as total_discount,
+            SUM(total) as total_amount,
+            SUM(paid) as total_paid,
+            SUM(due) as total_due,
+            COUNT(id) as total_orders
+        ')->first();
+
         $data = [
-            'sub_total' => $orders->sum('sub_total'),
-            'discount' => $orders->sum('discount'),
-            'total' => $orders->sum('total'),
-            'paid' => $orders->sum('paid'),
-            'due' => $orders->sum('due'),
+            'sub_total' => $orderTotals->total_sub_total ?? 0,
+            'discount' => $orderTotals->total_discount ?? 0,
+            'total' => $orderTotals->total_amount ?? 0,
+            'paid' => $orderTotals->total_paid ?? 0,
+            'due' => $orderTotals->total_due ?? 0,
             'total_customer' => Customer::count(),
-            'total_order' => $orders->count(),
+            'total_order' => $orderTotals->total_orders ?? 0,
             'total_product' => Product::count(),
             'total_sale_item' => OrderProduct::sum('quantity'),
+            'lowStockProducts' => Product::where('quantity', '<=', 10)->where('status', 1)->orderBy('quantity', 'asc')->take(5)->get(),
         ];
 
 

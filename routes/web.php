@@ -72,6 +72,7 @@ Route::prefix('admin')->as('backend.admin.')->middleware(['admin'])->group(funct
     Route::resource('products', ProductController::class);
     Route::resource('units', UnitController::class);
     Route::resource('currencies', CurrencyController::class);
+    Route::resource('reward-rules', \App\Http\Controllers\Backend\RewardRuleController::class);
     Route::match(['get', 'post'], 'import/products', [ProductController::class,'import'])->name('products.import');
     Route::get('currencies/default/{id}', [CurrencyController::class, 'setDefault'])->name('currencies.setDefault');
     Route::get('customers/orders/{id}', [CustomerController::class, 'orders'])->name('customers.orders');
@@ -79,6 +80,7 @@ Route::prefix('admin')->as('backend.admin.')->middleware(['admin'])->group(funct
     Route::get('orders/invoice/{id}', [OrderController::class,'invoice'])->name('orders.invoice');
     Route::get('orders/pos-invoice/{id}', [OrderController::class, 'posInvoice'])->name('orders.pos-invoice');
     Route::get('orders/transactions/{id}', [OrderController::class, 'transactions'])->name('orders.transactions');
+    Route::post('orders/void/{id}', [OrderController::class, 'voidOrder'])->name('orders.void');
     Route::match(['get', 'post'], 'orders/due/collection/{id}', [OrderController::class, 'collection'])->name('due.collection');
     Route::get('collection/invoice/{id}', [OrderController::class, 'collectionInvoice'])->name('collectionInvoice');
     Route::resource('categories', CategoryController::class);
@@ -90,6 +92,7 @@ Route::prefix('admin')->as('backend.admin.')->middleware(['admin'])->group(funct
     //end report
    // start pos
     Route::get('/get/products', [CartController::class, 'getProducts'])->name('getProducts');
+    Route::get('/get/rewards', [CartController::class, 'getRewards'])->name('getRewards');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::put('/cart/increment', [CartController::class, 'increment']);
@@ -148,18 +151,19 @@ Route::prefix('admin')->as('backend.admin.')->middleware(['admin'])->group(funct
             });
         });
     });
+
+    // Utility Routes (Protected)
+    Route::get('clear-all', function () {
+        Artisan::call('optimize:clear');
+        return redirect()->back();
+    });
+
+    Route::get('storage-link', function () {
+        Artisan::call('storage:link');
+        return redirect()->back();
+    });
+
+    Route::get('test', [TestController::class, 'test'])->name('test');
 });
 
 // ====================== /BACKEND ======================
-
-Route::get('clear-all', function () {
-    Artisan::call('optimize:clear');
-    return redirect()->back();
-});
-
-Route::get('storage-link', function () {
-    Artisan::call('storage:link');
-    return redirect()->back();
-});
-
-Route::get('test', [TestController::class, 'test'])->name('test');

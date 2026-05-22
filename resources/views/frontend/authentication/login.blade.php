@@ -16,6 +16,57 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap/bootstrap.min.css') }}">
     <!-- APP-CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}">
+    <style>
+        body {
+            background: url('{{ asset('assets/images/demo/auth/mala_dance_bg.png') }}') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .authentications {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay to make form pop */
+        }
+        .left-content {
+            display: none !important; /* Hide the old split image */
+        }
+        .right-content {
+            width: 100%;
+            max-width: 500px;
+            /* Glassmorphism Effect */
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-top: 1px solid rgba(255, 255, 255, 0.6);
+            border-left: 1px solid rgba(255, 255, 255, 0.6);
+            margin: 20px;
+        }
+        .authentication-form {
+            padding: 0 !important;
+        }
+        .form-title {
+            font-weight: 700;
+            color: #d84315; /* Warm brand color */
+        }
+        .authentication-form-header .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .authentication-form-header .logo img {
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.15));
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .authentication-form-header .logo img:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 6px 15px rgba(216, 67, 21, 0.4));
+        }
+    </style>
 </head>
 
 <body>
@@ -23,10 +74,8 @@
 
     <!-- AUTHENTICATION-START (LOGIN) -->
     <section class="authentications">
+        <!-- left-content is hidden via CSS now -->
         <div class="left-content">
-            <figure class="">
-                <img src="{{ asset('assets/images/demo/auth/login.svg') }}" alt="ภาพเข้าสู่ระบบร้านหม่าล่า">
-            </figure>
         </div>
         <div class="right-content">
             <form action="{{ route('login') }}" method="post" class="authentication-form px-lg-5 needs-validation"
@@ -34,10 +83,10 @@
                 @csrf
                 <div class="authentication-form-header">
                     <a href="{{ route('frontend.home') }}" class="logo">
-                        <img src="{{ assetImage(readconfig('site_logo')) }}" width="200px" alt="brand-logo">
+                        <img src="{{ asset('assets/images/logo_clean.png') }}" width="200px" alt="brand-logo">
                     </a>
                     <h3 class="form-title">เข้าสู่ระบบ</h3>
-                    <p class="form-des">ยินดีต้อนรับกลับ กรุณาเข้าสู่ระบบเพื่อใช้งานบัญชีของคุณ</p>
+                    <p class="form-des" style="color: #333; font-weight: 500;">ยินดีต้อนรับกลับ กรุณาเข้าสู่ระบบเพื่อใช้งานบัญชีของคุณ</p>
                 </div>
                 <div class="authentication-form-content">
                     <div class="row g-4">

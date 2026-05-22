@@ -5,15 +5,15 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        image: qpos-app
-        container_name: qpos-app
+        image: mala-app
+        container_name: mala-app
         restart: unless-stopped
         working_dir: /var/www
         volumes:
             - .:/var/www
             - ./docker-compose/php/local.ini:/usr/local/etc/php/conf.d/local.ini # PHP config if needed
         networks:
-            - qpos-network
+            - mala-network
         depends_on:
             - db
         environment:
@@ -22,11 +22,11 @@ services:
 
     db:
         image: mysql:8.0
-        container_name: qpos-db
+        container_name: mala-db
         restart: unless-stopped
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: qpos
+            MYSQL_DATABASE: mala
             MYSQL_USER: user
             MYSQL_PASSWORD: pass
         ports:
@@ -34,11 +34,11 @@ services:
         volumes:
             - db-data:/var/lib/mysql
         networks:
-            - qpos-network
+            - mala-network
 
     nginx:
         image: nginx:alpine
-        container_name: qpos-nginx
+        container_name: mala-nginx
         restart: unless-stopped
         ports:
             - "80:80" # HTTP port
@@ -49,7 +49,7 @@ services:
         depends_on:
             - app
         networks:
-            - qpos-network
+            - mala-network
 
     node:
         # Optional platform flag for Mac Silicon (M1/M2/M3)
@@ -57,8 +57,8 @@ services:
         build:
             context: .
             dockerfile: Dockerfile.node
-        image: qpos-node
-        container_name: qpos-node
+        image: mala-node
+        container_name: mala-node
         ports:
             - "3000:3000"
             - "3001:3001"
@@ -68,10 +68,10 @@ services:
             - ./:/var/www
             - /var/www/node_modules
         networks:
-            - qpos-network
+            - mala-network
 
 networks:
-    qpos-network:
+    mala-network:
         driver: bridge
 
 volumes:

@@ -83,6 +83,29 @@
         </tr>
       </table>
     </div>
+    
+    @if($rewardUsages->count() > 0 || ($order->customer && floor($order->sub_total / 10) > 0))
+    <hr>
+    <div class="summary">
+      <table style="width: 100%;">
+        @if($rewardUsages->count() > 0)
+          @foreach($rewardUsages as $usage)
+          <tr>
+            <td><small>โปรฯ: {{ $usage->rewardRule->name }}</small></td>
+            <td class="text-right"><small>-{{ number_format($usage->discount_applied, 2) }}</small></td>
+          </tr>
+          @endforeach
+        @endif
+        @if($order->customer)
+        <tr>
+          <td>แต้มสะสมปัจจุบัน:</td>
+          <td class="text-right">{{ $order->customer->points }}</td>
+        </tr>
+        @endif
+      </table>
+    </div>
+    @endif
+
     <hr>
     <div class="text-center">
       <p class="text-muted" style="font-size: 12px;">@if(readConfig('is_show_note_invoice')){{ readConfig('note_to_customer_invoice') }}@endif</p>

@@ -1,0 +1,126 @@
+
+> dev
+> vite --config vite.config.js
+
+Port 5173 is in use, trying another one...
+
+  [32m[1mVITE[22m v4.5.5[39m  [2mready in [0m[1m142[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5174[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+
+  [31m[1mLARAVEL[22m v10.48.22[39m  [2mplugin[22m [1mv0.7.8[22m
+
+  [32m➜[39m  [1mAPP_URL[22m: [36mhttp://localhost/[39m
+[2m14:19:37[22m [36m[1m[vite][22m[39m [32m.env changed, restarting server...[39m
+Port 5173 is in use, trying another one...
+[2m14:19:37[22m [36m[1m[vite][22m[39m server restarted.
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5174[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+
+  [31m[1mLARAVEL[22m v10.48.22[39m  [2mplugin[22m [1mv0.7.8[22m
+
+  [32m➜[39m  [1mAPP_URL[22m: [36mhttp://127.0.0.1:[1m8000[22m[39m
+[2m14:25:28[22m [36m[1m[vite][22m[39m [32m.env changed, restarting server...[39m
+[2m14:25:28[22m [36m[1m[vite][22m[39m server restarted.
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+
+  [31m[1mLARAVEL[22m v10.48.22[39m  [2mplugin[22m [1mv0.7.8[22m
+
+  [32m➜[39m  [1mAPP_URL[22m: [36mhttp://127.0.0.1:[1m8000[22m[39m
+[2m16:28:51[22m [36m[1m[vite][22m[39m [32m.env.example changed, restarting server...[39m
+[2m16:28:52[22m [36m[1m[vite][22m[39m server restarted.
+
+  [31m[1mLARAVEL[22m v10.48.22[39m  [2mplugin[22m [1mv0.7.8[22m
+
+  [32m➜[39m  [1mAPP_URL[22m: [36mhttp://127.0.0.1:[1m8000[22m[39m
+[2m17:26:10[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\login.blade.php[22m
+[2m17:26:38[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\login.blade.php[22m
+[2m17:26:38[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\forget-password.blade.php[22m
+[2m17:26:39[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\login-otp.blade.php[22m
+[2m17:26:39[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\reset.blade.php[22m
+[2m17:27:18[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\new-password.blade.php[22m
+[2m17:27:18[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\sign-up.blade.php[22m
+[2m17:27:41[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\layouts\sidebar.blade.php[22m
+[2m17:27:41[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\layouts\navbar.blade.php[22m
+[2m17:27:41[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\layouts\footer.blade.php[22m
+[2m17:27:41[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\master.blade.php[22m
+[2m17:27:52[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\index.blade.php[22m
+[2m17:28:33[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mresources/js/app.jsx[22m
+[2m08:10:08[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/resources/js/components/Pos.jsx[22m
+[2m08:10:08[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/resources/js/components/Cart.jsx[22m
+[2m08:10:08[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/resources/js/components/CutomerSelect.jsx[22m
+[2m08:11:03[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\products\index.blade.php[22m
+[2m08:11:03[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\categories\index.blade.php[22m
+[2m08:11:04[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\brands\index.blade.php[22m
+[2m08:11:04[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\products\create.blade.php[22m
+[2m08:11:04[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\products\edit.blade.php[22m
+[2m08:11:31[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\categories\create.blade.php[22m
+[2m08:11:32[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\categories\edit.blade.php[22m
+[2m08:11:32[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\brands\create.blade.php[22m
+[2m08:11:32[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\brands\edit.blade.php[22m
+[2m08:11:32[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\customers\index.blade.php[22m
+[2m08:11:32[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\suppliers\index.blade.php[22m
+[2m08:13:58[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\customers\create.blade.php[22m
+[2m08:13:58[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\customers\edit.blade.php[22m
+[2m08:13:58[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\suppliers\create.blade.php[22m
+[2m08:13:58[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\suppliers\edit.blade.php[22m
+[2m08:14:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\login.blade.php[22m
+[2m08:14:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\sign-up.blade.php[22m
+[2m08:14:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\forget-password.blade.php[22m
+[2m08:14:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\reset.blade.php[22m
+[2m08:14:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\new-password.blade.php[22m
+[2m08:14:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\frontend\authentication\login-otp.blade.php[22m
+[2m08:14:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\errors\404.blade.php[22m
+[2m08:14:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\errors\500.blade.php[22m
+[2m08:14:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\orders\pos-invoice.blade.php[22m
+[2m08:14:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\orders\print-invoice.blade.php[22m
+[2m08:15:46[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\settings\website-settings\general.blade.php[22m
+[2m08:16:57[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\brands\create.blade.php[22m
+[2m08:16:57[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\brands\edit.blade.php[22m
+[2m08:16:57[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\categories\create.blade.php[22m
+[2m08:16:57[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\categories\edit.blade.php[22m
+[2m08:16:57[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\units\create.blade.php[22m
+[2m08:16:57[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\units\edit.blade.php[22m
+[2m08:16:57[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\units\index.blade.php[22m
+[2m08:17:19[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\orders\collection\invoice.blade.php[22m
+[2m08:44:15[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\layouts\sidebar.blade.php[22m
+[2m08:44:42[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\layouts\navbar.blade.php[22m
+[2m08:44:51[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\master.blade.php[22m
+[2m08:48:12[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\users\index.blade.php[22m
+[2m08:48:13[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\settings\currencies\index.blade.php[22m
+[2m08:48:13[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\orders\index.blade.php[22m
+[2m08:48:13[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\purchase\index.blade.php[22m
+[2m08:48:13[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\reports\sale-report.blade.php[22m
+[2m08:49:51[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\users\create.blade.php[22m
+[2m08:49:51[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\users\edit.blade.php[22m
+[2m08:49:51[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\settings\currencies\create.blade.php[22m
+[2m08:49:51[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\settings\currencies\edit.blade.php[22m
+[2m08:49:51[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\settings\role\index.blade.php[22m
+[2m08:50:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/resources/js/components/Pos.jsx[22m
+[2m08:50:26[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/resources/js/components/Purchase/Purchase.jsx[22m
+[2m08:50:26[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/resources/js/components/Purchase/Suppliers.jsx[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/resources/js/components/Purchase/Suppliers.jsx[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/resources/js/components/Purchase/Purchase.jsx[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\purchase\create.blade.php[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\products\edit.blade.php[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\products\import.blade.php[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\reports\inventory.blade.php[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\reports\sale-summery.blade.php[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\purchase\products.blade.php[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\orders\collection\index.blade.php[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\orders\collection\create.blade.php[22m
+[2m08:50:56[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\settings\role\permissions.blade.php[22m
+[2m08:51:04[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\settings\permission\index.blade.php[22m
+[2m08:51:26[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\products\create.blade.php[22m
+[2m08:51:26[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\orders\collection\create.blade.php[22m
+[2m08:51:26[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\profile\index.blade.php[22m
+[2m08:51:26[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\purchase\edit.blade.php[22m
+[2m08:51:42[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\purchase\edit.blade.php[22m
+[2m09:14:46[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mroutes\web.php[22m
+[2m09:15:09[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\manuals\index.blade.php[22m
+[2m09:15:29[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\layouts\sidebar.blade.php[22m
+[2m13:35:51[22m [36m[1m[vite][22m[39m [32mfull reload[39m [2mresources\views\backend\products\import.blade.php[22m

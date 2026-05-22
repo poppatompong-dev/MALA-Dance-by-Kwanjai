@@ -86,6 +86,12 @@
               </div>
               <!-- /.col -->
             </div>
+            <!-- Pagination -->
+            <div class="row justify-content-center mt-3 no-print">
+              <div class="col-12 d-flex justify-content-center">
+                {{ $orders->appends(request()->query())->links('pagination::bootstrap-4') }}
+              </div>
+            </div>
             <!-- /.row -->
             <div class="row no-print">
               <div class="col-12">

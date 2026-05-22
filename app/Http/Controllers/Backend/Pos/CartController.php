@@ -56,6 +56,8 @@ class CartController extends Controller
         // Validate request input
         $request->validate([
             'id' => 'required|exists:products,id',
+            'spice_level' => 'nullable|string',
+            'toppings' => 'nullable|string',
         ]);
 
         $product_id = $request->id;
@@ -72,8 +74,12 @@ class CartController extends Controller
             return response()->json(['message' => 'สต็อกสินค้าไม่เพียงพอ'], 400);
         }
 
-        // Fetch the cart item for the current user and product
-        $cartItem = PosCart::where('user_id', auth()->id())->where('product_id', $product_id)->first();
+        // Fetch the cart item for the current user and product with matching options
+        $cartItem = PosCart::where('user_id', auth()->id())
+            ->where('product_id', $product_id)
+            ->where('spice_level', $request->spice_level)
+            ->where('toppings', $request->toppings)
+            ->first();
 
         if ($cartItem) {
             // If the product is already in the cart, increment the quantity
@@ -89,6 +95,8 @@ class CartController extends Controller
             $cart = new PosCart();
             $cart->user_id = auth()->id();
             $cart->product_id = $product_id;
+            $cart->spice_level = $request->spice_level;
+            $cart->toppings = $request->toppings;
             $cart->quantity = 1;
             $cart->save();
             return response()->json(['message' => 'เพิ่มสินค้าเข้าตะกร้าแล้ว', 'quantity' => 1], 201);
@@ -145,5 +153,15 @@ class CartController extends Controller
         }
 
         return response()->json(['message' => 'ตะกร้าว่างอยู่แล้ว'], 204);
+    }
+
+    public function getRewards(Request $request)
+    {
+        $customerId = $request->customer_id;
+        $total = $request->total ?? 0;
+        $customer = $customerId ? \App\Models\Customer::find($customerId) : null;
+
+        $rewards = app(\App\Services\RewardService::class)->getAvailableRewards($customer, $total);
+        return response()->json($rewards);
     }
 }

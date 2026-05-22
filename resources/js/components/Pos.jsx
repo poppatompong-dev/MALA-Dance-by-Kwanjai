@@ -12,6 +12,9 @@ import playSound from "../utils/playSound";
 export default function Pos() {
     const [products, setProducts] = useState([]);
     const [carts, setCarts] = useState([]);
+    const [availableRewards, setAvailableRewards] = useState([]);
+    const [appliedRewards, setAppliedRewards] = useState([]);
+    const [rewardDiscount, setRewardDiscount] = useState(0);
     const [orderDiscount, setOrderDiscount] = useState(0);
     const [paid, setPaid] = useState(0);
     const [due, setDue] = useState(0);
@@ -20,6 +23,8 @@ export default function Pos() {
     const [customerId, setCustomerId] = useState();
     const [cartUpdated, setCartUpdated] = useState(false);
     const [productUpdated, setProductUpdated] = useState(false);
+    const [orderType, setOrderType] = useState("dine_in");
+    const [notes, setNotes] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [searchBarcode, setSearchBarcode] = useState("");
     const { protocol, hostname, port } = window.location;
@@ -86,19 +91,36 @@ export default function Pos() {
     }, [cartUpdated]);
 
     useEffect(() => {
-        let paid1 = paid;
-        let disc = orderDiscount;
-        if (paid == "") {
-            paid1 = 0;
+        if (total > 0 && customerId) {
+            axios.get('/admin/get/rewards', { params: { customer_id: customerId, total: total } })
+                .then(res => setAvailableRewards(res.data))
+                .catch(err => console.error(err));
+        } else {
+            setAvailableRewards([]);
+            setAppliedRewards([]);
+            setRewardDiscount(0);
         }
-        if (orderDiscount == "") {
-            disc = 0;
-        }
-        const updatedTotalAmount = parseFloat(total) - parseFloat(disc);
-        const dueAmount = updatedTotalAmount - parseFloat(paid1);
+    }, [total, customerId]);
+
+    useEffect(() => {
+        let disc = 0;
+        appliedRewards.forEach(r => {
+            if (r.benefit_type === 'fixed_discount') disc += parseFloat(r.benefit_value);
+            else if (r.benefit_type === 'percent_discount') disc += (parseFloat(total) * (parseFloat(r.benefit_value) / 100));
+        });
+        setRewardDiscount(disc);
+    }, [appliedRewards, total]);
+
+    useEffect(() => {
+        let paid1 = parseFloat(paid) || 0;
+        let manualDisc = parseFloat(orderDiscount) || 0;
+        let rewardDisc = parseFloat(rewardDiscount) || 0;
+
+        const updatedTotalAmount = parseFloat(total) - manualDisc - rewardDisc;
+        const dueAmount = updatedTotalAmount - paid1;
         setUpdateTotal(updatedTotalAmount?.toFixed(2));
         setDue(dueAmount?.toFixed(2));
-    }, [orderDiscount, paid, total]);
+    }, [orderDiscount, rewardDiscount, paid, total]);
     useEffect(() => {
         if (searchQuery) {
             setProducts([]);
@@ -135,17 +157,42 @@ export default function Pos() {
     }, [currentPage, totalPages]);
 
     function addProductToCart(id) {
-        axios
-            .post("/admin/cart", { id })
-            .then((res) => {
-                setCartUpdated(!cartUpdated);
-                playSound(SuccessSound);
-                toast.success(res?.data?.message);
-            })
-            .catch((err) => {
-                playSound(WarningSound);
-                toast.error(err.response.data.message);
-            });
+        Swal.fire({
+            title: 'เลือกระดับความเผ็ด',
+            input: 'select',
+            inputOptions: {
+                '': 'ไม่ระบุ',
+                'ไม่เผ็ด': 'ไม่เผ็ด',
+                'เผ็ดน้อย': 'เผ็ดน้อย',
+                'เผ็ดกลาง': 'เผ็ดกลาง',
+                'เผ็ดมาก': 'เผ็ดมาก',
+                'หม่าล่าลิ้นชา': 'หม่าล่าลิ้นชา'
+            },
+            inputPlaceholder: 'เลือกระดับความเผ็ด',
+            showCancelButton: true,
+            confirmButtonText: 'เพิ่มลงตะกร้า',
+            cancelButtonText: 'ยกเลิก',
+            customClass: {
+                actions: "my-actions",
+                cancelButton: "order-1 right-gap",
+                confirmButton: "order-2",
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const spice_level = result.value;
+                axios
+                    .post("/admin/cart", { id, spice_level, toppings: "" })
+                    .then((res) => {
+                        setCartUpdated(!cartUpdated);
+                        playSound(SuccessSound);
+                        toast.success(res?.data?.message);
+                    })
+                    .catch((err) => {
+                        playSound(WarningSound);
+                        toast.error(err.response.data.message);
+                    });
+            }
+        });
     }
     function cartEmpty() {
         if (total <= 0) {
@@ -205,7 +252,10 @@ export default function Pos() {
                     .put("/admin/order/create", {
                         customer_id: customerId,
                         order_discount: parseFloat(orderDiscount) || 0,
+                        applied_rewards: appliedRewards.map(r => r.id),
                         paid: parseFloat(paid) || 0,
+                        order_type: orderType,
+                        notes: notes,
                     })
                     .then((res) => {
                         setCartUpdated(!cartUpdated);
@@ -244,6 +294,26 @@ export default function Pos() {
                     <div className="row">
                         <div className="col-md-6 col-lg-5 mb-2">
                             <div className="row mb-2">
+                                <div className="col-12 mb-2">
+                                    <select
+                                        className="form-control"
+                                        value={orderType}
+                                        onChange={(e) => setOrderType(e.target.value)}
+                                    >
+                                        <option value="dine_in">ทานที่ร้าน</option>
+                                        <option value="takeaway">กลับบ้าน</option>
+                                        <option value="delivery">เดลิเวอรี่</option>
+                                    </select>
+                                </div>
+                                <div className="col-12 mb-2">
+                                    <textarea
+                                        className="form-control"
+                                        placeholder="หมายเหตุ (ตัวเลือกเพิ่มเติม)"
+                                        value={notes}
+                                        onChange={(e) => setNotes(e.target.value)}
+                                        rows="1"
+                                    ></textarea>
+                                </div>
                                 <div className="col-12">
                                     <CustomerSelect
                                         setCustomerId={setCustomerId}
@@ -324,6 +394,34 @@ export default function Pos() {
                                                     }
                                                 }}
                                             />
+                                        </div>
+                                    </div>
+                                    <div className="row text-bold mb-1">
+                                        <div className="col">โปรโมชั่นที่เลือกได้:</div>
+                                        <div className="col text-right mr-2">
+                                            <select
+                                                className="form-control form-control-sm"
+                                                multiple
+                                                value={appliedRewards.map(r => r.id)}
+                                                onChange={(e) => {
+                                                    const selectedOptions = Array.from(e.target.selectedOptions).map(opt => parseInt(opt.value));
+                                                    const selected = availableRewards.filter(r => selectedOptions.includes(r.id));
+                                                    setAppliedRewards(selected);
+                                                }}
+                                                disabled={availableRewards.length === 0}
+                                                style={{height: '60px'}}
+                                            >
+                                                {availableRewards.length === 0 && <option disabled>ไม่มีโปรโมชั่น</option>}
+                                                {availableRewards.map(r => (
+                                                    <option key={r.id} value={r.id}>{r.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="row text-bold mb-1 text-success">
+                                        <div className="col">ส่วนลดโปรโมชั่น:</div>
+                                        <div className="col text-right mr-2">
+                                            {parseFloat(rewardDiscount).toFixed(2)}
                                         </div>
                                     </div>
                                     <div className="row text-bold mb-1">
