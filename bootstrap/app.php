@@ -43,6 +43,30 @@ $app->singleton(
 
 /*
 |--------------------------------------------------------------------------
+| Vercel Serverless Storage Path Override
+|--------------------------------------------------------------------------
+*/
+if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
+    $storagePath = '/tmp/storage';
+    $app->useStoragePath($storagePath);
+    
+    $directories = [
+        $storagePath . '/framework/views',
+        $storagePath . '/framework/cache/data',
+        $storagePath . '/framework/sessions',
+        $storagePath . '/logs',
+        $storagePath . '/app/public',
+    ];
+    
+    foreach ($directories as $dir) {
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0777, true);
+        }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
 | Return The Application
 |--------------------------------------------------------------------------
 |
