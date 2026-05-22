@@ -4,7 +4,7 @@
   "outputDirectory": "public",
   "functions": {
     "api/index.php": {
-      "runtime": "vercel-php@0.9.0",
+      "runtime": "vercel-php@0.8.4",
       "memory": 1024,
       "maxDuration": 60,
       "excludeFiles": "{.composer-cache/**,.composer-home/**,docs/**,node_modules/**,public/assets/**,public/build/**,public/css/**,public/dist/**,public/js/**,public/plugins/**,storage/**,tests/**}"
