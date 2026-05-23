@@ -28,6 +28,15 @@ class Order extends Model
     }
     public function getTotalItemAttribute()
     {
+        // Priority 1: SQL-aggregated value from ->withSum() — zero extra query
+        if (!is_null($this->getAttribute('products_sum_quantity'))) {
+            return (int) $this->products_sum_quantity;
+        }
+        // Priority 2: Already-loaded relation — zero extra query
+        if ($this->relationLoaded('products')) {
+            return $this->products->sum('quantity');
+        }
+        // Fallback: one DB query (avoid in list contexts — use withSum instead)
         return $this->products()->sum('quantity');
     }
    

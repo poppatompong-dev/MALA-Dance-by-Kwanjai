@@ -1,4 +1,16 @@
 {
+  "_http-1779699b.js": {
+    "file": "assets/http-1779699b.js"
+  },
+  "_react-vendor-5fe3892a.js": {
+    "file": "assets/react-vendor-5fe3892a.js"
+  },
+  "_ui-libs-f8c091dd.js": {
+    "file": "assets/ui-libs-f8c091dd.js",
+    "imports": [
+      "_react-vendor-5fe3892a.js"
+    ]
+  },
   "resources/js/app.css": {
     "file": "assets/app-9fad5703.css",
     "src": "resources/js/app.css"
@@ -11,7 +23,12 @@
     "css": [
       "assets/app-9fad5703.css"
     ],
-    "file": "assets/app-d5c28731.js",
+    "file": "assets/app-96b93adb.js",
+    "imports": [
+      "_react-vendor-5fe3892a.js",
+      "_http-1779699b.js",
+      "_ui-libs-f8c091dd.js"
+    ],
     "isEntry": true,
     "src": "resources/js/app.jsx"
   },

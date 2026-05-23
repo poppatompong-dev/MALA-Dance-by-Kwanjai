@@ -10,4 +10,16 @@ export default defineConfig({
         }),
         react(),
     ],
+    build: {
+        chunkSizeWarningLimit: 600,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'react-vendor': ['react', 'react-dom'],
+                    'ui-libs': ['sweetalert2', 'react-hot-toast', 'react-select', 'react-datepicker'],
+                    'http': ['axios'],
+                },
+            },
+        },
+    },
 });

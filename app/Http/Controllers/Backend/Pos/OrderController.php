@@ -21,6 +21,7 @@ class OrderController extends Controller
     {
         if ($request->ajax()) {
             $orders = Order::with('customer')
+                ->withSum('products', 'quantity')
                 ->select('orders.*')
                 ->latest();
             return DataTables::of($orders)
@@ -134,7 +135,6 @@ class OrderController extends Controller
                     $order->id,
                     'Order Checkout POS',
                     auth()->id()
-                );
                 );
             }
 

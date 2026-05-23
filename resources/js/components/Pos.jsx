@@ -533,6 +533,7 @@ export default function Pos() {
                                                     src={product.image_url || `${fullDomainWithPort}/storage/${product.image}`}
                                                     alt={product.name}
                                                     className="mr-2 img-thumb"
+                                                    loading="lazy"
                                                     onError={(e) => {
                                                         e.target.onerror = null;
                                                         e.target.src = `${fullDomainWithPort}/assets/images/demo/no-image.svg`;

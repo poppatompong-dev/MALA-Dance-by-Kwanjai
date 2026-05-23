@@ -3,7 +3,7 @@
   'close_msg' => 'ระบบปิดปรับปรุงชั่วคราว กรุณากลับมาใหม่อีกครั้ง',
   'site_url' => 'http://127.0.0.1:8000',
   'site_name' => 'หม่าล่าแดนซ์ by ขวัญใจ',
-  'site_logo' => '/assets/images/logo/1779245989_6a0d23a55cb0e_ChatGPT Image May 20, 2026, 09_59_29 AM.png',
+  'site_logo' => '/assets/images/logo/1779504867_6a1116e339f16_ChatGPT Image May 20, 2026, 09_59_29 AM.png',
   'app_name' => 'หม่าล่าแดนซ์ by ขวัญใจ',
   'favicon_icon' => '/assets/images/logo/1779253089_6a0d3f616fa5b_ChatGPT Image May 20, 2026, 11_58_01 AM.png',
   'favicon_icon_apple' => '/assets/images/demo/apple-icon.svg',
