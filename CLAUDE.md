@@ -6,7 +6,7 @@
 
 **ระบบ**: POS + Management สำหรับร้านหม่าล่า/เครื่องดื่ม
 **Stack**: Laravel 10 + Blade/AdminLTE + React 18 + Vite 4
-**DB**: Supabase Postgres (Transaction Pooler) — production only
+**DB**: Neon Postgres — ทั้ง local dev และ production (Supabase เคยวางแผนไว้แต่ไม่ได้ใช้ — ฐานข้อมูลว่างเปล่า)
 **Deploy**: Vercel (`vercel-php@0.7.4`, region `sin1`)
 **Production URL**: https://mala-dance-by-kwanjai.vercel.app
 **Branch**: local `master` ↔ remote `main` — push ด้วย `git push origin HEAD:main`

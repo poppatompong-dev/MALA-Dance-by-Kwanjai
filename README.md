@@ -3,6 +3,7 @@
 ระบบ Point-of-Sale และ Management สำหรับร้าน **หม่าล่าแดนซ์ by ขวัญใจ** ระดับ production พัฒนาบน Laravel 10 + React 18 + Vite พร้อม deploy ผ่าน Vercel + Supabase Postgres
 
 **Production URL**: https://mala-dance-by-kwanjai.vercel.app
+**Database**: Neon Postgres (ทั้ง local และ production)
 
 ## Core Features
 
@@ -13,7 +14,7 @@
 - **Security & RBAC**: 3 roles (Admin / Cashier / Sales associate) ใช้ Spatie Laravel Permission พร้อม `audit_logs` permanent
 - **Performance**: SQL aggregation แทน collection loop, Cache::remember บน dashboard/POS, cache busting อัตโนมัติบน product mutation, composite indexes
 - **Manuals หลังร้าน**: หน้า `/admin/manuals` อ่านคู่มือ Markdown ทั้งหมดจากในระบบ
-- **Production**: Vercel + Supabase Postgres (Transaction Pooler) + Vite build artifacts ใน git
+- **Production**: Vercel + Neon Postgres + Vite build artifacts ใน git
 
 ## บัญชีผู้ใช้เริ่มต้น
 
@@ -32,10 +33,10 @@
 
 | Layer | Tech |
 |---|---|
-| Hosting | Vercel (vercel-php@0.7.4), region `sin1` |
+| Hosting | Vercel (vercel-php@0.7.4), region `sin1` (Singapore) |
 | Backend | Laravel 10, PHP 8.1+ |
 | Frontend | Blade + AdminLTE 3, React 18, Vite 4 |
-| Database | PostgreSQL via Supabase (Transaction Pooler) |
+| Database | PostgreSQL via Neon |
 | Auth | Laravel + Spatie Permission |
 | Tables | Yajra DataTables (server-side) |
 | Excel | Maatwebsite |

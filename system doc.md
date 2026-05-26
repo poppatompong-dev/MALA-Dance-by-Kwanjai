@@ -10,7 +10,7 @@
 
 - Backend: Laravel 10, PHP 8.1+
 - Frontend: Blade + AdminLTE, React 18, Vite 4
-- Database: PostgreSQL (Supabase) — production
+- Database: PostgreSQL (Neon) — production และ local dev
 - Auth/RBAC: Laravel auth + Spatie Laravel Permission
 - DataTables: Yajra DataTables (server-side)
 - Import/export: Maatwebsite Excel
@@ -199,7 +199,7 @@ Report: `/admin/platform-sales-report` — aggregate ยอดขาย + commis
 ### Architecture
 
 - **Hosting**: Vercel (vercel-php@0.7.4 runtime), region `sin1`
-- **Database**: Supabase Postgres (Transaction Pooler)
+- **Database**: Neon Postgres (ทั้ง local dev และ production)
 - **Static assets**: served by Vercel CDN จาก `public/`
 - **Build**: `npm run build` (Vite) — output ใน `public/build/` ต้อง commit
 - **Session**: cookie driver (เก็บใน client cookie)
