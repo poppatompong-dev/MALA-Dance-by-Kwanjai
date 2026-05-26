@@ -2,61 +2,52 @@
 
 ## ภาพรวมระบบ
 
-หม่าล่าแดนซ์ by ขวัญใจ เป็นระบบ POS สำหรับร้านหม่าล่าและเครื่องดื่ม พัฒนาด้วย Laravel, Blade, React และ Vite รองรับงานขายหน้าร้าน การจัดการสินค้า สต็อก ลูกค้า ซัพพลายเออร์ การซื้อเข้า รายงาน ใบเสร็จ ระบบสะสมแต้ม/รางวัล สิทธิ์ผู้ใช้งาน และ audit log
+หม่าล่าแดนซ์ by ขวัญใจ เป็นระบบ POS สำหรับร้านหม่าล่าและเครื่องดื่ม รองรับงานขายหน้าร้าน การจัดการสินค้า สต็อก ลูกค้า ซัพพลายเออร์ การซื้อเข้า รายงาน ใบเสร็จ สิทธิ์ผู้ใช้งาน และ audit log
 
-ระบบถูกปรับเป็น Thai Full Version โดยใช้ข้อมูลเดโมร้านหม่าล่า เครื่องดื่มเย็น และชุดหม่าล่า พร้อมภาพ placeholder ภายใน repo
+ระบบเป็น Thai Full Version ใช้ข้อมูลเดโมร้านหม่าล่า
 
 ## เทคโนโลยีหลัก
 
 - Backend: Laravel 10, PHP 8.1+
 - Frontend: Blade + AdminLTE, React 18, Vite 4
-- Database: SQLite (local), MySQL/MariaDB (production option), **PostgreSQL (Supabase) สำหรับ Vercel production**
+- Database: PostgreSQL (Supabase) — production
 - Auth/RBAC: Laravel auth + Spatie Laravel Permission
 - DataTables: Yajra DataTables (server-side)
 - Import/export: Maatwebsite Excel
 - PDF: barryvdh/laravel-dompdf
-- Hosting (production): Vercel (vercel-php runtime) + Supabase Postgres
+- Hosting: Vercel (vercel-php runtime) + Supabase Postgres
 
 ## โครงสร้างสำคัญ
 
-- `app/Http/Controllers`: controller หลังร้าน POS สินค้า ซื้อเข้า รายงาน สิทธิ์ และระบบสะสมแต้ม
-- `app/Models`: Product, Category, Brand, Unit, Customer, Supplier, Order, OrderProduct, OrderTransaction, Purchase, Currency, User, RewardRule, RewardUsage, StockMovement, AuditLog, PosCart
-- `app/Services`: InventoryService (สต็อก + stock_movements ledger), RewardService (คำนวณสิทธิ์รางวัล)
+- `app/Http/Controllers`: controller หลังร้าน POS สินค้า ซื้อเข้า รายงาน และสิทธิ์
+- `app/Models`: Product, Category, Brand, Unit, Customer, Supplier, Order, OrderProduct, OrderTransaction, Purchase, Currency, User, StockMovement, AuditLog, PosCart
+- `app/Services/InventoryService.php`: จัดการสต็อก + stock_movements ledger
 - `app/Trait/FileHandler.php`: จัดการ upload รูป (local filesystem)
-- `database/seeders`: seed ข้อมูลร้านเดโม รวม RolesAndPermissionsSeeder และ ThaiShopSeeder
+- `database/seeders`: seed ข้อมูลเริ่มต้น (StartUpSeeder, RolePermissionSeeder, ThaiShopSeeder)
 - `database/migrations`: schema รวม composite indexes สำหรับ performance
-- `public/assets/images/demo`: logo, favicon, auth/error, product/category/brand placeholders
-- `public/build`: Vite build output (ต้อง commit ลง git สำหรับ Vercel deploy)
+- `public/build`: Vite build output (ต้อง commit สำหรับ Vercel deploy)
 - `resources/views/backend`: หน้าหลังร้านและเมนู
 - `resources/js/components`: POS และ purchase React components
 - `docs/th`: คู่มือภาษาไทย
 - `api/index.php`: entrypoint สำหรับ Vercel PHP runtime
 - `vercel.json`: config Vercel (regions, routes, excludeFiles)
 
-## Demo Data
+## บัญชีผู้ใช้
 
-ข้อมูลเดโมประกอบด้วย:
+หลังจาก seed:
 
-- หมวดสินค้า 7 หมวด
-- แบรนด์/แหล่งสินค้า 4 รายการ
-- สินค้า 12 รายการ
-- หน่วยนับไทย: ไม้, แก้ว, ขวด, ชุด, ถุง, กรัม
-- ลูกค้าเดโม 3 รายการ
-- ซัพพลายเออร์เดโม 3 รายการ
-- สกุลเงิน THB สัญลักษณ์ `฿`
+- **Admin**: `admin` / `admin` (เปลี่ยนรหัสผ่านทันทีหลังเข้าครั้งแรก)
+- **เจ้าของร้าน**: `kwan` / `kwan`
 
-บัญชีเดโม:
+ระบบรองรับการล็อกอินด้วย **ชื่อผู้ใช้** หรือ **อีเมล**
 
-- Email: `demo@qtecsolution.net`
-- Password: `87654321`
-- Name: `ผู้ดูแลร้าน`
-- Role: Owner
+Role: `Admin`, `cashier`, `sales_associate`
 
 ## โมดูลหลัก
 
 ### Authentication
 
-หน้า public อยู่ที่ `/login`, `/sign-up`, `/forget-password`, `/new-password`, `/password-reset`
+หน้า public: `/login`, `/sign-up`, `/forget-password`, `/new-password`, `/password-reset`
 
 รองรับ Google OAuth ผ่าน `/auth/google` (ต้องตั้งค่า env)
 
@@ -69,14 +60,13 @@
 POS ใช้ React (`resources/js/components/Pos.jsx`) เรียก API:
 
 - `GET /admin/get/products` — รายการสินค้า (มี cache 10 นาที, รองรับ search/barcode/pagination)
-- `GET /admin/get/rewards?customer_id=&total=` — รางวัลที่ลูกค้าเลือกใช้ได้
 - `GET /admin/cart` — ตะกร้าปัจจุบัน
 - `POST /admin/cart` — เพิ่มสินค้าเข้าตะกร้า (รองรับ spice_level, toppings)
 - `PUT /admin/cart/increment` / `decrement` / `delete` / `empty`
 - `PUT /admin/order/create` — บันทึก order
-  - รับ `customer_id`, `order_discount`, `paid`, `applied_rewards[]`, `order_type`, `notes`
-  - DB transaction: สร้าง Order + OrderProducts → ลดสต็อก → คำนวณรางวัล → สร้าง RewardUsage → อัปเดต customer points/total_spent/visit_count → บันทึก OrderTransaction
-- `POST /admin/orders/void/{id}` — ยกเลิกบิล (คืนสต็อก, คืนแต้ม, ลบ RewardUsage, soft-delete Order, บันทึก AuditLog)
+  - รับ `customer_id`, `order_discount`, `paid`, `order_type`, `notes`
+  - DB transaction: สร้าง Order + OrderProducts → ลดสต็อก → คำนวณส่วนลด → บันทึก OrderTransaction
+- `POST /admin/orders/void/{id}` — ยกเลิกบิล (คืนสต็อก, soft-delete Order, บันทึก AuditLog)
 
 ### Product Management
 
@@ -92,7 +82,7 @@ POS ใช้ React (`resources/js/components/Pos.jsx`) เรียก API:
 
 ### Customer และ Supplier
 
-- `/admin/customers` — รวมข้อมูล `points`, `total_spent`, `visit_count`, `last_visit_at`, `birth_date`, `tier`
+- `/admin/customers`
 - `/admin/suppliers`
 - `/admin/get/customers` (search)
 - `/admin/create/customers` (สร้างจาก POS)
@@ -103,25 +93,6 @@ POS ใช้ React (`resources/js/components/Pos.jsx`) เรียก API:
 - `/admin/purchase/products/{id}`
 
 เมื่อบันทึกซื้อเข้า ระบบเพิ่มสต็อกสินค้าและบันทึก `stock_movements` type=`purchase`
-
-### Reward / Loyalty System
-
-ระบบสะสมแต้ม/รางวัล (เฉพาะ Owner/Admin):
-
-- `/admin/reward-rules` (CRUD)
-
-ตาราง:
-
-- `reward_rules`: เก็บกฎ (type, benefit_type, benefit_value, conditions)
-- `reward_usages`: บันทึกการใช้รางวัลต่อ order
-
-ค่าเริ่มต้น: 1 แต้ม / 10 บาท คำนวณจาก `Order.sub_total` (หลังส่วนลดสินค้า ก่อนส่วนลดรางวัล)
-
-Type: `earn_points`, `redeem_points`, `coupon`, `tier`, `birthday`
-
-Benefit type: `percent_discount`, `fixed_discount`, `bonus_points`
-
-ดูรายละเอียดเงื่อนไขใน `app/Services/RewardService.php`
 
 ### Inventory Service
 
@@ -154,35 +125,11 @@ Benefit type: `percent_discount`, `fixed_discount`, `bonus_points`
 - `docs/th/admin-manual.md`
 - `docs/th/user-manual.md`
 - `system doc.md`
-
-## คำสั่ง Local
-
-```powershell
-.\.tools\php\php.exe artisan migrate:fresh --seed --force
-npm.cmd run dev
-.\.tools\php\php.exe artisan serve --host=127.0.0.1 --port=8000
-```
-
-## คำสั่งตรวจ
-
-```powershell
-.\.tools\php\php.exe artisan migrate:fresh --seed --force
-npm.cmd run build
-.\.tools\php\php.exe artisan view:cache
-```
-
-## หมายเหตุ Deploy
-
-- ตั้งค่า `.env` ให้ตรงฐานข้อมูลจริง
-- รัน `php artisan key:generate` เมื่อสร้าง environment ใหม่
-- ตั้ง permission ให้ `storage` และ `bootstrap/cache`
-- รัน `php artisan storage:link` หากใช้ไฟล์ upload (local)
-- รัน `npm run build` ก่อน production และ **commit `public/build/` ลง git** สำหรับ Vercel
-- ห้าม commit `.env`, `vendor`, `node_modules`, log และ local SQLite
+- `CLAUDE.md`
 
 ## Performance Guidelines
 
-ดูแนวทางแก้ไขเมื่อ query หรือการแสดงผลช้าได้ที่ [`docs/th/admin-manual.md` ส่วนที่ 11](docs/th/admin-manual.md#11-แนวทางแก้ไขเมื่อ-query-หรือการแสดงผลช้า) มี 11 หัวข้อย่อย:
+ดูแนวทางแก้ไขเมื่อ query หรือการแสดงผลช้าได้ที่ [`docs/th/admin-manual.md` ส่วนที่ 11](docs/th/admin-manual.md) มี 11 หัวข้อย่อย ครอบคลุม:
 
 1. ขั้นตอนวินิจฉัย
 2. ปัญหา N+1 Query
@@ -201,20 +148,9 @@ npm.cmd run build
 - `orders(customer_id, created_at)`
 - `products(status, quantity)`
 - `stock_movements(product_id, created_at)`
-- `reward_usages(reward_rule_id, customer_id)`
 - `order_transactions(order_id, created_at)`
 
-หากเพิ่ม query pattern ใหม่ ให้พิจารณาเพิ่ม index และทดสอบด้วย `EXPLAIN ANALYZE` (Postgres) หรือ `EXPLAIN` (MySQL)
-
-## คู่มือบนเว็บหลังร้าน
-
-ระบบมีหน้าอ่านคู่มือสำหรับผู้ดูแลหลังร้านที่:
-
-```text
-/admin/manuals
-```
-
-route นี้อยู่ภายใต้ middleware `admin` และอ่านได้เฉพาะไฟล์ที่อยู่ใน allowlist เท่านั้น
+หากเพิ่ม query pattern ใหม่ ให้พิจารณาเพิ่ม index และทดสอบด้วย `EXPLAIN ANALYZE`
 
 ## Product Import
 
@@ -234,7 +170,6 @@ route นี้อยู่ภายใต้ middleware `admin` และอ่
 - slug ถูกสร้างจาก SKU เป็น lowercase/hyphen เพื่อเลี่ยงปัญหา slug ภาษาไทยว่าง
 - หาก SKU มีอยู่แล้ว ระบบจะ update สินค้าเดิม
 - หาก category, brand หรือ unit ยังไม่มี ระบบจะสร้างให้อัตโนมัติ
-- ถ้าเป็นสินค้าใหม่และมี supplier/user ในระบบ จะบันทึก purchase เริ่มต้นสำหรับจำนวนที่นำเข้า
 
 ## Vercel Production
 
@@ -246,6 +181,7 @@ route นี้อยู่ภายใต้ middleware `admin` และอ่
 - **Build**: `npm run build` (Vite) — output ใน `public/build/` ต้อง commit
 - **Session**: cookie driver (เก็บใน client cookie)
 - **Cache**: array driver (in-memory per request, ไม่ persist)
+- **URL**: `https://mala-dance-by-kwanjai.vercel.app`
 
 ### Vercel Environment Variables
 
@@ -271,19 +207,17 @@ QUEUE_CONNECTION=sync
 3. **Cold start** — request แรกหลัง idle อาจช้า 1-3 วินาที
 4. **Function timeout 60s** (ตั้งใน `vercel.json`)
 5. **Vite manifest** — ต้อง build แล้ว commit `public/build/` ก่อน push
-6. **`excludeFiles`** ใน `vercel.json` ห้ามใส่ `public/build/**` เพราะ PHP ต้องอ่าน manifest.json
-7. **PDO PostgreSQL** — `PDO::ATTR_EMULATE_PREPARES` hardcode เป็น `false` (env var ส่งมาเป็น string ทำให้ TypeError)
+6. **`excludeFiles`** ใน `vercel.json` ห้ามใส่ `public/build/**` หรือ `docs/**`
+7. **PDO PostgreSQL** — `PDO::ATTR_EMULATE_PREPARES` hardcode เป็น `false`
 
 ### Supabase Project
 
-- Supabase URL: `https://rnvgjbhfnnzxmbmlyxke.supabase.co`
-- Project ref: `rnvgjbhfnnzxmbmlyxke`
-- Database host: `db.rnvgjbhfnnzxmbmlyxke.supabase.co`
 - ใช้ **Transaction Pooler** เท่านั้น สำหรับ serverless
+- region ใกล้ Vercel function (Southeast Asia - Singapore)
 
 ## Known Issues / Future Work
 
 - **File upload**: ปัจจุบันใช้ local filesystem ผ่าน `FileHandler` ซึ่งไม่ persist บน Vercel ควรย้ายไปใช้ Supabase Storage หรือ S3
 - **Redis cache**: หากต้องการ persistent cache ระหว่าง serverless invocation ให้ตั้ง Upstash Redis แล้วเปลี่ยน `CACHE_DRIVER=redis`
 - **Image optimization**: พิจารณา WebP/AVIF และ Vercel Image Optimization
-- **Background jobs**: ปัจจุบัน `QUEUE_CONNECTION=sync` — งานหนัก (เช่น export Excel ขนาดใหญ่) จะ block request หากต้องการ async ต้องใช้ external queue
+- **Background jobs**: ปัจจุบัน `QUEUE_CONNECTION=sync` — งานหนัก (เช่น export Excel ขนาดใหญ่) จะ block request

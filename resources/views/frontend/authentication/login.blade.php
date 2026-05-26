@@ -93,11 +93,11 @@
 
                         <div class="col-sm-6 col-lg-12 col-xl-6">
                             <div class="form-group">
-                                <label for="email" class="form-label">อีเมล</label>
-                                <input type="email" class="form-control" id="email" placeholder="กรอกอีเมล"
+                                <label for="email" class="form-label">ชื่อผู้ใช้หรืออีเมล</label>
+                                <input type="text" class="form-control" id="email" placeholder="กรอกชื่อผู้ใช้หรืออีเมล"
                                     autocomplete="off" name="email" required>
                                 <div class="invalid-feedback">
-                                    กรุณากรอกอีเมลให้ถูกต้อง
+                                    กรุณากรอกชื่อผู้ใช้หรืออีเมล
                                 </div>
                             </div>
                         </div>
@@ -176,8 +176,8 @@
                                 <button type="submit" class="create-account-btn w-100">เข้าสู่ระบบ</button>
                             </div>
                             <div class="form-group"> <br>
-                            <p><b>ผู้ใช้ตัวอย่าง:</b> demo@qtecsolution.net</p>
-                            <p><b>รหัสผ่านตัวอย่าง:</b> 87654321</p>
+                            <p><b>ผู้ดูแลระบบ:</b> admin / admin</p>
+                            <p><b>เจ้าของร้าน:</b> kwan / kwan</p>
                             </div>
                         </div>
 

@@ -12,9 +12,6 @@ import playSound from "../utils/playSound";
 export default function Pos() {
     const [products, setProducts] = useState([]);
     const [carts, setCarts] = useState([]);
-    const [availableRewards, setAvailableRewards] = useState([]);
-    const [appliedRewards, setAppliedRewards] = useState([]);
-    const [rewardDiscount, setRewardDiscount] = useState(0);
     const [orderDiscount, setOrderDiscount] = useState(0);
     const [paid, setPaid] = useState(0);
     const [due, setDue] = useState(0);
@@ -91,36 +88,14 @@ export default function Pos() {
     }, [cartUpdated]);
 
     useEffect(() => {
-        if (total > 0 && customerId) {
-            axios.get('/admin/get/rewards', { params: { customer_id: customerId, total: total } })
-                .then(res => setAvailableRewards(res.data))
-                .catch(err => console.error(err));
-        } else {
-            setAvailableRewards([]);
-            setAppliedRewards([]);
-            setRewardDiscount(0);
-        }
-    }, [total, customerId]);
-
-    useEffect(() => {
-        let disc = 0;
-        appliedRewards.forEach(r => {
-            if (r.benefit_type === 'fixed_discount') disc += parseFloat(r.benefit_value);
-            else if (r.benefit_type === 'percent_discount') disc += (parseFloat(total) * (parseFloat(r.benefit_value) / 100));
-        });
-        setRewardDiscount(disc);
-    }, [appliedRewards, total]);
-
-    useEffect(() => {
         let paid1 = parseFloat(paid) || 0;
         let manualDisc = parseFloat(orderDiscount) || 0;
-        let rewardDisc = parseFloat(rewardDiscount) || 0;
 
-        const updatedTotalAmount = parseFloat(total) - manualDisc - rewardDisc;
+        const updatedTotalAmount = parseFloat(total) - manualDisc;
         const dueAmount = updatedTotalAmount - paid1;
         setUpdateTotal(updatedTotalAmount?.toFixed(2));
         setDue(dueAmount?.toFixed(2));
-    }, [orderDiscount, rewardDiscount, paid, total]);
+    }, [orderDiscount, paid, total]);
     useEffect(() => {
         if (searchQuery) {
             setProducts([]);
@@ -252,7 +227,6 @@ export default function Pos() {
                     .put("/admin/order/create", {
                         customer_id: customerId,
                         order_discount: parseFloat(orderDiscount) || 0,
-                        applied_rewards: appliedRewards.map(r => r.id),
                         paid: parseFloat(paid) || 0,
                         order_type: orderType,
                         notes: notes,
@@ -394,34 +368,6 @@ export default function Pos() {
                                                     }
                                                 }}
                                             />
-                                        </div>
-                                    </div>
-                                    <div className="row text-bold mb-1">
-                                        <div className="col">โปรโมชั่นที่เลือกได้:</div>
-                                        <div className="col text-right mr-2">
-                                            <select
-                                                className="form-control form-control-sm"
-                                                multiple
-                                                value={appliedRewards.map(r => r.id)}
-                                                onChange={(e) => {
-                                                    const selectedOptions = Array.from(e.target.selectedOptions).map(opt => parseInt(opt.value));
-                                                    const selected = availableRewards.filter(r => selectedOptions.includes(r.id));
-                                                    setAppliedRewards(selected);
-                                                }}
-                                                disabled={availableRewards.length === 0}
-                                                style={{height: '60px'}}
-                                            >
-                                                {availableRewards.length === 0 && <option disabled>ไม่มีโปรโมชั่น</option>}
-                                                {availableRewards.map(r => (
-                                                    <option key={r.id} value={r.id}>{r.name}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="row text-bold mb-1 text-success">
-                                        <div className="col">ส่วนลดโปรโมชั่น:</div>
-                                        <div className="col text-right mr-2">
-                                            {parseFloat(rewardDiscount).toFixed(2)}
                                         </div>
                                     </div>
                                     <div className="row text-bold mb-1">

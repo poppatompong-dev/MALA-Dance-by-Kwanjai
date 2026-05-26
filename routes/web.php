@@ -72,7 +72,6 @@ Route::prefix('admin')->as('backend.admin.')->middleware(['admin'])->group(funct
     Route::resource('products', ProductController::class);
     Route::resource('units', UnitController::class);
     Route::resource('currencies', CurrencyController::class);
-    Route::resource('reward-rules', \App\Http\Controllers\Backend\RewardRuleController::class);
     Route::match(['get', 'post'], 'import/products', [ProductController::class,'import'])->name('products.import');
     Route::get('currencies/default/{id}', [CurrencyController::class, 'setDefault'])->name('currencies.setDefault');
     Route::get('customers/orders/{id}', [CustomerController::class, 'orders'])->name('customers.orders');
@@ -92,7 +91,6 @@ Route::prefix('admin')->as('backend.admin.')->middleware(['admin'])->group(funct
     //end report
    // start pos
     Route::get('/get/products', [CartController::class, 'getProducts'])->name('getProducts');
-    Route::get('/get/rewards', [CartController::class, 'getRewards'])->name('getRewards');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::put('/cart/increment', [CartController::class, 'increment']);

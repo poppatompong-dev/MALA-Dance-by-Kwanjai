@@ -10,28 +10,39 @@ use Spatie\Permission\Models\Role;
 
 class StartUpSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
+        $role = Role::firstOrCreate(['name' => 'Admin']);
 
-        $user = User::create([
-            'name' => 'ผู้ดูแลร้าน',
-            'email' => 'demo@qtecsolution.net',
-            'password' => bcrypt(87654321),
-            'username' => uniqid()
-        ]);
-        Customer::create([
-            'name' => "ลูกค้าหน้าร้าน",
-            'phone' => "0800000000",
-        ]);
-        Supplier::create([
-            'name' => "ร้านวัตถุดิบหม่าล่า",
-            'phone' => "0810000000",
-        ]);
-        $role = Role::create(['name' => 'Admin']);
-        $user->syncRoles($role);
+        $admin = User::updateOrCreate(
+            ['email' => 'admin@admin.com'],
+            [
+                'name' => 'Admin',
+                'password' => bcrypt('admin'),
+                'username' => 'admin',
+            ]
+        );
+        $admin->syncRoles($role);
+
+        $kwan = User::updateOrCreate(
+            ['email' => 'kwan@kwan.com'],
+            [
+                'name' => 'Kwan',
+                'password' => bcrypt('kwan'),
+                'username' => 'kwan',
+            ]
+        );
+        $kwan->syncRoles($role);
+
+        Customer::firstOrCreate(
+            ['phone' => '0800000000'],
+            ['name' => 'ลูกค้าหน้าร้าน']
+        );
+        Supplier::firstOrCreate(
+            ['phone' => '0810000000'],
+            ['name' => 'ร้านวัตถุดิบหม่าล่า']
+        );
+
         $this->call([
             UnitSeeder::class,
             CurrencySeeder::class,

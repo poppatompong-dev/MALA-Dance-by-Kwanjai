@@ -57,15 +57,6 @@
                 </li>
             @endif
 
-            @if(auth()->user()->hasRole('Owner') || auth()->user()->hasRole('Admin'))
-                <li class="nav-item">
-                    <a href="{{ route('backend.admin.reward-rules.index') }}" class="nav-link {{ request()->routeIs(['backend.admin.reward-rules.*']) ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-gift" aria-hidden="true"></i>
-                        <p>จัดการสะสมแต้ม/รางวัล</p>
-                    </a>
-                </li>
-            @endif
-
             @if (auth()->user()->hasAnyPermission(['product_create', 'product_view', 'product_update', 'product_delete', 'product_import', 'product_purchase']))
                 <li class="nav-item {{ request()->routeIs(['backend.admin.products.index', 'backend.admin.products.create', 'backend.admin.products.edit', 'backend.admin.products.import', 'backend.admin.brands.index', 'backend.admin.brands.create', 'backend.admin.brands.edit', 'backend.admin.categories.index', 'backend.admin.categories.create', 'backend.admin.categories.edit', 'backend.admin.units.index', 'backend.admin.units.create', 'backend.admin.units.edit']) ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ request()->routeIs(['backend.admin.products.index', 'backend.admin.products.create', 'backend.admin.products.edit', 'backend.admin.products.import', 'backend.admin.brands.index', 'backend.admin.brands.create', 'backend.admin.brands.edit', 'backend.admin.categories.index', 'backend.admin.categories.create', 'backend.admin.categories.edit', 'backend.admin.units.index', 'backend.admin.units.create', 'backend.admin.units.edit']) ? 'active' : '' }}">

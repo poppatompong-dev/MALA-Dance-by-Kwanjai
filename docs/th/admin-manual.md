@@ -1,19 +1,24 @@
 # คู่มือผู้ดูแลระบบ
 
-คู่มือนี้สำหรับผู้ดูแลระบบที่ต้องตั้งค่าร้าน จัดการข้อมูลหลัก ดูแลผู้ใช้งาน สิทธิ์ สินค้า สต็อก รายงาน ระบบสะสมแต้ม และความพร้อมของระบบ
+คู่มือนี้สำหรับผู้ดูแลระบบที่ต้องตั้งค่าร้าน จัดการข้อมูลหลัก ดูแลผู้ใช้งาน สิทธิ์ สินค้า สต็อก รายงาน และความพร้อมของระบบ
 
-## 1. หน้าที่ของผู้ดูแลระบบ
+## 1. เข้าสู่ระบบ
+
+URL: `https://mala-dance-by-kwanjai.vercel.app/login`
+
+บัญชีผู้ดูแลระบบ: `admin` / `admin` (เปลี่ยนรหัสผ่านในเมนู `โปรไฟล์` ทันทีหลังเข้าครั้งแรก)
+
+## 2. หน้าที่ของผู้ดูแลระบบ
 
 - ตั้งค่าชื่อร้าน โลโก้ favicon ข้อมูลติดต่อ และข้อความท้ายใบเสร็จ
 - เพิ่มและแก้ไขสินค้า หมวดสินค้า แบรนด์/แหล่งสินค้า และหน่วยนับ
 - ดูแลลูกค้า ซัพพลายเออร์ และรายการซื้อเข้า
-- จัดการกฎสะสมแต้ม/รางวัล/คูปอง
 - ตรวจรายงานขายและรายงานสต็อก
 - จัดการผู้ใช้งาน บทบาท และสิทธิ์
-- ตรวจระบบหลัง migrate, seed, build หรือ deploy
+- ตรวจระบบหลัง deploy
 - ดู audit log เมื่อเกิดเหตุการณ์ผิดปกติ (void, การแก้ข้อมูลสำคัญ)
 
-## 2. ตั้งค่าร้าน
+## 3. ตั้งค่าร้าน
 
 ไปที่ `ตั้งค่า > ตั้งค่าระบบ > ตั้งค่าทั่วไป`
 
@@ -32,55 +37,21 @@
 - เวลาทำการ: `เปิดทุกวัน 11:00 - 22:00 น.`
 - ข้อความท้ายใบเสร็จ: `ขอบคุณที่อุดหนุนหม่าล่าแดนซ์ by ขวัญใจ แซ่บแล้วกลับมาอีกนะคะ`
 
-## 3. จัดการสินค้า
+## 4. จัดการสินค้า
 
 เมนูหลักอยู่ใต้ `สินค้า`
 
 ลำดับการตั้งค่าที่แนะนำ:
 
 1. สร้างหน่วยนับ เช่น `ไม้`, `แก้ว`, `ขวด`, `ชุด`, `ถุง`, `กรัม`
-2. สร้างหมวดสินค้า เช่น `หม่าล่าเสียบไม้`, `ชุดหม่าล่า`, `เครื่องดื่มเย็น`
-3. สร้างแบรนด์/แหล่งสินค้า เช่น `ครัวกลาง`, `หน้าร้าน`, `เครื่องดื่มสด`
+2. สร้างหมวดสินค้า เช่น `เนื้อสัตว์`, `ซีฟู้ด`, `ผักและเห็ด`, `เมนูพิเศษ`
+3. สร้างแบรนด์/แหล่งสินค้า เช่น `MALA Dance`, `ครัวกลาง`, `หน้าร้าน`
 4. เพิ่มสินค้า พร้อม SKU ราคา ต้นทุน สต็อก และรูปสินค้า
 5. เปิดสถานะสินค้าเฉพาะรายการที่พร้อมขาย
 
 ข้อสำคัญ: สินค้าภาษาไทยควรมี slug ที่ไม่ว่าง ระบบ seeder ใช้ slug จาก SKU เพื่อเลี่ยงปัญหา Thai slug ว่าง
 
 หลังแก้สินค้า ระบบจะ bust cache POS อัตโนมัติ
-
-## 4. จัดการระบบสะสมแต้ม/รางวัล
-
-เมนู `จัดการสะสมแต้ม/รางวัล` (เฉพาะ Owner/Admin)
-
-ตารางที่เกี่ยวข้อง:
-
-- `reward_rules`: เก็บกฎรางวัล/โปรโมชั่น
-- `reward_usages`: บันทึกการใช้แต้ม/รางวัลของลูกค้า (เชื่อมกับ Order)
-- `customers.points` / `customers.total_spent` / `customers.visit_count` / `customers.last_visit_at`: ข้อมูลสะสมของลูกค้า
-
-ระบบจะคำนวณแต้มอัตโนมัติเมื่อบันทึก Order (1 แต้ม / 10 บาท) และคืนแต้มเมื่อ void
-
-ขั้นตอนสร้างกฎใหม่:
-
-1. กด `เพิ่มกฎของรางวัล`
-2. ใส่ชื่อรางวัล (เช่น "ส่วนลด 10% สำหรับลูกค้าวันเกิด")
-3. เลือกประเภท (`type`):
-   - `earn_points` / `redeem_points` / `coupon` / `tier` / `birthday`
-4. เลือกประเภทสิทธิประโยชน์ (`benefit_type`):
-   - `percent_discount` / `fixed_discount` / `bonus_points`
-5. ใส่ค่า `benefit_value`
-6. ตั้งเงื่อนไขอื่น (ยอดซื้อขั้นต่ำ, แต้มที่ต้องใช้, จำกัดการใช้, วันที่)
-7. เปิด `Active` และ `Stackable` ตามต้องการ
-8. กด `บันทึกกฎ`
-
-ตัวอย่างกฎที่ใช้บ่อย:
-
-| กฎ | type | benefit_type | benefit_value | เงื่อนไข |
-|---|---|---|---|---|
-| ใช้ 100 แต้ม ส่วนลด 50 บาท | redeem_points | fixed_discount | 50 | required_points=100 |
-| ลูกค้าวันเกิดลด 10% | birthday | percent_discount | 10 | - |
-| ซื้อครบ 500 ลด 50 | earn_points | fixed_discount | 50 | min_purchase=500 |
-| คูปอง MALA10 ลด 10% | coupon | percent_discount | 10 | coupon_code=MALA10 |
 
 ## 5. จัดการซื้อเข้าและสต็อก
 
@@ -103,8 +74,6 @@
 - `ลูกค้าประจำ`
 - `ออเดอร์เดลิเวอรี`
 
-ลูกค้าประจำควรกรอก `birth_date` เพื่อใช้สิทธิ์โปรโมชั่นวันเกิดได้
-
 ซัพพลายเออร์หลักที่ควรมี:
 
 - `ร้านวัตถุดิบสด`
@@ -121,22 +90,15 @@
 
 Roles ที่มีในระบบ:
 
-- **Owner**: สิทธิ์ครบทุกเมนู รวม User Management
-- **Admin**: สิทธิ์ครบยกเว้น User Management
+- **Admin**: สิทธิ์ครบทุกเมนู รวม User Management
 - **Cashier**: เฉพาะ POS ขายหน้าร้าน
+- **Sales associate**: ขายและดูรายการขาย
 
 หลังแก้สิทธิ์ ให้ทดสอบ login ด้วยบัญชีของบทบาทนั้นจริงเสมอ
 
 ## 8. Audit Log
 
-ระบบเก็บ `audit_logs` สำหรับการกระทำที่สำคัญ เช่น void order
-
-ตรวจดูได้ผ่าน database query หรือใช้ tinker:
-
-```powershell
-.\.tools\php\php.exe artisan tinker
->>> App\Models\AuditLog::latest()->take(20)->get()
-```
+ระบบเก็บ `audit_logs` สำหรับการกระทำที่สำคัญ เช่น void order รวมข้อมูล user_id, ip, user_agent, target
 
 ## 9. รายงานที่ต้องตรวจ
 
@@ -144,30 +106,13 @@ Roles ที่มีในระบบ:
 - `รายงาน > รายงานขาย`: ใช้ตรวจบิลรายใบ
 - `รายงาน > รายงานสต็อก`: ใช้ดูสินค้าคงเหลือและวางแผนซื้อเข้า
 
-## 10. คำสั่งดูแลระบบ
+## 10. การล้าง Cache บนระบบ
 
-บน Windows workspace นี้:
+หากแสดงข้อมูลค้างไม่อัปเดต ให้กดล้างผ่าน URL หลังร้าน:
 
-```powershell
-.\.tools\php\php.exe artisan migrate:fresh --seed --force
-npm.cmd run build
-.\.tools\php\php.exe artisan view:cache
+```text
+/admin/clear-all
 ```
-
-รัน dev server:
-
-```powershell
-.\.tools\php\php.exe artisan serve --host=127.0.0.1 --port=8000
-npm.cmd run dev
-```
-
-ล้าง cache ระบบ:
-
-```powershell
-.\.tools\php\php.exe artisan optimize:clear
-```
-
-หรือผ่าน URL หลังร้าน: `/admin/clear-all`
 
 ## 11. แนวทางแก้ไขเมื่อ Query หรือการแสดงผลช้า
 
@@ -177,8 +122,7 @@ npm.cmd run dev
 
 1. เปิด **Browser DevTools > Network** ดูว่า request ใดใช้เวลาเกิน 1 วินาที
 2. เปิด **Console** ดู error JS หรือ warning การ render ซ้ำ
-3. หากเป็น query backend ให้เปิด Laravel Debugbar (เฉพาะ local) เพื่อดูจำนวน query และเวลาที่ใช้
-4. บน Vercel ดู **Function Logs** ใน Dashboard เพื่อจับ slow request
+3. ดู **Function Logs** ใน Vercel Dashboard เพื่อจับ slow request
 
 ตัวชี้วัดที่ยอมรับได้:
 
@@ -209,7 +153,7 @@ $orders = Order::with('customer')->get();
 
 ### 11.3 ปัญหา DataTables ช้า
 
-**อาการ**: ตาราง `รายการขาย`, `รายการสินค้า`, `กฎรางวัล` โหลด page ละหลายวินาที
+**อาการ**: ตาราง `รายการขาย`, `รายการสินค้า` โหลด page ละหลายวินาที
 
 **วิธีแก้**:
 
@@ -236,10 +180,10 @@ $orders = Order::with('customer')->get();
 
 **วิธีแก้**:
 
-1. `CartController::getProducts` ใช้ `Cache::remember` cache 10 นาทีสำหรับ page ที่ไม่มี filter — ตรวจว่า cache driver รองรับ (บน Vercel เป็น `array` ใช้ได้แต่ไม่ persist)
+1. `CartController::getProducts` ใช้ `Cache::remember` cache 10 นาทีสำหรับ page ที่ไม่มี filter — ตรวจว่า cache driver รองรับ (บน Vercel เป็น `array` ใช้ได้แต่ไม่ persist ข้าม request)
 2. เพิ่ม **pagination** (`->paginate(96)`) อย่าโหลดสินค้าทั้งหมดมาทีเดียว
 3. ใช้ **image lazy loading** (`loading="lazy"` ใน `<img>` แล้ว)
-4. Bundle JS ใช้ `manualChunks` ใน [vite.config.js](../../vite.config.js) แยก vendor
+4. Bundle JS ใช้ `manualChunks` ใน `vite.config.js` แยก vendor
 
 ### 11.6 ปัญหา Cache ไม่หาย (Stale Data)
 
@@ -249,11 +193,11 @@ $orders = Order::with('customer')->get();
 
 1. Bust cache หลังบันทึก/แก้ไข/ลบ: `Cache::flush()` หรือ `Cache::forget('pos_products_page_*')`
 2. ระบบนี้ bust cache อัตโนมัติใน `ProductController::store/update/destroy` แล้ว — ถ้าเพิ่ม field/mutation ใหม่ต้องเพิ่ม cache bust ด้วย
-3. กดล้าง cache ผ่าน `/admin/clear-all` หรือ `php artisan optimize:clear`
+3. กดล้าง cache ผ่าน `/admin/clear-all`
 
 ### 11.7 ปัญหา Database Connection (Vercel)
 
-**อาการ**: 500 Internal Server Error เป็นช่วงๆ บน Vercel
+**อาการ**: 500 Internal Server Error เป็นช่วงๆ
 
 **สาเหตุ**: serverless function เปิด connection ใหม่ทุก request หาก connection pool เต็มจะ fail
 
@@ -273,7 +217,7 @@ $orders = Order::with('customer')->get();
 **วิธีแก้**:
 
 1. ตั้ง `regions: ["sin1"]` ใน `vercel.json` (Singapore) ให้ใกล้ Supabase region
-2. ตรวจว่า Supabase project สร้างใน region ใกล้กัน (เช่น Southeast Asia - Singapore)
+2. ตรวจว่า Supabase project สร้างใน region ใกล้กัน (Southeast Asia - Singapore)
 
 ### 11.9 ปัญหา Composite Index ขาด
 
@@ -284,7 +228,7 @@ $orders = Order::with('customer')->get();
 - `orders(customer_id, created_at)` — สำหรับรายงานขายตามลูกค้าและเวลา
 - `products(status, quantity)` — สำหรับ POS query สินค้าที่พร้อมขาย
 - `stock_movements(product_id, created_at)` — สำหรับ history สต็อก
-- `reward_usages(reward_rule_id, customer_id)` — สำหรับนับการใช้รางวัล
+- `order_transactions(order_id, created_at)` — สำหรับ history การชำระ
 
 ### 11.10 ปัญหา Frontend Bundle ใหญ่
 
@@ -294,20 +238,19 @@ $orders = Order::with('customer')->get();
 
 1. ใช้ Vite `manualChunks` แยก vendor (มีแล้วใน `vite.config.js`): react-vendor, ui-libs, http
 2. ใช้ React lazy + Suspense สำหรับ component หนัก
-3. รัน `npm run build` แล้วดู bundle ขนาด ถ้า > 600KB ต่อ chunk ให้แยกเพิ่ม
+3. ตรวจ bundle ขนาด ถ้า > 600KB ต่อ chunk ให้แยกเพิ่ม
 4. ใช้ image format ใหม่ (.webp) แทน .png/.jpg ถ้าเป็นไปได้
 
 ### 11.11 Checklist ก่อนแจ้งว่าระบบช้า
 
 1. ตรวจ Network tab — request ไหนช้า?
-2. ตรวจว่ารัน `php artisan config:cache` และ `php artisan route:cache` หรือยัง (production)
-3. ตรวจว่า build asset ใหม่หรือยัง (`npm run build`)
-4. ลองล้าง cache (`/admin/clear-all`)
-5. ตรวจว่า DB region ตรงกับ Vercel region
-6. ตรวจ Vercel Function Logs ดู cold start vs warm
-7. ตรวจขนาด table หลัก (`orders`, `products`, `stock_movements`) — ถ้าเกิน 100k row อาจต้อง partition
+2. ตรวจว่าเคยเปิดหน้าก่อนนานแล้วหรือไม่ (Vercel cold start)
+3. ลองล้าง cache (`/admin/clear-all`)
+4. ตรวจว่า DB region ตรงกับ Vercel region
+5. ตรวจ Vercel Function Logs ดู cold start vs warm
+6. ตรวจขนาด table หลัก (`orders`, `products`, `stock_movements`) — ถ้าเกิน 100k row อาจต้อง partition
 
-## 12. Production Deployment (Vercel + Supabase)
+## 12. Production Architecture (Vercel + Supabase)
 
 ระบบถูก deploy ที่ Vercel โดยใช้:
 
@@ -315,29 +258,14 @@ $orders = Order::with('customer')->get();
 - **Database**: Supabase Postgres (Transaction Pooler)
 - **Region**: `sin1` (Singapore)
 
-Environment variables ที่ต้องตั้งใน Vercel Dashboard:
-
-```
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://mala-dance-by-kwanjai.vercel.app
-APP_KEY=<base64 key>
-DB_CONNECTION=pgsql
-DATABASE_URL=<Supabase Transaction Pooler URL>
-SESSION_DRIVER=cookie
-CACHE_DRIVER=array
-LOG_CHANNEL=stderr
-QUEUE_CONNECTION=sync
-```
-
 ข้อจำกัดของ Vercel ที่ต้องรู้:
 
 1. **Filesystem read-only** ยกเว้น `/tmp` — การ upload รูปสินค้าหรือโลโก้ต้องใช้ external storage (เช่น S3 หรือ Supabase Storage) ในอนาคต
 2. **Cache driver = array** — ไม่ persist ระหว่าง request หาก require persistent cache ต้องใช้ Redis (เช่น Upstash)
 3. **Session driver = cookie** — session อยู่ใน cookie ของ client ไม่ใช่ฝั่ง server
-4. **Vite manifest** — `public/build/` ต้องถูก build และ commit ลง git (รัน `npm run build` ก่อน push)
+4. **Function timeout 60s** — งานหนัก (export Excel ใหญ่) อาจ timeout
 
-## 13. Checklist หลังอัปเดตระบบ
+## 13. Checklist หลัง Deploy
 
 1. เข้าหน้า login ได้
 2. เมนูหลังร้านเป็นภาษาไทย
@@ -346,21 +274,10 @@ QUEUE_CONNECTION=sync
 5. ทดลอง void 1 บิล สต็อกคืนถูกต้อง
 6. ทดลองซื้อเข้าแล้วสต็อกเพิ่ม
 7. รายงานขายและรายงานสต็อกเปิดได้
-8. หน้า `จัดการสะสมแต้ม/รางวัล` เปิดและสร้างกฎใหม่ได้
-9. ตั้งค่าโลโก้และข้อความท้ายใบเสร็จแสดงถูกต้อง
-10. สิทธิ์ผู้ใช้งานไม่เปิดเมนูเกินจำเป็น
+8. ตั้งค่าโลโก้และข้อความท้ายใบเสร็จแสดงถูกต้อง
+9. สิทธิ์ผู้ใช้งานไม่เปิดเมนูเกินจำเป็น
 
-## หน้าอ่านคู่มือบนเว็บ
-
-ผู้ดูแลระบบสามารถอ่านคู่มือทั้งหมดจากหลังร้านได้ที่:
-
-```text
-/admin/manuals
-```
-
-เมนู `คู่มือการใช้งาน` อยู่ใน sidebar หลังร้าน และใช้สำหรับเปิดอ่านไฟล์คู่มือ Markdown แบบ read-only ได้แก่ quick start, owner manual, admin manual, user manual และ system doc โดยระบบจำกัดเฉพาะรายการที่อนุญาตไว้เท่านั้น
-
-## นำเข้ารายการสินค้า
+## 14. นำเข้ารายการสินค้า
 
 ไปที่ `สินค้า > นำเข้าสินค้า` เพื่ออัปโหลดรายการสินค้าแบบ Excel หรือ CSV
 

@@ -28,37 +28,26 @@ class AuthController extends Controller
     {
         if ($request->isMethod('post')) {
 
-            $request->validate(
-                [
-                    'email' => 'required',
-                    'password' => 'required'
-                ]
-            );
+            $request->validate([
+                'email' => 'required',
+                'password' => 'required',
+            ]);
 
-            if (!Auth::validate($request->only('email', 'password'))) {
-                return redirect()->back()->with('error', 'Incorrect email or password');
+            $loginField = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+            $user = User::where($loginField, $request->email)->first();
+
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return redirect()->back()->with('error', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
             }
 
-            $user = User::where('email', $request->email)->first();
             if ($user->is_suspended == 1) {
-                return redirect()->back()->with('error', 'Your account is temporarily suspended');
+                return redirect()->back()->with('error', 'บัญชีของคุณถูกระงับชั่วคราว');
             }
 
             $remember = $request->remember_me ? true : false;
-            $credentials['email'] = $request->email;
-            $credentials['password'] = $request->password;
-            $credentials['remember'] = $remember;
-            $credentials['previous_url'] = $request->previous_url;
-
-            $valid = Arr::only($credentials, ['email', 'password']);
-
-            if (Auth::attempt($valid, $credentials['remember'])) {
-                session()->regenerate();
-
-                return $this->redirectUser();
-            } else {
-                return redirect()->route('login')->with('error', 'Incorrect email or password');
-            }
+            Auth::login($user, $remember);
+            session()->regenerate();
+            return $this->redirectUser();
         } else {
             if (auth()->user()) {
                 return $this->redirectUser();

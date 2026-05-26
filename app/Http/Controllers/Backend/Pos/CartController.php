@@ -164,13 +164,4 @@ class CartController extends Controller
         return response()->json(['message' => 'ตะกร้าว่างอยู่แล้ว'], 204);
     }
 
-    public function getRewards(Request $request)
-    {
-        $customerId = $request->customer_id;
-        $total = $request->total ?? 0;
-        $customer = $customerId ? \App\Models\Customer::find($customerId) : null;
-
-        $rewards = app(\App\Services\RewardService::class)->getAvailableRewards($customer, $total);
-        return response()->json($rewards);
-    }
 }

@@ -6,10 +6,19 @@
 
 **ระบบ**: POS + Management สำหรับร้านหม่าล่า/เครื่องดื่ม
 **Stack**: Laravel 10 + Blade/AdminLTE + React 18 + Vite 4
-**DB**: SQLite (local), Supabase Postgres (production via Vercel)
+**DB**: Supabase Postgres (Transaction Pooler) — production only
 **Deploy**: Vercel (`vercel-php@0.7.4`, region `sin1`)
 **Production URL**: https://mala-dance-by-kwanjai.vercel.app
-**Main branch**: `main` (remote) / `master` (local) — push ใช้ `git push origin HEAD:main`
+**Branch**: local `master` ↔ remote `main` — push ด้วย `git push origin HEAD:main`
+
+## Default Accounts
+
+หลังจาก seed:
+
+- **Admin**: `admin` / `admin`
+- **เจ้าของร้าน**: `kwan` / `kwan`
+
+ระบบรองรับ login ด้วย **ชื่อผู้ใช้** หรือ **อีเมล** (ดู `AuthController::login` — ใช้ `filter_var` แยก email vs username)
 
 ## Where to Find Things
 
@@ -18,10 +27,10 @@
 | POS frontend (React) | `resources/js/components/Pos.jsx`, `Cart.jsx`, `CutomerSelect.jsx` |
 | Backend controllers | `app/Http/Controllers/Backend/**` |
 | Inventory / Stock logic | `app/Services/InventoryService.php` (immutable ledger pattern) |
-| Reward / Loyalty logic | `app/Services/RewardService.php`, `RewardRuleController.php`, `OrderController::store/voidOrder` |
+| Order checkout & void | `app/Http/Controllers/Backend/Pos/OrderController.php` |
 | Routes | `routes/web.php` (single file, all backend under `/admin` prefix) |
 | Database schema | `database/migrations/` (รวม composite indexes) |
-| Seeders | `database/seeders/` — `RolesAndPermissionsSeeder`, `ThaiShopSeeder` |
+| Seeders | `database/seeders/` — `StartUpSeeder` (admin+kwan users), `RolePermissionSeeder`, `ThaiShopSeeder` |
 | Manuals (Thai) | `docs/th/*.md` — แสดงผ่าน `/admin/manuals` (allowlist) |
 | Vercel config | `vercel.json` |
 | Vite config | `vite.config.js` (มี manualChunks สำหรับ bundle splitting) |
@@ -32,9 +41,9 @@
 ### Vercel Production
 
 1. **`config/database.php` `PDO::ATTR_EMULATE_PREPARES`** ต้อง hardcode เป็น `false` ห้ามอ่านจาก `env()` เพราะ Vercel ส่ง env เป็น string → PDO TypeError
-2. **`vercel.json` `excludeFiles`** ห้ามใส่ `public/build/**` — PHP ต้องอ่าน `manifest.json` ตอน `@vite()`
+2. **`vercel.json` `excludeFiles`** ห้ามใส่ `public/build/**` หรือ `docs/**` — PHP ต้องอ่าน `manifest.json` ตอน `@vite()` และ ManualController ต้องอ่านไฟล์คู่มือ
 3. **`public/build/`** ต้อง commit ลง git ทุกครั้งที่ frontend เปลี่ยน (รัน `npm run build` ก่อน push)
-4. **Filesystem read-only** ยกเว้น `/tmp` — `FileHandler` upload จะ fail บน Vercel (ยังไม่ได้แก้ — TODO ย้ายไป Supabase Storage)
+4. **Filesystem read-only** ยกเว้น `/tmp` — `FileHandler` upload จะ fail บน Vercel (TODO: ย้ายไป Supabase Storage)
 5. **Cache driver = array** บน Vercel — `Cache::remember` ทำงานแต่ไม่ persist ข้าม request
 6. **Session driver = cookie** — session อยู่ใน client cookie
 7. **Function timeout 60s** — งานหนัก (export Excel ใหญ่) อาจ timeout
@@ -50,16 +59,7 @@
 7. **Yajra DataTables `rawColumns`** ต้อง escape สำหรับคอลัมน์ที่ render HTML
 8. **`@vite('resources/js/app.jsx')`** ใน master blade — ต้อง build ก่อน
 
-## Bugs ที่เคยเจอและแก้แล้ว (อย่าทำซ้ำ)
-
-| Bug | สาเหตุ | แก้แล้วที่ |
-|---|---|---|
-| 419 CSRF page expired บน Vercel | session driver = file default | `.env`/Vercel: `SESSION_DRIVER=cookie` |
-| PDO TypeError "must be of type bool" | `env('DB_EMULATE_PREPARES')` คืน string | hardcode `false` ใน `config/database.php` |
-| Vite manifest not found | `public/build/**` ถูก exclude | ลบออกจาก `vercel.json` excludeFiles |
-| RewardRule บันทึกไม่ได้ | validation `'boolean'` ไม่รับ `"on"` จาก checkbox | `$request->merge([...has...])` ก่อน validate |
-
-## Validation Pattern สำหรับ Checkbox
+### Validation Pattern สำหรับ Checkbox
 
 Checkbox HTML ส่ง `"on"` หรือไม่ส่งเลย Laravel `'boolean'` rule **ไม่รับ `"on"`** ใช้ pattern นี้:
 
@@ -73,17 +73,36 @@ $data = $request->validate([
 ]);
 ```
 
+## Bugs ที่เคยเจอและแก้แล้ว (อย่าทำซ้ำ)
+
+| Bug | สาเหตุ | แก้แล้วที่ |
+|---|---|---|
+| 419 CSRF page expired บน Vercel | session driver = file default | Vercel env: `SESSION_DRIVER=cookie` |
+| PDO TypeError "must be of type bool" | `env('DB_EMULATE_PREPARES')` คืน string | hardcode `false` ใน `config/database.php` |
+| Vite manifest not found | `public/build/**` ถูก exclude | ลบออกจาก `vercel.json` excludeFiles |
+| ไม่พบคู่มือบน Vercel | `docs/**` ถูก exclude | ลบออกจาก `vercel.json` excludeFiles |
+| Checkbox 'boolean' validation fail | Laravel ไม่รับ `"on"` | `$request->merge([...has...])` ก่อน validate |
+
+## Removed Features (อย่าใส่กลับโดยไม่ได้รับการร้องขอ)
+
+- **ระบบสะสมแต้ม/รางวัล (Reward/Loyalty)** — ถูกถอดออกในเดือน 2026-05 เพราะใช้งานไม่ได้
+  - ลบ menu, route (`reward-rules`, `/get/rewards`), controller, views, RewardService, RewardRuleSeeder
+  - คงเหลือ: model `RewardRule`, `RewardUsage` และ migration ของ `reward_rules`, `reward_usages` (เก็บไว้กรณีต้องทำใหม่)
+  - ลบ logic จาก `OrderController::store` (reward processing) และ `voidOrder` (reward reversal)
+  - ลบ UI จาก `Pos.jsx` (reward state, available rewards select)
+- **Demo user `demo@qtecsolution.net`** — แทนที่ด้วย `admin`/`admin` และ `kwan`/`kwan`
+
 ## Commit Style
 
-- Subject สั้น: `Fix: ...` / `Perf: ...` / `Feat: ...` / `Docs: ...`
+- Subject สั้น: `Fix: ...` / `Perf: ...` / `Feat: ...` / `Docs: ...` / `Remove: ...`
 - Body 1-3 บรรทัด อธิบาย WHY ไม่ใช่ WHAT
 - เพิ่ม `Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>` ทุก commit
 
 ## ก่อน Push
 
-1. ถ้าแตะ frontend → รัน `npm run build` และ commit `public/build/`
-2. ถ้าแตะ migration → ทดสอบ `php artisan migrate:fresh --seed` local ก่อน
-3. ถ้าแตะ config/database → ทดสอบทั้ง local (SQLite) และ pgsql ถ้าทำได้
+1. ถ้าแตะ frontend → build และ commit `public/build/`
+2. ถ้าแตะ migration → ต้องระวังว่าอาจกระทบ schema production
+3. ถ้าแตะ config/database → ทดสอบบน Vercel
 4. Push ใช้ `git push origin HEAD:main` (local branch ชื่อ master, remote ชื่อ main)
 
 ## Performance Reference
@@ -95,32 +114,7 @@ Composite indexes ที่มีอยู่:
 - `orders(customer_id, created_at)`
 - `products(status, quantity)`
 - `stock_movements(product_id, created_at)`
-- `reward_usages(reward_rule_id, customer_id)`
 - `order_transactions(order_id, created_at)`
-
-## Useful Commands
-
-```powershell
-# Local dev
-.\.tools\php\php.exe artisan serve --host=127.0.0.1 --port=8000
-npm.cmd run dev
-
-# Fresh DB
-.\.tools\php\php.exe artisan migrate:fresh --seed --force
-
-# Production build
-npm.cmd run build
-.\.tools\php\php.exe artisan view:cache
-
-# Clear all caches
-.\.tools\php\php.exe artisan optimize:clear
-```
-
-## Demo Login
-
-- Email: `demo@qtecsolution.net`
-- Password: `87654321`
-- Role: Owner
 
 ## What NOT to Do
 
@@ -131,8 +125,9 @@ npm.cmd run build
 - ❌ อย่า amend commit ที่ push แล้ว
 - ❌ อย่า force push main
 - ❌ อย่าใช้ `--no-verify` หรือ skip hooks
-- ❌ อย่าใส่ `public/build/**` ใน `vercel.json` excludeFiles
+- ❌ อย่าใส่ `public/build/**` หรือ `docs/**` ใน `vercel.json` excludeFiles
 - ❌ อย่าเปลี่ยน `PDO::ATTR_EMULATE_PREPARES` ให้อ่านจาก env
+- ❌ อย่าเพิ่ม Reward/Loyalty system กลับเข้ามาโดยไม่ได้รับการร้องขอ
 
 ## TODO / Future Work
 

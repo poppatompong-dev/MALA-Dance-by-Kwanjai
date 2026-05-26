@@ -76,23 +76,9 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'customer_id' => [
-                'required',
-                'exists:customers,id',
-                'integer', // Ensure customer_id is an integer
-            ],
-            'order_discount' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-            'paid' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-            'applied_rewards' => 'nullable|array',
-            'applied_rewards.*' => 'integer|exists:reward_rules,id',
+            'customer_id' => ['required', 'exists:customers,id', 'integer'],
+            'order_discount' => ['nullable', 'numeric', 'min:0'],
+            'paid' => ['nullable', 'numeric', 'min:0'],
             'order_type' => 'nullable|string',
             'notes' => 'nullable|string',
         ], [
@@ -110,7 +96,6 @@ class OrderController extends Controller
                 'notes' => $request->notes,
             ]);
             $totalAmountOrder = 0;
-            $orderDiscount = $request->order_discount;
             foreach ($carts as $cart) {
                 $mainTotal = $cart->product->price * $cart->quantity;
                 $totalAfterDiscount = $cart->product->discounted_price * $cart->quantity;
@@ -138,50 +123,9 @@ class OrderController extends Controller
                 );
             }
 
-            // --- REWARD LOGIC ---
-            $appliedRewards = $request->applied_rewards ?? [];
-            $rewardDiscount = 0;
-            $pointsEarned = floor($totalAmountOrder / 10); // Base rate: 1 pt per 10 THB
-            $pointsRedeemed = 0;
-            $customer = \App\Models\Customer::find($request->customer_id);
-
-            foreach ($appliedRewards as $ruleId) {
-                $rule = \App\Models\RewardRule::find($ruleId);
-                if ($rule) {
-                    $result = app(\App\Services\RewardService::class)->calculateReward($rule, $customer, $totalAmountOrder);
-                    $rewardDiscount += $result['discount'];
-                    
-                    if ($result['points_change'] > 0) {
-                        $pointsEarned += $result['points_change'];
-                    } else {
-                        $pointsRedeemed += abs($result['points_change']);
-                    }
-
-                    \App\Models\RewardUsage::create([
-                        'reward_rule_id' => $rule->id,
-                        'customer_id' => $customer->id,
-                        'order_id' => $order->id,
-                        'discount_applied' => $result['discount'],
-                        'points_changed' => $result['points_change']
-                    ]);
-                    
-                    $rule->increment('usage_count');
-                }
-            }
-
-            if ($customer) {
-                $customer->points += $pointsEarned - $pointsRedeemed;
-                $customer->total_spent += $totalAmountOrder;
-                $customer->visit_count += 1;
-                $customer->last_visit_at = now();
-                $customer->save();
-            }
-            
-            $orderDiscount = ($request->order_discount ?? 0) + $rewardDiscount;
-            // --------------------
-
+            $orderDiscount = (float) ($request->order_discount ?? 0);
             $total = $totalAmountOrder - $orderDiscount;
-            $due = $total - $request->paid;
+            $due = $total - (float) $request->paid;
             $order->sub_total = $totalAmountOrder;
             $order->discount = $orderDiscount;
             $order->paid = $request->paid;
@@ -189,9 +133,9 @@ class OrderController extends Controller
             $order->due = round((float)$due, 2);
             $order->status = round((float)$due, 2) <= 0;
             $order->save();
-            //create order transaction
+
             if ($request->paid > 0) {
-                $orderTransaction = $order->transactions()->create([
+                $order->transactions()->create([
                     'amount' => $request->paid,
                     'customer_id' => $order->customer_id,
                     'user_id' => auth()->id(),
@@ -199,7 +143,7 @@ class OrderController extends Controller
                 ]);
             }
 
-            $carts = PosCart::where('user_id', auth()->id())->delete();
+            PosCart::where('user_id', auth()->id())->delete();
             return response()->json(['message' => 'บันทึกการขายเรียบร้อยแล้ว', 'order' => $order], 200);
         });
     }
@@ -291,20 +235,18 @@ class OrderController extends Controller
     {
         $order = Order::with(['customer', 'products.product'])->findOrFail($id);
         $maxWidth = readConfig('receiptMaxwidth')??'300px';
-        $rewardUsages = \App\Models\RewardUsage::with('rewardRule')->where('order_id', $id)->get();
-        return view('backend.orders.pos-invoice', compact('order', 'maxWidth', 'rewardUsages'));
+        return view('backend.orders.pos-invoice', compact('order', 'maxWidth'));
     }
 
     public function voidOrder($id)
     {
         return DB::transaction(function () use ($id) {
             $order = Order::with('products.product')->findOrFail($id);
-            
-            // Return stock
+
             foreach ($order->products as $item) {
                 app(\App\Services\InventoryService::class)->adjustStock(
                     $item->product,
-                    $item->quantity, // Add back
+                    $item->quantity,
                     'void',
                     Order::class,
                     $order->id,
@@ -313,51 +255,6 @@ class OrderController extends Controller
                 );
             }
 
-            // Reverse Rewards & Points
-            $usages = \App\Models\RewardUsage::where('order_id', $order->id)->get();
-            $customer = \App\Models\Customer::find($order->customer_id);
-            
-            $pointsToReverse = floor($order->sub_total / 10); // Base points earned
-
-            foreach ($usages as $usage) {
-                if ($usage->points_changed > 0) {
-                    $pointsToReverse += $usage->points_changed;
-                } else {
-                    // Redeemed points, so give them back
-                    $pointsToReverse += $usage->points_changed; // points_changed is negative, so adding it actually subtracts from the reversal amount? Wait.
-                    // If they redeemed 100 points, points_changed is -100.
-                    // When they void, we should give back 100.
-                    // Customer points = points - pointsToReverse + abs(redeemed).
-                    // Actually, let's process it directly.
-                }
-
-                $rule = \App\Models\RewardRule::find($usage->reward_rule_id);
-                if ($rule) {
-                    $rule->decrement('usage_count');
-                }
-                $usage->delete();
-            }
-
-            if ($customer) {
-                // Re-calculate the exact points they got from this order
-                // Earned: Base + Bonus
-                // Redeemed: Abs(Negative)
-                $earnedInOrder = floor($order->sub_total / 10);
-                $redeemedInOrder = 0;
-                foreach ($usages as $u) {
-                    if ($u->points_changed > 0) $earnedInOrder += $u->points_changed;
-                    if ($u->points_changed < 0) $redeemedInOrder += abs($u->points_changed);
-                }
-                
-                // Reverse it
-                $customer->points -= $earnedInOrder;
-                $customer->points += $redeemedInOrder;
-                $customer->total_spent -= $order->sub_total;
-                $customer->visit_count = max(0, $customer->visit_count - 1);
-                $customer->save();
-            }
-
-            // Audit log
             \App\Models\AuditLog::create([
                 'user_id' => auth()->id(),
                 'action' => 'void_order',
