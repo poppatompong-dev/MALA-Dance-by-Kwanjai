@@ -26,6 +26,10 @@ class Order extends Model
     public function customer(){
         return $this->belongsTo(Customer::class);
     }
+    public function salesChannel()
+    {
+        return $this->belongsTo(SalesChannel::class);
+    }
     public function getTotalItemAttribute()
     {
         // Priority 1: SQL-aggregated value from ->withSum() — zero extra query

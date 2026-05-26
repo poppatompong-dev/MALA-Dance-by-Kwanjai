@@ -13,6 +13,7 @@
               <tr>
                 <th data-orderable="false">#</th>
                 <th>เลขที่ขาย</th>
+                <th>ช่องทาง</th>
                 <th>ลูกค้า</th>
                 <th>จำนวนรายการ</th>
                 <th>ยอดก่อนส่วนลด {{currency()->symbol??''}}</th>
@@ -54,6 +55,11 @@
         {
           data: 'saleId',
           name: 'saleId'
+        },
+        {
+          data: 'channel',
+          name: 'channel',
+          orderable: false
         },
         {
           data: 'customer',

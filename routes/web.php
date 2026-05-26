@@ -72,6 +72,8 @@ Route::prefix('admin')->as('backend.admin.')->middleware(['admin'])->group(funct
     Route::resource('products', ProductController::class);
     Route::resource('units', UnitController::class);
     Route::resource('currencies', CurrencyController::class);
+    Route::resource('sales-channels', \App\Http\Controllers\Backend\SalesChannelController::class);
+    Route::get('platform-sales-report', [ReportController::class, 'platformSalesReport'])->name('platform.sales.report');
     Route::match(['get', 'post'], 'import/products', [ProductController::class,'import'])->name('products.import');
     Route::get('currencies/default/{id}', [CurrencyController::class, 'setDefault'])->name('currencies.setDefault');
     Route::get('customers/orders/{id}', [CustomerController::class, 'orders'])->name('customers.orders');
@@ -91,6 +93,7 @@ Route::prefix('admin')->as('backend.admin.')->middleware(['admin'])->group(funct
     //end report
    // start pos
     Route::get('/get/products', [CartController::class, 'getProducts'])->name('getProducts');
+    Route::get('/get/channels', [CartController::class, 'getChannels'])->name('getChannels');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::put('/cart/increment', [CartController::class, 'increment']);

@@ -60,13 +60,36 @@ Role: `Admin`, `cashier`, `sales_associate`
 POS ใช้ React (`resources/js/components/Pos.jsx`) เรียก API:
 
 - `GET /admin/get/products` — รายการสินค้า (มี cache 10 นาที, รองรับ search/barcode/pagination)
+- `GET /admin/get/channels` — รายการช่องทางการขายที่เปิดใช้
 - `GET /admin/cart` — ตะกร้าปัจจุบัน
 - `POST /admin/cart` — เพิ่มสินค้าเข้าตะกร้า (รองรับ spice_level, toppings)
 - `PUT /admin/cart/increment` / `decrement` / `delete` / `empty`
 - `PUT /admin/order/create` — บันทึก order
-  - รับ `customer_id`, `order_discount`, `paid`, `order_type`, `notes`
-  - DB transaction: สร้าง Order + OrderProducts → ลดสต็อก → คำนวณส่วนลด → บันทึก OrderTransaction
+  - รับ `customer_id`, `order_discount`, `paid`, `order_type`, `notes`, `sales_channel_id`, `platform_order_ref`
+  - DB transaction: สร้าง Order + OrderProducts → ลดสต็อก → คำนวณส่วนลด + platform_fee → บันทึก OrderTransaction
 - `POST /admin/orders/void/{id}` — ยกเลิกบิล (คืนสต็อก, soft-delete Order, บันทึก AuditLog)
+
+### Sales Channels (Food Delivery Platforms)
+
+ระบบรองรับการบันทึกออเดอร์จากแพลตฟอร์ม food delivery เพื่อรวมยอดขายและการตัดสต็อกในระบบเดียว
+
+ตาราง `sales_channels`:
+
+- `name`, `slug` (unique), `icon` (FontAwesome class), `color` (hex)
+- `commission_percent` — ใช้คำนวณ platform_fee อัตโนมัติ
+- `status`, `sort_order`, `description`
+
+ค่า default seed: `walk_in` (0%), `grab` (32%), `line_man` (30%), `shopee_food` (30%)
+
+คอลัมน์ใหม่ใน `orders`:
+
+- `sales_channel_id` (FK to sales_channels, nullable, indexed)
+- `platform_fee` (decimal) — auto-calculated = `total * commission_percent / 100`
+- `platform_order_ref` (string) — เลขที่ออเดอร์จากแอปแพลตฟอร์ม
+
+CRUD: `/admin/sales-channels` (เฉพาะ Admin) — ลบ `walk_in` ไม่ได้
+
+Report: `/admin/platform-sales-report` — aggregate ยอดขาย + commission แยกตามช่องทาง
 
 ### Product Management
 

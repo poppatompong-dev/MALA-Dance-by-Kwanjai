@@ -22,6 +22,9 @@ export default function Pos() {
     const [productUpdated, setProductUpdated] = useState(false);
     const [orderType, setOrderType] = useState("dine_in");
     const [notes, setNotes] = useState("");
+    const [channels, setChannels] = useState([]);
+    const [salesChannelId, setSalesChannelId] = useState("");
+    const [platformOrderRef, setPlatformOrderRef] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [searchBarcode, setSearchBarcode] = useState("");
     const { protocol, hostname, port } = window.location;
@@ -86,6 +89,20 @@ export default function Pos() {
     useEffect(() => {
         getCarts();
     }, [cartUpdated]);
+
+    useEffect(() => {
+        axios.get('/admin/get/channels')
+            .then(res => {
+                setChannels(res.data || []);
+                const walkIn = (res.data || []).find(c => c.slug === 'walk_in');
+                if (walkIn) setSalesChannelId(walkIn.id);
+            })
+            .catch(err => console.error('โหลดช่องทางการขายไม่ได้:', err));
+    }, []);
+
+    const selectedChannel = channels.find(c => String(c.id) === String(salesChannelId));
+    const commissionPercent = selectedChannel ? parseFloat(selectedChannel.commission_percent) : 0;
+    const estimatedFee = ((parseFloat(updateTotal) || 0) * commissionPercent) / 100;
 
     useEffect(() => {
         let paid1 = parseFloat(paid) || 0;
@@ -230,6 +247,8 @@ export default function Pos() {
                         paid: parseFloat(paid) || 0,
                         order_type: orderType,
                         notes: notes,
+                        sales_channel_id: salesChannelId || null,
+                        platform_order_ref: platformOrderRef || null,
                     })
                     .then((res) => {
                         setCartUpdated(!cartUpdated);
@@ -268,7 +287,8 @@ export default function Pos() {
                     <div className="row">
                         <div className="col-md-6 col-lg-5 mb-2">
                             <div className="row mb-2">
-                                <div className="col-12 mb-2">
+                                <div className="col-6 mb-2">
+                                    <label className="small mb-1 text-muted">ประเภทออเดอร์</label>
                                     <select
                                         className="form-control"
                                         value={orderType}
@@ -279,6 +299,31 @@ export default function Pos() {
                                         <option value="delivery">เดลิเวอรี่</option>
                                     </select>
                                 </div>
+                                <div className="col-6 mb-2">
+                                    <label className="small mb-1 text-muted">ช่องทางการขาย</label>
+                                    <select
+                                        className="form-control"
+                                        value={salesChannelId}
+                                        onChange={(e) => setSalesChannelId(e.target.value)}
+                                    >
+                                        {channels.map(c => (
+                                            <option key={c.id} value={c.id}>
+                                                {c.name}{parseFloat(c.commission_percent) > 0 ? ` (${parseFloat(c.commission_percent)}%)` : ''}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                {selectedChannel && selectedChannel.slug !== 'walk_in' && (
+                                    <div className="col-12 mb-2">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder={`เลขที่ออเดอร์จาก ${selectedChannel.name} (ตัวเลือก)`}
+                                            value={platformOrderRef}
+                                            onChange={(e) => setPlatformOrderRef(e.target.value)}
+                                        />
+                                    </div>
+                                )}
                                 <div className="col-12 mb-2">
                                     <textarea
                                         className="form-control"
@@ -376,6 +421,14 @@ export default function Pos() {
                                             {updateTotal}
                                         </div>
                                     </div>
+                                    {commissionPercent > 0 && (
+                                        <div className="row mb-1 text-warning small">
+                                            <div className="col">ค่า commission ประมาณการ ({commissionPercent}%):</div>
+                                            <div className="col text-right mr-2">
+                                                -{estimatedFee.toFixed(2)}
+                                            </div>
+                                        </div>
+                                    )}
                                     <div className="row text-bold mb-1">
                                         <div className="col">รับเงิน:</div>
                                         <div className="col text-right mr-2">

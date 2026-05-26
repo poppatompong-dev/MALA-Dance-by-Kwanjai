@@ -83,6 +83,53 @@ class ReportController extends Controller
 
         return view('backend.reports.sale-summery', $data);
     }
+    public function platformSalesReport(Request $request)
+    {
+        abort_if(!auth()->user()->can('reports_sales'), 403);
+
+        $start_date_input = $request->input('start_date', Carbon::today()->subDays(29)->format('Y-m-d'));
+        $end_date_input = $request->input('end_date', Carbon::today()->format('Y-m-d'));
+
+        $start_date = (Carbon::createFromFormat('Y-m-d', $start_date_input) ?: Carbon::today()->subDays(29))->startOfDay();
+        $end_date = (Carbon::createFromFormat('Y-m-d', $end_date_input) ?: Carbon::today())->endOfDay();
+
+        // Aggregate per channel using single SQL query
+        $rows = Order::leftJoin('sales_channels', 'orders.sales_channel_id', '=', 'sales_channels.id')
+            ->whereBetween('orders.created_at', [$start_date, $end_date])
+            ->whereNull('orders.deleted_at')
+            ->selectRaw('
+                COALESCE(sales_channels.id, 0) as channel_id,
+                COALESCE(sales_channels.name, \'หน้าร้าน\') as channel_name,
+                COALESCE(sales_channels.color, \'#28a745\') as channel_color,
+                COALESCE(sales_channels.icon, \'fas fa-store\') as channel_icon,
+                COALESCE(sales_channels.commission_percent, 0) as commission_percent,
+                COUNT(orders.id) as order_count,
+                SUM(orders.sub_total) as gross_sales,
+                SUM(orders.discount) as total_discount,
+                SUM(orders.total) as net_sales,
+                SUM(orders.platform_fee) as total_platform_fee
+            ')
+            ->groupBy('sales_channels.id', 'sales_channels.name', 'sales_channels.color', 'sales_channels.icon', 'sales_channels.commission_percent')
+            ->orderByDesc('net_sales')
+            ->get();
+
+        $grandTotals = [
+            'order_count' => (int) $rows->sum('order_count'),
+            'gross_sales' => (float) $rows->sum('gross_sales'),
+            'total_discount' => (float) $rows->sum('total_discount'),
+            'net_sales' => (float) $rows->sum('net_sales'),
+            'total_platform_fee' => (float) $rows->sum('total_platform_fee'),
+        ];
+        $grandTotals['net_after_fee'] = $grandTotals['net_sales'] - $grandTotals['total_platform_fee'];
+
+        return view('backend.reports.platform-sales', [
+            'rows' => $rows,
+            'grandTotals' => $grandTotals,
+            'start_date' => $start_date->format('Y-m-d'),
+            'end_date' => $end_date->format('Y-m-d'),
+        ]);
+    }
+
     function inventoryReport(Request $request)
     {
 

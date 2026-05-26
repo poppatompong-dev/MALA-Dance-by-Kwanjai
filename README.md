@@ -7,6 +7,7 @@
 ## Core Features
 
 - **POS หน้าร้านสำหรับร้านหม่าล่า**: รองรับ spice level, toppings, ประเภทออเดอร์ (dine_in / takeaway / delivery), สแกนบาร์โค้ด, ค้นหาด้วยชื่อสินค้า
+- **Multi-channel Sales**: บันทึกยอดขายจากหน้าร้าน + แพลตฟอร์ม food delivery (Grab, LINE MAN, Shopee Food, เพิ่มได้) — ตัดสต็อกอัตโนมัติ คำนวณค่า commission ต่อแพลตฟอร์ม
 - **Smart Inventory**: real-time stock deduction พร้อม `stock_movements` ledger (immutable) สำหรับ audit ทุกการเปลี่ยนแปลงสต็อก (sale, purchase, void, manual)
 - **Void / Refund**: ยกเลิกบิลแบบ soft-delete พร้อมคืนสต็อกอัตโนมัติและบันทึก audit log
 - **Security & RBAC**: 3 roles (Admin / Cashier / Sales associate) ใช้ Spatie Laravel Permission พร้อม `audit_logs` permanent

@@ -28,6 +28,8 @@
 | Backend controllers | `app/Http/Controllers/Backend/**` |
 | Inventory / Stock logic | `app/Services/InventoryService.php` (immutable ledger pattern) |
 | Order checkout & void | `app/Http/Controllers/Backend/Pos/OrderController.php` |
+| Sales channels (delivery platforms) | `app/Http/Controllers/Backend/SalesChannelController.php`, `app/Models/SalesChannel.php` |
+| Platform sales report | `ReportController::platformSalesReport`, `resources/views/backend/reports/platform-sales.blade.php` |
 | Routes | `routes/web.php` (single file, all backend under `/admin` prefix) |
 | Database schema | `database/migrations/` (รวม composite indexes) |
 | Seeders | `database/seeders/` — `StartUpSeeder` (admin+kwan users), `RolePermissionSeeder`, `ThaiShopSeeder` |
@@ -82,6 +84,36 @@ $data = $request->validate([
 | Vite manifest not found | `public/build/**` ถูก exclude | ลบออกจาก `vercel.json` excludeFiles |
 | ไม่พบคู่มือบน Vercel | `docs/**` ถูก exclude | ลบออกจาก `vercel.json` excludeFiles |
 | Checkbox 'boolean' validation fail | Laravel ไม่รับ `"on"` | `$request->merge([...has...])` ก่อน validate |
+
+## Sales Channels / Food Delivery Integration
+
+ระบบบันทึกออเดอร์จากแพลตฟอร์ม delivery (Grab, LINE MAN, Shopee Food + ขยายได้) ผ่าน POS แบบ manual entry
+
+Schema:
+
+- ตาราง `sales_channels`: name, slug (unique), icon (FA class), color, commission_percent, status, sort_order
+- คอลัมน์ใหม่ใน `orders`: `sales_channel_id` (FK, indexed), `platform_fee` (auto-calculated), `platform_order_ref`
+
+Default channels (จาก `SalesChannelSeeder`): `walk_in` (0%), `grab` (32%), `line_man` (30%), `shopee_food` (30%)
+
+Key invariants:
+
+- `walk_in` ห้ามลบ (`SalesChannelController::destroy` block ไว้)
+- `platform_fee = total * (commission_percent / 100)` คำนวณใน `SalesChannel::calculateFee()` และเรียกใน `OrderController::store`
+- ถ้า request ไม่ส่ง `sales_channel_id` → default เป็น `walk_in`
+- รายงานใช้ `LEFT JOIN sales_channels` + `GROUP BY` (single query) อย่าใช้ collection loop
+
+API:
+
+- `GET /admin/get/channels` — รายการ active channels สำหรับ POS dropdown
+- `/admin/sales-channels` (resource, Admin only)
+- `/admin/platform-sales-report` — aggregate ยอดขาย + commission แยกช่องทาง
+
+POS UI (`Pos.jsx`):
+
+- โหลด channels ใน useEffect แรก, default selectedChannelId เป็น walk_in
+- แสดง `platform_order_ref` input เฉพาะเมื่อเลือกช่องทางที่ไม่ใช่ walk_in
+- คำนวณ + แสดง estimated fee real-time
 
 ## Removed Features (อย่าใส่กลับโดยไม่ได้รับการร้องขอ)
 

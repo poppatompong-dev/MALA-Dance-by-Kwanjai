@@ -20,13 +20,18 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $orders = Order::with('customer')
+            $orders = Order::with(['customer', 'salesChannel'])
                 ->withSum('products', 'quantity')
                 ->select('orders.*')
                 ->latest();
             return DataTables::of($orders)
                 ->addIndexColumn()
                 ->addColumn('saleId', fn($data) => "#" . $data->id)
+                ->addColumn('channel', function ($data) {
+                    if (!$data->salesChannel) return '<span class="text-muted">-</span>';
+                    return '<span class="badge" style="background-color:'.e($data->salesChannel->color).';color:#fff;"><i class="'.e($data->salesChannel->icon ?? 'fas fa-tag').'"></i> '.e($data->salesChannel->name).'</span>'
+                        . ($data->platform_order_ref ? '<br><small class="text-muted">'.e($data->platform_order_ref).'</small>' : '');
+                })
                 ->addColumn('customer', fn($data) => $data->customer->name ?? '-')
                 ->addColumn('item', fn($data) => $data->total_item)
                 ->addColumn('sub_total', fn($data) => number_format($data->sub_total, 2, '.', ','))
@@ -56,7 +61,7 @@ class OrderController extends Controller
                     ';
                     return $buttons;
                 })
-                ->rawColumns(['saleId', 'customer', 'item', 'sub_total', 'discount', 'total', 'paid', 'due', 'status', 'action'])
+                ->rawColumns(['saleId', 'channel', 'customer', 'item', 'sub_total', 'discount', 'total', 'paid', 'due', 'status', 'action'])
                 ->toJson();
         }
         return view('backend.orders.index');
@@ -81,19 +86,28 @@ class OrderController extends Controller
             'paid' => ['nullable', 'numeric', 'min:0'],
             'order_type' => 'nullable|string',
             'notes' => 'nullable|string',
+            'sales_channel_id' => ['nullable', 'integer', 'exists:sales_channels,id'],
+            'platform_order_ref' => ['nullable', 'string', 'max:100'],
         ], [
             'customer_id.required' => 'กรุณาเลือกลูกค้า',
             'customer_id.exists' => 'ไม่พบลูกค้าที่เลือก',
             'order_discount.numeric' => 'ส่วนลดต้องเป็นตัวเลข',
             'paid.numeric' => 'ยอดรับเงินต้องเป็นตัวเลข',
+            'sales_channel_id.exists' => 'ช่องทางการขายไม่ถูกต้อง',
         ]);
         return DB::transaction(function () use ($request) {
             $carts = PosCart::with('product')->where('user_id', auth()->id())->get();
+            $channel = $request->sales_channel_id
+                ? \App\Models\SalesChannel::find($request->sales_channel_id)
+                : \App\Models\SalesChannel::where('slug', 'walk_in')->first();
+
             $order = Order::create([
                 'customer_id' => $request->customer_id,
                 'user_id' => $request->user()->id,
                 'order_type' => $request->order_type ?? 'dine_in',
                 'notes' => $request->notes,
+                'sales_channel_id' => $channel?->id,
+                'platform_order_ref' => $request->platform_order_ref,
             ]);
             $totalAmountOrder = 0;
             foreach ($carts as $cart) {
@@ -126,12 +140,15 @@ class OrderController extends Controller
             $orderDiscount = (float) ($request->order_discount ?? 0);
             $total = $totalAmountOrder - $orderDiscount;
             $due = $total - (float) $request->paid;
+            $platformFee = $channel ? $channel->calculateFee($total) : 0;
+
             $order->sub_total = $totalAmountOrder;
             $order->discount = $orderDiscount;
             $order->paid = $request->paid;
             $order->total = round((float)$total, 2);
             $order->due = round((float)$due, 2);
             $order->status = round((float)$due, 2) <= 0;
+            $order->platform_fee = $platformFee;
             $order->save();
 
             if ($request->paid > 0) {

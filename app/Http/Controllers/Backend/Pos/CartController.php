@@ -164,4 +164,11 @@ class CartController extends Controller
         return response()->json(['message' => 'ตะกร้าว่างอยู่แล้ว'], 204);
     }
 
+    public function getChannels()
+    {
+        $channels = \App\Models\SalesChannel::active()->get([
+            'id', 'name', 'slug', 'icon', 'color', 'commission_percent', 'sort_order',
+        ]);
+        return response()->json($channels);
+    }
 }

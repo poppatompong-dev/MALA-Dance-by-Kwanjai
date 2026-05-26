@@ -117,8 +117,8 @@
             @endif
 
             @can('sale_view')
-                <li class="nav-item {{ request()->routeIs(['backend.admin.orders.index']) ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->routeIs(['backend.admin.orders.index']) ? 'active' : '' }}">
+                <li class="nav-item {{ request()->routeIs(['backend.admin.orders.index', 'backend.admin.sales-channels.*']) ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->routeIs(['backend.admin.orders.index', 'backend.admin.sales-channels.*']) ? 'active' : '' }}">
                         <i class="fas fa-tags nav-icon" aria-hidden="true"></i>
                         <p>การขาย <i class="fas fa-angle-left right" aria-hidden="true"></i></p>
                     </a>
@@ -129,6 +129,14 @@
                                 <p>รายการขาย</p>
                             </a>
                         </li>
+                        @if(auth()->user()->hasRole('Admin'))
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.sales-channels.index') }}" class="nav-link {{ request()->routeIs(['backend.admin.sales-channels.*']) ? 'active' : '' }}">
+                                <i class="fas fa-circle nav-icon" aria-hidden="true"></i>
+                                <p>ช่องทางการขาย</p>
+                            </a>
+                        </li>
+                        @endif
                     </ul>
                 </li>
             @endcan
@@ -188,6 +196,14 @@
                                 <a href="{{ route('backend.admin.inventory.report') }}" class="nav-link {{ request()->routeIs(['backend.admin.inventory.report']) ? 'active' : '' }}">
                                     <i class="fas fa-circle nav-icon" aria-hidden="true"></i>
                                     <p>รายงานสต็อก</p>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('reports_sales')
+                            <li class="nav-item">
+                                <a href="{{ route('backend.admin.platform.sales.report') }}" class="nav-link {{ request()->routeIs(['backend.admin.platform.sales.report']) ? 'active' : '' }}">
+                                    <i class="fas fa-circle nav-icon" aria-hidden="true"></i>
+                                    <p>ยอดขายแยกตามแพลตฟอร์ม</p>
                                 </a>
                             </li>
                         @endcan
