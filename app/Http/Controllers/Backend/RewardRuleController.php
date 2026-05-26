@@ -46,6 +46,11 @@ class RewardRuleController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'status' => $request->has('status'),
+            'is_stackable' => $request->has('is_stackable'),
+        ]);
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -55,21 +60,18 @@ class RewardRuleController extends Controller
             'status' => 'boolean',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
-            'priority' => 'integer',
-            'min_purchase' => 'numeric|min:0',
-            'required_points' => 'integer|min:0',
+            'priority' => 'nullable|integer',
+            'min_purchase' => 'nullable|numeric|min:0',
+            'required_points' => 'nullable|integer|min:0',
             'customer_tier' => 'nullable|string',
             'usage_limit' => 'nullable|integer|min:1',
             'per_customer_limit' => 'nullable|integer|min:1',
             'is_stackable' => 'boolean',
             'coupon_code' => 'nullable|string|unique:reward_rules,coupon_code',
         ]);
-        
-        $data['status'] = $request->has('status');
-        $data['is_stackable'] = $request->has('is_stackable');
 
         RewardRule::create($data);
-        return redirect()->route('backend.admin.reward-rules.index')->with('success', 'Reward Rule created successfully');
+        return redirect()->route('backend.admin.reward-rules.index')->with('success', 'บันทึกกฎรางวัลเรียบร้อยแล้ว');
     }
 
     public function edit(RewardRule $rewardRule)
@@ -79,6 +81,11 @@ class RewardRuleController extends Controller
 
     public function update(Request $request, RewardRule $rewardRule)
     {
+        $request->merge([
+            'status' => $request->has('status'),
+            'is_stackable' => $request->has('is_stackable'),
+        ]);
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -88,9 +95,9 @@ class RewardRuleController extends Controller
             'status' => 'boolean',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
-            'priority' => 'integer',
-            'min_purchase' => 'numeric|min:0',
-            'required_points' => 'integer|min:0',
+            'priority' => 'nullable|integer',
+            'min_purchase' => 'nullable|numeric|min:0',
+            'required_points' => 'nullable|integer|min:0',
             'customer_tier' => 'nullable|string',
             'usage_limit' => 'nullable|integer|min:1',
             'per_customer_limit' => 'nullable|integer|min:1',
@@ -98,16 +105,13 @@ class RewardRuleController extends Controller
             'coupon_code' => 'nullable|string|unique:reward_rules,coupon_code,'.$rewardRule->id,
         ]);
 
-        $data['status'] = $request->has('status');
-        $data['is_stackable'] = $request->has('is_stackable');
-
         $rewardRule->update($data);
-        return redirect()->route('backend.admin.reward-rules.index')->with('success', 'Reward Rule updated successfully');
+        return redirect()->route('backend.admin.reward-rules.index')->with('success', 'อัปเดตกฎรางวัลเรียบร้อยแล้ว');
     }
 
     public function destroy(RewardRule $rewardRule)
     {
         $rewardRule->delete();
-        return redirect()->route('backend.admin.reward-rules.index')->with('success', 'Reward Rule deleted successfully');
+        return redirect()->route('backend.admin.reward-rules.index')->with('success', 'ลบกฎรางวัลเรียบร้อยแล้ว');
     }
 }

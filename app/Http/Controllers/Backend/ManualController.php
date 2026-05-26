@@ -61,6 +61,11 @@ class ManualController extends Controller
                 'description' => 'ภาพรวมระบบ โครงสร้างไฟล์ โมดูลหลัก และแนวทางพัฒนาต่อ',
                 'path' => 'system doc.md',
             ],
+            'claude' => [
+                'title' => 'คู่มือสำหรับ AI Agent (CLAUDE.md)',
+                'description' => 'บริบทและข้อจำกัดสำคัญสำหรับ Claude/AI agent ที่จะทำงานบนระบบนี้',
+                'path' => 'CLAUDE.md',
+            ],
         ];
     }
 
